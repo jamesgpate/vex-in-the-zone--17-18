@@ -4,6 +4,8 @@
 #pragma config(Sensor, in5,    potRightClaw,   sensorPotentiometer)
 #pragma config(Sensor, dgtl2,  encLDT,         sensorQuadEncoder)
 #pragma config(Sensor, dgtl4,  encRDT,         sensorQuadEncoder)
+#pragma config(Sensor, dgtl6,  encLT,          sensorQuadEncoder)
+#pragma config(Sensor, dgtl8,  encRT,          sensorQuadEncoder)
 #pragma config(Motor,  port2,           backLeft,      tmotorVex393TurboSpeed_MC29, openLoop, driveLeft)
 #pragma config(Motor,  port3,           leftClaw,      tmotorVex393TurboSpeed_MC29, openLoop, driveLeft)
 #pragma config(Motor,  port4,           leftDRFBY,     tmotorVex393TurboSpeed_MC29, openLoop, driveLeft)
