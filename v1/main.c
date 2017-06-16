@@ -21,6 +21,7 @@
 #include "Vex_Competition_Includes.c"
 #include "driving.c"
 #include "auton.c"
+//const int DIAMWHEELS = 4;
 void pre_auton(){
 
 }
