@@ -1,6 +1,6 @@
 #include "main.c"
 /*
-    Copyright (C) <year>  <name of author>
+    Copyright (C) 2017 Quantum Robotics
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -16,7 +16,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	
 */
-int DIAMWHEELS = 4;
+const int DIAMWHEELS = 4;
 task auton(){
 
 }

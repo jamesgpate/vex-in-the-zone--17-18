@@ -1,6 +1,6 @@
 #include "main.c"
 /*
-    Copyright (C) <year>  <name of author>
+    Copyright (C) 2017 Quantum Robotics
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU Affero General Public License as published
@@ -43,12 +43,23 @@ task drive(){
 			precision=!precision;
 		}
 		if(vexRT[Btn6U]==1){
-			motor[leftDRFBY]=-127;
-			motor[rightDRFBY]=-127;
+			if(vexRT[Btn7R]==1){
+				motor[leftDRFBY]=-64;
+				motor[rightDRFBY]=-64;
+			}else if(vexRT[Btn7R]==0){
+				motor[leftDRFBY]=-127;
+				motor[rightDRFBY]=-127;
+			}
 		}
 		else if(vexRT[Btn6D]==1){
-			motor[leftDRFBY]=127;
-			motor[rightDRFBY]=127;
+			if(vexRT[Btn7R]==1){
+				motor[leftDRFBY]=64;
+				motor[rightDRFBY]=64;
+			}
+			else if(vexRT[Btn7R]==0){
+				motor[leftDRFBY]=127;
+				motor[rightDRFBY]=127;
+			}
 		}
 		else{
 			motor[leftDRFBY]=0;
