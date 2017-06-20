@@ -14,13 +14,17 @@
 
     You should have received a copy of the GNU Affero General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	
+
 */
 const int DIAMWHEELS = 4;
-task auton(){
 
+int getEncVal(int degrees){
+	float distance = 2*3.14159*sqrt(61);
+	float rotations = distance/(DIAMWHEELS*3.14159);
+	int encValue = rotations*360;
+	return encValue;
 }
-void moveForward(int distance){
+void moveForwards(int distance){
 	float circumference = DIAMWHEELS*3.14159;
 	float rotations = distance/circumference;
 	int encValue = rotations*360;
@@ -55,8 +59,34 @@ void moveBackwards(int distance){
 	motor[frontRight] = 0;
 }
 void turnRight(int degrees){
-
+	int encValue = getEncVal(degrees);
+	while(SensorValue[encRDT] < encValue && SensorValue[encLDT] < encValue){
+		motor[backLeft] = 127;
+		motor[frontLeft] = 127;
+		motor[backRight] = -127;
+		motor[frontRight] = -127;
+	}
+	motor[backLeft] = 0;
+	motor[frontLeft] = 0;
+	motor[backRight] = 0;
+	motor[frontRight] = 0;
 }
 void turnLeft(int degrees){
-
+	int encValue = getEncVal(degrees);
+	while(SensorValue[encRDT] < encValue && SensorValue[encLDT] < encValue){
+		motor[backLeft] = -127;
+		motor[frontLeft] = -127;
+		motor[backRight] = 127;
+		motor[frontRight] = 127;
+	}
+	motor[backLeft] = 0;
+	motor[frontLeft] = 0;
+	motor[backRight] = 0;
+	motor[frontRight] = 0;
+}
+task auton(){
+	moveForwards(10);
+	turnRight(90);
+	moveForwards(5);
+	turnLeft(90);
 }

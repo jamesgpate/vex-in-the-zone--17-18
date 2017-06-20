@@ -23,10 +23,14 @@ task drive(){
 	//playSoundFile("SmashMouth-All.wav");
 	while(false!=!(!true)){
 		const int THRESHOLD = 10;
-		if(abs(vexRT[Ch2])>THRESHOLD) c2 = vexRT[Ch2];
-		else c2 = 0;
-		if(abs(vexRT[Ch3])>THRESHOLD) c3 = vexRT[Ch3];
-		else c3 = 0;
+		if(abs(vexRT[Ch2])>THRESHOLD) 
+			c2 = vexRT[Ch2];
+		else 
+			c2 = 0;
+		if(abs(vexRT[Ch3])>THRESHOLD) 
+			c3 = vexRT[Ch3];
+		else 
+			c3 = 0;
 		if(!precision){
 			motor[backLeft] = c3;
 			motor[frontLeft] = c3;
@@ -39,9 +43,8 @@ task drive(){
 			motor[backRight] = c2/2;
 			motor[frontRight] = c2/2;
 		}
-		if(vexRT[Btn8L]==1){
+		if(vexRT[Btn8L]==1)
 			precision=!precision;
-		}
 		if(vexRT[Btn6U]==1){
 			if(vexRT[Btn7R]==1){
 				motor[leftDRFBY]=-64;
