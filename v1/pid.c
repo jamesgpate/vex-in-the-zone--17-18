@@ -4,7 +4,7 @@ float pid_Ki = 1.0;
 float pid_Kd = 0.0;
 static int pidRunning = 1;
 static float pidRequestedValue;
-void pid(int motorNum, int sensor, float kp, float ki, float kd){
+void pid(tMotor motorNum, tSensors sensor, float kp, float ki, float kd){
 	float pidSensorCurrentValue;
 	float pidError;
 	float pidLastError;
