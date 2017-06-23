@@ -90,5 +90,14 @@ task drive(){
 				}
 			}
 		}
+		clearLCDLine(0);
+		clearLCDLine(1);
+		displayLCDString(0,0,"Battery: ");
+		displayLCDNumber(0,10, nImmediateBatteryLevel);
+		displayLCDString(0,14, " mV");
+		displayLCDString(1,0,"Backup: ");
+		displayLCDNumber(1,10,BackupBatteryLevel);
+		displayLCDString(1,14, " mV");
+		wait1Msec(25);
 	}
 }
