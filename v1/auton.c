@@ -17,7 +17,7 @@
 
 */
 const int DIAMWHEELS = 4;
-
+int count = 0;
 int getEncVal(int degrees){
 	float distance = 2*3.14159*sqrt(61);
 	float rotations = distance/(DIAMWHEELS*3.14159);
@@ -85,8 +85,23 @@ void turnLeft(int degrees){
 	motor[frontRight] = 0;
 }
 task auton(){
-	moveForwards(10);
-	turnRight(90);
-	moveForwards(5);
-	turnLeft(90);
+	switch(count){
+		case 0:
+			displayLCDCenteredString(0, "Autonomous 1");
+			displayLCDCenteredString(1, "is running!");
+			moveForwards(10);
+			turnRight(90);
+			moveForwards(5);
+			turnLeft(90);
+			break;
+		case 1:
+			break;
+		case 2:
+			break;
+		case 3:
+			break;
+		default:
+			break;
+	}
+
 }
