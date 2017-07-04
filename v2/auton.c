@@ -19,7 +19,7 @@
 const int DIAMWHEELS = 4;
 int count = 0;
 int getEncVal(int degrees){
-	float distance = 2*3.14159*sqrt(61);
+	float distance = 2*3.14159*8.4;
 	float rotations = distance/(DIAMWHEELS*3.14159);
 	int encValue = rotations*360;
 	return encValue;

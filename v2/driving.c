@@ -22,10 +22,10 @@ task drive(){
 	int c2 = 0;
 	int c3 = 0;
 	//playSoundFile("SmashMouth-All.wav");
-	pid(leftDRFBY,encDrfbL,1,1,0);
-	pid(rightDRFBY,encDrfbR,1,1,0);
-	while(false!=!(!true)){
-		const int THRESHOLD = 10;
+	pid(backLeft,encWheelL,1,1,0);
+	pid(backRight,encWheelR,1,1,0);
+	while(true){
+		const int THRESHOLD = 15;
 		if(abs(vexRT[Ch2])>THRESHOLD)
 			c2 = vexRT[Ch2];
 		else
