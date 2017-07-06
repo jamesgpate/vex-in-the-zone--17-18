@@ -21,9 +21,6 @@ task drive(){
 	bool precision = false;
 	int c2 = 0;
 	int c3 = 0;
-	//playSoundFile("SmashMouth-All.wav");
-	pid(backLeft,encWheelL,1,1,0);
-	pid(backRight,encWheelR,1,1,0);
 	while(true){
 		const int THRESHOLD = 15;
 		if(abs(vexRT[Ch2])>THRESHOLD)
@@ -50,32 +47,35 @@ task drive(){
 			precision=!precision;
 		if(vexRT[Btn6U]==1){
 			if(vexRT[Btn7R]==1){
-				pidRequestedValue=pidRequestedValue-25;
-				//motor[leftDRFBY]=-64;
-				//motor[rightDRFBY]=-64;
+				motor[bldr4b] = 63;
+				motor[brdr4b] = 63;
+				motor[fldr4b] = 63;
+				motor[frdr4b] = 63;
 			}else if(vexRT[Btn7R]==0){
-				pidRequestedValue=pidRequestedValue-50;
-				//motor[leftDRFBY]=-127;
-				//motor[rightDRFBY]=-127;
+				motor[bldr4b] = 127;
+				motor[brdr4b] = 127;
+				motor[fldr4b] = 127;
+				motor[frdr4b] = 127;
 			}
-		}
-		else if(vexRT[Btn6D]==1){
+		}else if(vexRT[Btn6D]==1){
 			if(vexRT[Btn7R]==1){
-				pidRequestedValue=pidRequestedValue+25;
-				//motor[leftDRFBY]=64;
-				//motor[rightDRFBY]=64;
+				motor[bldr4b] = -63;
+				motor[brdr4b] = -63;
+				motor[fldr4b] = -63;
+				motor[frdr4b] = -63;
+			}else if(vexRT[Btn7R]==0){
+				motor[bldr4b] = -127;
+				motor[brdr4b] = -127;
+				motor[fldr4b] = -127;
+				motor[frdr4b] = -127;
 			}
-			else if(vexRT[Btn7R]==0){
-				pidRequestedValue=pidRequestedValue+50;
-				//motor[leftDRFBY]=127;
-				//motor[rightDRFBY]=127;
-			}
+		}else{
+			motor[bldr4b] = 0;
+			motor[brdr4b] = 0;
+			motor[fldr4b] = 0;
+			motor[frdr4b] = 0;
 		}
-		else{
-			pidRequestedValue=pidRequestedValue;
-			//motor[leftDRFBY]=0;
-			//motor[rightDRFBY]=0;
-		}
+
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
 				wait1Msec(200);
