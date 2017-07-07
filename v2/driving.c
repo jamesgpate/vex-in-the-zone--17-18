@@ -21,6 +21,7 @@ task drive(){
 	bool precision = false;
 	int c2 = 0;
 	int c3 = 0;
+	//pid()
 	while(true){
 		const int THRESHOLD = 15;
 		if(abs(vexRT[Ch2])>THRESHOLD)
@@ -46,24 +47,24 @@ task drive(){
 		if(vexRT[Btn8L]==1)
 			precision=!precision;
 		if(vexRT[Btn6U]==1){
-			if(vexRT[Btn7R]==1){
+			if(vexRT[Btn5U]==1){
 				motor[bldr4b] = 63;
 				motor[brdr4b] = 63;
 				motor[fldr4b] = 63;
 				motor[frdr4b] = 63;
-			}else if(vexRT[Btn7R]==0){
+			}else if(vexRT[Btn5U]==0){
 				motor[bldr4b] = 127;
 				motor[brdr4b] = 127;
 				motor[fldr4b] = 127;
 				motor[frdr4b] = 127;
 			}
 		}else if(vexRT[Btn6D]==1){
-			if(vexRT[Btn7R]==1){
+			if(vexRT[Btn5U]==1){
 				motor[bldr4b] = -63;
 				motor[brdr4b] = -63;
 				motor[fldr4b] = -63;
 				motor[frdr4b] = -63;
-			}else if(vexRT[Btn7R]==0){
+			}else if(vexRT[Btn5U]==0){
 				motor[bldr4b] = -127;
 				motor[brdr4b] = -127;
 				motor[fldr4b] = -127;
@@ -75,7 +76,10 @@ task drive(){
 			motor[fldr4b] = 0;
 			motor[frdr4b] = 0;
 		}
-
+		if(vexRT[Btn5D]==1)
+			motor[claw] = 127;
+		if(vexRT[Btn7D]==1)
+			motor[claw] = -63;
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
 				wait1Msec(200);

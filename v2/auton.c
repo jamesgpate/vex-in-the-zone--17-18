@@ -41,7 +41,6 @@ void moveForwards(int distance){
 	motor[frontLeft] = 0;
 	motor[backRight] = 0;
 	motor[frontRight] = 0;
-	return 0;
 }
 void moveBackwards(int distance){
 	float circumference = DIAMWHEELS*3.14159;
@@ -59,7 +58,6 @@ void moveBackwards(int distance){
 	motor[frontLeft] = 0;
 	motor[backRight] = 0;
 	motor[frontRight] = 0;
-	return 0;
 }
 void turnRight(int degrees){
 	int encValue = getEncVal(degrees);
@@ -73,7 +71,6 @@ void turnRight(int degrees){
 	motor[frontLeft] = 0;
 	motor[backRight] = 0;
 	motor[frontRight] = 0;
-	return 0;
 }
 void turnLeft(int degrees){
 	int encValue = getEncVal(degrees);
@@ -87,7 +84,6 @@ void turnLeft(int degrees){
 	motor[frontLeft] = 0;
 	motor[backRight] = 0;
 	motor[frontRight] = 0;
-	return 0;
 }
 task auton(){
 	switch(count){
@@ -108,5 +104,4 @@ task auton(){
 		default:
 			break;
 	}
-	return 0;
 }
