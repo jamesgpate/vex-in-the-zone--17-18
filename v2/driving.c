@@ -23,7 +23,7 @@ task drive(){
 	int c3 = 0;
 	//pid()
 	while(true){
-		const int THRESHOLD = 15;
+		const int THRESHOLD = 20;
 		if(abs(vexRT[Ch2])>THRESHOLD)
 			c2 = vexRT[Ch2];
 		else
@@ -97,11 +97,11 @@ task drive(){
 		clearLCDLine(0);
 		clearLCDLine(1);
 		displayLCDString(0,0,"Battery: ");
-		displayLCDNumber(0,10, nImmediateBatteryLevel);
-		displayLCDString(0,14, " mV");
+		displayLCDNumber(0,9, nImmediateBatteryLevel);
+		displayLCDString(0,13, " mV");
 		displayLCDString(1,0,"Backup: ");
-		displayLCDNumber(1,10,BackupBatteryLevel);
-		displayLCDString(1,14, " mV");
+		displayLCDNumber(1,9,BackupBatteryLevel);
+		displayLCDString(1,13, " mV");
 		wait1Msec(25);
 	}
 }
