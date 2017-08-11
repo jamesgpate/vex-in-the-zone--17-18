@@ -78,8 +78,10 @@ task drive(){
 		}
 		if(vexRT[Btn5D]==1)
 			motor[claw] = 127;
-		if(vexRT[Btn7D]==1)
+		else if(vexRT[Btn7D]==1)
 			motor[claw] = -63;
+		else
+			motor[claw] = 0;
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
 				wait1Msec(200);
