@@ -1,6 +1,6 @@
 #pragma config(I2C_Usage, I2C1, i2cSensors)
-#pragma config(Sensor, dgtl5,  encWheelL,      sensorQuadEncoder)
-#pragma config(Sensor, dgtl7,  encWheelR,      sensorQuadEncoder)
+#pragma config(Sensor, dgtl5,  towerL,         sensorQuadEncoder)
+#pragma config(Sensor, dgtl7,  towerR,         sensorQuadEncoder)
 #pragma config(Sensor, I2C_1,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Sensor, I2C_2,  ,               sensorQuadEncoderOnI2CPort,    , AutoAssign )
 #pragma config(Motor,  port1,           bldr4b,        tmotorVex393TurboSpeed_MC29, openLoop)

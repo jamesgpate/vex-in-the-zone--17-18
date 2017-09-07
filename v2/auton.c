@@ -29,9 +29,9 @@ void moveForwards(int distance){
 	float circumference = DIAMWHEELS*3.14159;
 	float rotations = distance/circumference;
 	int encValue = rotations*360;
-	nMotorEncoder[encWheelL] = 0;
-	nMotorEncoder[encWheelR] = 0;
-	while(nMotorEncoder[encWheelL] < encValue && nMotorEncoder[encWheelR] < encValue){
+	nMotorEncoder[I2C_1] = 0;
+	nMotorEncoder[I2C_2] = 0;
+	while(nMotorEncoder[I2C_1] < encValue && nMotorEncoder[I2C_2] < encValue){
 		motor[backLeft] = 127;
 		motor[frontLeft] = 127;
 		motor[backRight] = 127;
@@ -46,9 +46,9 @@ void moveBackwards(int distance){
 	float circumference = DIAMWHEELS*3.14159;
 	float rotations = distance/circumference;
 	int encValue = rotations*360;
-	nMotorEncoder[encWheelL] = 0;
-	nMotorEncoder[encWheelR] = 0;
-	while(nMotorEncoder[encWheelL] < encValue && nMotorEncoder[encWheelR] < encValue){
+	nMotorEncoder[I2C_1] = 0;
+	nMotorEncoder[I2C_2] = 0;
+	while(nMotorEncoder[I2C_1] < encValue && nMotorEncoder[I2C_2] < encValue){
 		motor[backLeft] = -127;
 		motor[frontLeft] = -127;
 		motor[backRight] = -127;
@@ -61,7 +61,7 @@ void moveBackwards(int distance){
 }
 void turnRight(int degrees){
 	int encValue = getEncVal(degrees);
-	while(nMotorEncoder[encWheelL] < encValue && nMotorEncoder[encWheelR] < encValue){
+	while(nMotorEncoder[I2C_1] < encValue && nMotorEncoder[I2C_2] < encValue){
 		motor[backLeft] = 127;
 		motor[frontLeft] = 127;
 		motor[backRight] = -127;
@@ -74,7 +74,7 @@ void turnRight(int degrees){
 }
 void turnLeft(int degrees){
 	int encValue = getEncVal(degrees);
-	while(nMotorEncoder[encWheelL] < encValue && nMotorEncoder[encWheelR] < encValue){
+	while(nMotorEncoder[I2C_1] < encValue && nMotorEncoder[I2C_2] < encValue){
 		motor[backLeft] = -127;
 		motor[frontLeft] = -127;
 		motor[backRight] = 127;
