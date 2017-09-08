@@ -53,7 +53,7 @@ void waitForPress()
 		wait1Msec(5);
 }
 void pre_auton(){
-	clearLCDLine(0);
+	/*clearLCDLine(0);
 	clearLCDLine(1);
 	bLCDBacklight = true;
 	while(nLCDButtons != centerButton){
@@ -117,7 +117,7 @@ void pre_auton(){
 			break;
 
 		}
-	}
+	}*/
 }
 task autonomous(){
 	startTask(auton);
