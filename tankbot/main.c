@@ -1,3 +1,5 @@
+#pragma config(Sensor, dgtl1,  ,               sensorDigitalOut)
+#pragma config(Sensor, dgtl2,  ,               sensorDigitalOut)
 #pragma config(Motor,  port1,           frontLeft,     tmotorVex393_HBridge, openLoop, driveLeft)
 #pragma config(Motor,  port2,           backLeft,      tmotorVex393_MC29, openLoop, reversed, driveLeft)
 #pragma config(Motor,  port4,           backRight,     tmotorVex393_MC29, openLoop, driveRight)
@@ -6,6 +8,7 @@
 
 task main(){
 	int c2 = 0, c3 = 0;
+	bool toggle = false;
 	while(true){
 		const int THRESHOLD = 20;
 		if(abs(vexRT[Ch2])>THRESHOLD)
@@ -18,5 +21,10 @@ task main(){
 			c3 = 0;
 		motor[backLeft] = motor[frontLeft] = c3;
 		motor[backRight] = motor[frontRight] = c2;
+		if(vexRT[Btn8R]==1){
+			toggle = !toggle;
+		}
+		if(toggle) SensorValue[dgtl1] = SensorValue[dgtl2] = 1;
+		else SensorValue[dgtl1] = SensorValue[dgtl2] = 0;
 	}
 }
