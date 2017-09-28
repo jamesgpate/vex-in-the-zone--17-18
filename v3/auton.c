@@ -19,11 +19,10 @@
 const int DIAMWHEELS = 4;
 const int rOfRobot = 8.4;
 int count = 0;
-int getEncVal(int degrees){//this returns
+int getEncVal(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
 	float distance = 2*3.14159*rOfRobot;
 	float rotations = distance/(DIAMWHEELS*3.14159);
-	int encValue = rotations*360;
-	return encValue;
+	return rotations*360;
 }
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
 	float circumference = DIAMWHEELS*3.14159;

@@ -22,7 +22,10 @@ task drive(){
 	int c2 = 0;
 	int c3 = 0;
 	int lcdRefresh = 0;
-	//pid()
+	float pidRequestValue = 0;
+	float pid_Kp = 1.5;
+	float pid_Ki = 2;
+	float pid_Kd = 0;
 	while(true){
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
@@ -51,8 +54,9 @@ task drive(){
 		//switch for above
 		if(vexRT[Btn8L]==1)
 			precision=!precision;
+		//Non-PID version
 		//6U/6D for dr4b, 5U for half speed
-		if(vexRT[Btn6U]==1){
+		/*if(vexRT[Btn6U]==1){
 			if(vexRT[Btn5U]==1){
 				motor[ldr4b] = 63;
 				motor[rdr4b] = 63;
@@ -79,6 +83,35 @@ task drive(){
 			motor[claw] = -63;
 		else
 			motor[claw] = 0;
+		*/
+		//PID version
+		if(vexRT[Btn6U]==1){
+			if(vexRT[Btn5U]==1){
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-50);
+				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-50);
+			}else if(vexRT[Btn5U]==0){
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-100);
+				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-100);
+			}
+		}else if(vexRT[Btn6D]==1){
+			if(vexRT[Btn5U]==1){
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+50);
+				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+50);
+			}else if(vexRT[Btn5U]==0){
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+100);
+				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+100);
+			}
+		}else{
+			pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
+			pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
+		}
+		//open and close claw
+		if(vexRT[Btn5D]==1)
+			motor[claw] = 127;
+		else if(vexRT[Btn7D]==1)
+			motor[claw] = -63;
+		else
+			motor[claw] = 0;
 		//sounds
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
@@ -94,17 +127,15 @@ task drive(){
 				}
 			}
 		}
-		if(lcdRefresh%5==0){//refreshes lcd every tenth of a second
-			clearLCDLine(0);
-			clearLCDLine(1);
-			displayLCDString(0,0,"Battery: ");
-			displayLCDNumber(0,9, nImmediateBatteryLevel);
-			displayLCDString(0,13, " mV");
-			displayLCDString(1,0,"Backup: ");
-			displayLCDNumber(1,9,BackupBatteryLevel);
-			displayLCDString(1,13, " mV");
-			wait1Msec(25);
-			++lcdRefresh;
-		}
+		clearLCDLine(0);
+		clearLCDLine(1);
+		displayLCDString(0,0,"Battery: ");
+		displayLCDNumber(0,9, nImmediateBatteryLevel);
+		displayLCDString(0,13, " mV");
+		displayLCDString(1,0,"Backup: ");
+		displayLCDNumber(1,9,BackupBatteryLevel);
+		displayLCDString(1,13, " mV");
+		++lcdRefresh;
+		wait1Msec(25);
 	}
 }
