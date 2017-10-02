@@ -21,7 +21,6 @@ task drive(){
 	bool precision = false;
 	int c2 = 0;
 	int c3 = 0;
-	int lcdRefresh = 0;
 	float pidRequestValue = 0;
 	float pid_Kp = 1.5;
 	float pid_Ki = 2;
@@ -86,27 +85,25 @@ task drive(){
 		*/
 		//PID version
 		if(vexRT[Btn6U]==1){
-			if(vexRT[Btn5U]==1){
-				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-50);
-				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-50);
-			}else if(vexRT[Btn5U]==0){
 				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-100);
 				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-100);
-			}
 		}else if(vexRT[Btn6D]==1){
-			if(vexRT[Btn5U]==1){
-				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+50);
-				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+50);
-			}else if(vexRT[Btn5U]==0){
 				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+100);
 				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+100);
-			}
 		}else{
-			pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
-			pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
+			pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-5);
+			pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-5);
+		}
+		//
+		if (vexRT[Btn5U]==1){
+			motor[chain] = 127;
+		}else if (vexRT[Btn5D]==1){
+			motor[chain] = -127;
+		}else{
+			motor[chain] = 0;
 		}
 		//open and close claw
-		if(vexRT[Btn5D]==1)
+		if(vexRT[Btn7U]==1)
 			motor[claw] = 127;
 		else if(vexRT[Btn7D]==1)
 			motor[claw] = -63;
@@ -135,7 +132,6 @@ task drive(){
 		displayLCDString(1,0,"Backup: ");
 		displayLCDNumber(1,9,BackupBatteryLevel);
 		displayLCDString(1,13, " mV");
-		++lcdRefresh;
 		wait1Msec(25);
 	}
 }
