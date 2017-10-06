@@ -22,9 +22,11 @@ task drive(){
 	int c2 = 0;
 	int c3 = 0;
 	float pidRequestValue = 0;
-	float pid_Kp = 1.5;
-	float pid_Ki = 2;
+	float pid_Kp = 2;
+	float pid_Ki = 1;
 	float pid_Kd = 0;
+	SensorValue[towerL] = 0;
+	SensorValue[towerR] = 0;
 	while(true){
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
@@ -85,14 +87,14 @@ task drive(){
 		*/
 		//PID version
 		if(vexRT[Btn6U]==1){
-				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-100);
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+100);
 				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-100);
 		}else if(vexRT[Btn6D]==1){
-				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+100);
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-100);
 				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+100);
 		}else{
-			pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-5);
-			pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-5);
+			pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
+			pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
 		}
 		//
 		if (vexRT[Btn5U]==1){

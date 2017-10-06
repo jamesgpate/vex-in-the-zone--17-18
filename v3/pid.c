@@ -10,7 +10,6 @@ void pid(tMotor motorNum, tSensors sensor, float kp, float ki, float kd, float p
 	float pidIntegral;
 	float pidDerivative;
 	float pidDrive;
-	SensorValue[sensor] = 0;
 	pidLastError = 0;
 	pidIntegral = 0;
 	pid_Kp = kp;
