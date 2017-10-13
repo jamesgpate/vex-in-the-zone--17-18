@@ -87,11 +87,11 @@ task drive(){
 		*/
 		//PID version
 		if(vexRT[Btn6U]==1){
-				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+100);
-				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-100);
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+2);
+				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-2);
 		}else if(vexRT[Btn6D]==1){
-				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-100);
-				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+100);
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-2);
+				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+2);
 		}else{
 			pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
 			pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
