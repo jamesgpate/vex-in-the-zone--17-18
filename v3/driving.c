@@ -22,9 +22,9 @@ task drive(){
 	int c2 = 0;
 	int c3 = 0;
 	float pidRequestValue = 0;
-	float pid_Kp = 2;
+	float pid_Kp = 1;
 	float pid_Ki = 1;
-	float pid_Kd = 0;
+	float pid_Kd = 1;
 	SensorValue[towerL] = 0;
 	SensorValue[towerR] = 0;
 	while(true){
@@ -57,21 +57,21 @@ task drive(){
 			precision=!precision;
 		//Non-PID version
 		//6U/6D for dr4b, 5U for half speed
-		/*if(vexRT[Btn6U]==1){
+		if(vexRT[Btn6U]==1){
 			if(vexRT[Btn5U]==1){
 				motor[ldr4b] = 63;
-				motor[rdr4b] = 63;
+				motor[rdr4b] = -63;
 			}else if(vexRT[Btn5U]==0){
 				motor[ldr4b] = 127;
-				motor[rdr4b] = 127;
+				motor[rdr4b] = -127;
 			}
 		}else if(vexRT[Btn6D]==1){
 			if(vexRT[Btn5U]==1){
 				motor[ldr4b] = -63;
-				motor[rdr4b] = -63;
+				motor[rdr4b] = 63;
 			}else if(vexRT[Btn5U]==0){
 				motor[ldr4b] = -127;
-				motor[rdr4b] = -127;
+				motor[rdr4b] = 127;
 			}
 		}else{
 			motor[ldr4b] = 0;
@@ -84,14 +84,15 @@ task drive(){
 			motor[claw] = -63;
 		else
 			motor[claw] = 0;
-		*/
+		
 		//PID version
+		/*
 		if(vexRT[Btn6U]==1){
-				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+2);
-				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-2);
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+5);
+				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-5);
 		}else if(vexRT[Btn6D]==1){
-				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-2);
-				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+2);
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-5);
+				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+5);
 		}else{
 			pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
 			pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
@@ -104,6 +105,7 @@ task drive(){
 		}else{
 			motor[chain] = 0;
 		}
+		*/
 		//open and close claw
 		if(vexRT[Btn7U]==1)
 			motor[claw] = 127;
@@ -134,6 +136,6 @@ task drive(){
 		displayLCDString(1,0,"Backup: ");
 		displayLCDNumber(1,9,BackupBatteryLevel);
 		displayLCDString(1,13, " mV");
-		wait1Msec(25);
+		wait1Msec(10);
 	}
 }

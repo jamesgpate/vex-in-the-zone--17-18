@@ -1,4 +1,3 @@
-#pragma config(I2C_Usage, I2C1, i2cSensors)
 #pragma config(Sensor, dgtl5,  towerL,         sensorQuadEncoder)
 #pragma config(Sensor, dgtl7,  towerR,         sensorQuadEncoder)
 #pragma config(Motor,  port2,           left1,         tmotorVex393TurboSpeed_MC29, openLoop, driveLeft)
