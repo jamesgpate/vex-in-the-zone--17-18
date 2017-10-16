@@ -1,4 +1,3 @@
-#include "main.c"
 /*
     Copyright (C) 2017 Quantum Robotics
 

@@ -1,4 +1,3 @@
-#include "main.c"
 #include "pid.c"
 /*
     Copyright (C) 2017 Quantum Robotics
@@ -22,9 +21,9 @@ task drive(){
 	int c2 = 0;
 	int c3 = 0;
 	float pidRequestValue = 0;
-	float pid_Kp = 1;
+	float pid_Kp = 10;
 	float pid_Ki = 1;
-	float pid_Kd = 1;
+	float pid_Kd = 0;
 	SensorValue[towerL] = 0;
 	SensorValue[towerR] = 0;
 	while(true){
@@ -57,6 +56,7 @@ task drive(){
 			precision=!precision;
 		//Non-PID version
 		//6U/6D for dr4b, 5U for half speed
+
 		if(vexRT[Btn6U]==1){
 			if(vexRT[Btn5U]==1){
 				motor[ldr4b] = 63;
@@ -77,42 +77,35 @@ task drive(){
 			motor[ldr4b] = 0;
 			motor[rdr4b] = 0;
 		}
+
 		//open and close claw
-		if(vexRT[Btn5D]==1)
+		if(vexRT[Btn7U]==1)
 			motor[claw] = 127;
-		else if(vexRT[Btn7D]==1)
+		else if(vexRT[Btn7L]==1)
 			motor[claw] = -63;
 		else
 			motor[claw] = 0;
-		
+
 		//PID version
 		/*
 		if(vexRT[Btn6U]==1){
-				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+5);
-				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-5);
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+2);
+				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-2);
 		}else if(vexRT[Btn6D]==1){
-				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-5);
-				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+5);
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-2);
+				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+2);
 		}else{
 			pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
 			pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
 		}
-		//
-		if (vexRT[Btn5U]==1){
+		*/
+		if(vexRT[Btn5U]==1){
 			motor[chain] = 127;
 		}else if (vexRT[Btn5D]==1){
 			motor[chain] = -127;
 		}else{
 			motor[chain] = 0;
 		}
-		*/
-		//open and close claw
-		if(vexRT[Btn7U]==1)
-			motor[claw] = 127;
-		else if(vexRT[Btn7D]==1)
-			motor[claw] = -63;
-		else
-			motor[claw] = 0;
 		//sounds
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
