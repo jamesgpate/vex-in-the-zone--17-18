@@ -125,6 +125,8 @@ task drive(){
 		displayLCDString(1,0,"Backup: ");
 		displayLCDNumber(1,9,BackupBatteryLevel);
 		displayLCDString(1,13, " mV");
-		wait1Msec(10);
+		SensorValue[sensor] = 0;
+		wait1Msec(25);
+		
 	}
 }

@@ -49,7 +49,7 @@ void pid(tMotor motorNum, tSensors sensor, float kp, float ki, float kd, float p
 		if(pidDrive > 127) pidDrive = 127;
 		if(pidDrive < -127) pidDrive = -127;
 		motor[motorNum] = pidDrive;
-		SensorValue[sensor] = 0;
+		
 	}else{
 		pidError = 0;
 		pidLastError = 0;
