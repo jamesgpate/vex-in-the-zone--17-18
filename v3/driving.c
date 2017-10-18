@@ -56,7 +56,7 @@ task drive(){
 			precision=!precision;
 		//Non-PID version
 		//6U/6D for dr4b, 5U for half speed
-/*
+
 		if(vexRT[Btn6U]==1){
 			if(vexRT[Btn5U]==1){
 				motor[ldr4b] = 63;
@@ -77,7 +77,7 @@ task drive(){
 			motor[ldr4b] = 0;
 			motor[rdr4b] = 0;
 		}
-*/
+
 		//open and close claw
 		if(vexRT[Btn7U]==1)
 			motor[claw] = 127;
@@ -87,7 +87,7 @@ task drive(){
 			motor[claw] = 0;
 
 		//PID version
-
+/*
 		if(vexRT[Btn6U]==1){
 				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+=0.5);
 				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,-pidRequestValue);
@@ -102,6 +102,7 @@ task drive(){
 		}else{
 			motor[chain] = 0;
 		}
+		*/
 		//sounds
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
@@ -125,8 +126,9 @@ task drive(){
 		displayLCDString(1,0,"Backup: ");
 		displayLCDNumber(1,9,BackupBatteryLevel);
 		displayLCDString(1,13, " mV");
-		SensorValue[sensor] = 0;
+		SensorValue[towerL] = 0;
+		SensorValue[towerR] = 0;
 		wait1Msec(25);
-		
+
 	}
 }
