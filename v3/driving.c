@@ -16,12 +16,12 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+float pidRequestValue = 0;
 task drive(){
 	bool precision = false;
 	int c2 = 0;
 	int c3 = 0;
-	float pidRequestValue = 0;
-	float pid_Kp = 10;
+	float pid_Kp = 2;
 	float pid_Ki = 1;
 	float pid_Kd = 0;
 	SensorValue[towerL] = 0;
@@ -56,7 +56,7 @@ task drive(){
 			precision=!precision;
 		//Non-PID version
 		//6U/6D for dr4b, 5U for half speed
-
+/*
 		if(vexRT[Btn6U]==1){
 			if(vexRT[Btn5U]==1){
 				motor[ldr4b] = 63;
@@ -77,7 +77,7 @@ task drive(){
 			motor[ldr4b] = 0;
 			motor[rdr4b] = 0;
 		}
-
+*/
 		//open and close claw
 		if(vexRT[Btn7U]==1)
 			motor[claw] = 127;
@@ -87,18 +87,14 @@ task drive(){
 			motor[claw] = 0;
 
 		//PID version
-		/*
+
 		if(vexRT[Btn6U]==1){
-				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+2);
-				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-2);
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+=0.5);
+				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,-pidRequestValue);
 		}else if(vexRT[Btn6D]==1){
-				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-2);
-				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue+2);
-		}else{
-			pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
-			pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,pidRequestValue);
+				pid(ldr4b,towerL,pid_Kp,pid_Ki,pid_Kd,pidRequestValue-=0.5);
+				pid(rdr4b,towerR,pid_Kp,pid_Ki,pid_Kd,-pidRequestValue);
 		}
-		*/
 		if(vexRT[Btn5U]==1){
 			motor[chain] = 127;
 		}else if (vexRT[Btn5D]==1){
