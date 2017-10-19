@@ -1,4 +1,3 @@
-
 /*
     Copyright (C) 2017 Quantum Robotics
 
@@ -66,10 +65,10 @@ task drive(){
 		}
 
 		//open and close claw
-		if(vexRT[Btn7U]==1)
+		if(vexRT[Btn5U]==1)
 			motor[claw] = 127;
-		else if(vexRT[Btn7L]==1)
-			motor[claw] = -63;
+		else if(vexRT[Btn5D]==1)
+			motor[claw] = -127;
 		else
 			motor[claw] = 0;
 

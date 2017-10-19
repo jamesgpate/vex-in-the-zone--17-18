@@ -27,9 +27,9 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	float circumference = DIAMWHEELS*3.14159;
 	float rotations = distance/circumference;
 	int encValue = rotations*360;
-	nMotorEncoder[I2C_1] = 0;
-	nMotorEncoder[I2C_2] = 0;
-	while(nMotorEncoder[I2C_1] < encValue && nMotorEncoder[I2C_2] < encValue){
+	SensorValue[leftDT] = 0;
+	SensorValue[rightDT] = 0;
+	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
 		motor[left1] = 127;
 		motor[left2] = 127;
 		motor[right1] = 127;
@@ -44,9 +44,9 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 	float circumference = DIAMWHEELS*3.14159;
 	float rotations = distance/circumference;
 	int encValue = rotations*360;
-	nMotorEncoder[I2C_1] = 0;
-	nMotorEncoder[I2C_2] = 0;
-	while(nMotorEncoder[I2C_1] < encValue && nMotorEncoder[I2C_2] < encValue){
+	SensorValue[leftDT] = 0;
+	SensorValue[rightDT] = 0;
+	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
 		motor[left1] = -127;
 		motor[left2] = -127;
 		motor[right1] = -127;
@@ -59,7 +59,7 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 }
 void turnRight(int degrees){//this turns the robot to the right *degrees* degrees
 	int encValue = getEncVal(degrees);
-	while(nMotorEncoder[I2C_1] < encValue && nMotorEncoder[I2C_2] < encValue){
+	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
 		motor[left1] = 127;
 		motor[left2] = 127;
 		motor[right1] = -127;
@@ -72,7 +72,7 @@ void turnRight(int degrees){//this turns the robot to the right *degrees* degree
 }
 void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
 	int encValue = getEncVal(degrees);
-	while(nMotorEncoder[I2C_1] < encValue && nMotorEncoder[I2C_2] < encValue){
+	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
 		motor[left1] = -127;
 		motor[left2] = -127;
 		motor[right1] = 127;
