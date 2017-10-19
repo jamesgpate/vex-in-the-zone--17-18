@@ -52,13 +52,13 @@ void waitForPress()
 		wait1Msec(5);
 }
 void pre_auton(){//Selects auton program
-	clearLCDLine(0);
+	/*clearLCDLine(0);
 	clearLCDLine(1);
 	bLCDBacklight = true;
 	while(nLCDButtons != centerButton){
 		switch(count){
 		case 0:
-			displayLCDCenteredString(0, "Autonomous 1");
+			displayLCDCenteredS\tring(0, "Autonomous 1");
 			displayLCDCenteredString(1, "<         Enter        >");
 			waitForPress();
 			if(nLCDButtons == leftButton){
@@ -116,7 +116,7 @@ void pre_auton(){//Selects auton program
 			break;
 
 		}
-	}
+	}*/
 }
 task autonomous(){
 	startTask(auton);

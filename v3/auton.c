@@ -86,12 +86,29 @@ void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
 task auton(){
 	switch(count){
 		case 0://first auton
-			displayLCDCenteredString(0, "Autonomous 1");
-			displayLCDCenteredString(1, "is running!");
+			motor[claw] = 127;
+			wait1Msec(500);
 			moveForwards(10);
-			turnRight(90);
-			moveForwards(5);
-			turnLeft(90);
+			while(SensorValue[towerL] < 30 && SensorValue[towerR] < 30){
+				motor[ldr4b] = 63;
+				motor[rdr4b] = -63;
+			}
+			motor[claw] = -127;
+			wait1Msec(500);
+			motor[ldr4b] = 0;
+			motor[rdr4b] = 0;
+			moveForwards(10);
+			while(SensorValue[towerL] > 0 && SensorValue[towerR] > 0){
+				motor[ldr4b] = -63;
+				motor[rdr4b] = 63;
+			}
+			motor[ldr4b] = 0;
+			motor[rdr4b] = 0;
+			motor[claw] = 127;
+			wait1Msec(500);
+			motor[claw] = -127;
+			wait1Msec(500);
+			motor[claw] = 0;
 			break;
 		case 1:
 			break;
