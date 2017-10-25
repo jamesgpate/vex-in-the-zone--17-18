@@ -52,18 +52,16 @@ task drive(){
 		//6U/6D for dr4b, 5U for half speed
 
 		if(vexRT[Btn6U]==1){
-				motor[rdr4b] = 127;
+			moveMotorTarget(rdr4b, 1, 70, true);
 		}else if(vexRT[Btn6D]==1){
-				motor[rdr4b] = -127;
-		}else{
-			motor[rdr4b] = 10;
+			moveMotorTarget(rdr4b, -1, 70, true);		
 		}
 
 		//open and close claw
 		if(vexRT[Btn5U]==1)
-			moveMotorTarget(rdr4b, 1, 70, true);
+			motor[claw] = 127;
 		else if(vexRT[Btn5D]==1)
-			moveMotorTarget(rdr4b, -1, 70, true);
+			motor[claw] = -127;
 
 		//sounds
 		if(!bSoundActive){
