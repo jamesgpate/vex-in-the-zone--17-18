@@ -93,7 +93,7 @@ void closeClaw(){
 	wait1Msec(300);
 	motor[claw] = 0;	
 }
-void rotateDr4bUpTo(int degrees){
+void rotateDr4bUpTo(int degrees){//this rotates the dr4b *degrees* degrees up
 	motor[ldr4b] = 0;
 	motor[rdr4b] = 0;
 	while(SensorValue[towerL] < degrees && SensorValue[towerR] < degrees){
@@ -103,7 +103,7 @@ void rotateDr4bUpTo(int degrees){
 	motor[ldr4b] = 0;
 	motor[rdr4b] = 0;
 }
-void rotateDr4bDownTo(int degrees){
+void rotateDr4bDownTo(int degrees){//this rotates the dr4b *degrees* degrees up
 	motor[ldr4b] = 0;
 	motor[rdr4b] = 0;
 	while(SensorValue[towerL] > degrees && SensorValue[towerR] > degrees){
@@ -113,7 +113,7 @@ void rotateDr4bDownTo(int degrees){
 	motor[ldr4b] = 0;
 	motor[rdr4b] = 0;
 }
-task auton(){
+task auton(){//main task
 	switch(count){
 		case 0://first auton
 			closeClaw();
