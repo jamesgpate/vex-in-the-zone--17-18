@@ -52,9 +52,9 @@ task drive(){
 		//6U/6D for dr4b, 5U for half speed
 
 		if(vexRT[Btn6U]==1){
-			moveMotorTarget(rdr4b, 1, 70, true);
+			motor[rdr4b] = 60;
 		}else if(vexRT[Btn6D]==1){
-			moveMotorTarget(rdr4b, -1, 70, true);		
+			motor[rdr4b] = -60;
 		}
 
 		//open and close claw
