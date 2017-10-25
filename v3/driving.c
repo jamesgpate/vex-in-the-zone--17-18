@@ -49,8 +49,6 @@ task drive(){
 		//switch for above
 		if(vexRT[Btn8L]==1)
 			precision=!precision;
-		nMotorPIDSpeedCtrl[ldr4b] = mtrSpeedReg;
-		nMotorPIDSpeedCtrl[rdr4b] = mtrSpeedReg;
 		//6U/6D for dr4b, 5U for half speed
 
 		if(vexRT[Btn6U]==1){
@@ -60,8 +58,8 @@ task drive(){
 				motor[ldr4b] = -127;
 				motor[rdr4b] = 127;
 		}else{
-			motor[ldr4b] = 0;
-			motor[rdr4b] = 0;
+			motor[ldr4b] = 20;
+			motor[rdr4b] = -20;
 		}
 
 		//open and close claw

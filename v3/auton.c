@@ -83,32 +83,46 @@ void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
 	motor[right1] = 0;
 	motor[right2] = 0;
 }
+void openClaw(){
+	motor[claw] = -127;
+	wait1Msec(300);
+	motor[claw] = 0;
+}
+void closeClaw(){
+	motor[claw] = 127;
+	wait1Msec(300);
+	motor[claw] = 0;	
+}
+void rotateDr4bUpTo(int degrees){
+	motor[ldr4b] = 0;
+	motor[rdr4b] = 0;
+	while(SensorValue[towerL] < degrees && SensorValue[towerR] < degrees){
+		motor[ldr4b] = 63;
+		motor[rdr4b] = -63;
+	}
+	motor[ldr4b] = 0;
+	motor[rdr4b] = 0;
+}
+void rotateDr4bDownTo(int degrees){
+	motor[ldr4b] = 0;
+	motor[rdr4b] = 0;
+	while(SensorValue[towerL] > degrees && SensorValue[towerR] > degrees){
+		motor[ldr4b] = -63;
+		motor[rdr4b] = 63;
+	}
+	motor[ldr4b] = 0;
+	motor[rdr4b] = 0;
+}
 task auton(){
 	switch(count){
 		case 0://first auton
-			motor[claw] = 127;
-			wait1Msec(500);
+			closeClaw();
 			moveForwards(10);
-			while(SensorValue[towerL] < 30 && SensorValue[towerR] < 30){
-				motor[ldr4b] = 63;
-				motor[rdr4b] = -63;
-			}
-			motor[claw] = -127;
-			wait1Msec(500);
-			motor[ldr4b] = 0;
-			motor[rdr4b] = 0;
+			rotateDr4bUpTo(30);
 			moveForwards(10);
-			while(SensorValue[towerL] > 0 && SensorValue[towerR] > 0){
-				motor[ldr4b] = -63;
-				motor[rdr4b] = 63;
-			}
-			motor[ldr4b] = 0;
-			motor[rdr4b] = 0;
-			motor[claw] = 127;
-			wait1Msec(500);
-			motor[claw] = -127;
-			wait1Msec(500);
-			motor[claw] = 0;
+			openClaw();
+			moveBackwards(10);
+			rotateDr4bDownTo(0);
 			break;
 		case 1:
 			break;
