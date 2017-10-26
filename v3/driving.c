@@ -34,17 +34,13 @@ task drive(){
 			c3 = 0;
 		//regular speed
 		if(!precision){
-			motor[left1] = c3;
-			motor[left2] = c3;
-			motor[right1] = c2;
-			motor[right2] = c2;
+			motor[left1] = motor[left2] = motor[left3] = c3;
+			motor[right1] = motor[right2] = motor[right3] = c2;
 		}
 		//half speed
 		if(precision){
-			motor[left1] = c3/2;
-			motor[left2] = c3/2;
-			motor[right1] = c2/2;
-			motor[right2] = c2/2;
+			motor[left1] = motor[left2] = motor[left3] = c3/2;
+			motor[right1] = motor[right2] = motor[right3] = c2/2;
 		}
 		//switch for above
 		if(vexRT[Btn8L]==1)

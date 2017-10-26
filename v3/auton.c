@@ -30,15 +30,9 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	SensorValue[leftDT] = 0;
 	SensorValue[rightDT] = 0;
 	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
-		motor[left1] = 127;
-		motor[left2] = 127;
-		motor[right1] = 127;
-		motor[right2] = 127;
+		motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = 100;
 	}
-	motor[left1] = 0;
-	motor[left2] = 0;
-	motor[right1] = 0;
-	motor[right2] = 0;
+	motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = 0;
 }
 void moveBackwards(int distance){//this moves the robot backwards *distance* inches
 	float circumference = DIAMWHEELS*3.14159;
@@ -47,41 +41,25 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 	SensorValue[leftDT] = 0;
 	SensorValue[rightDT] = 0;
 	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
-		motor[left1] = -127;
-		motor[left2] = -127;
-		motor[right1] = -127;
-		motor[right2] = -127;
+		motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = -100;
 	}
-	motor[left1] = 0;
-	motor[left2] = 0;
-	motor[right1] = 0;
-	motor[right2] = 0;
+	motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = 0;
 }
 void turnRight(int degrees){//this turns the robot to the right *degrees* degrees
 	int encValue = getEncVal(degrees);
 	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
-		motor[left1] = 127;
-		motor[left2] = 127;
-		motor[right1] = -127;
-		motor[right2] = -127;
+		motor[left1] = motor[left2] = 100;
+		motor[right1] =	motor[right2] = -100;
 	}
-	motor[left1] = 0;
-	motor[left2] = 0;
-	motor[right1] = 0;
-	motor[right2] = 0;
+	motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = 0;
 }
 void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
 	int encValue = getEncVal(degrees);
 	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
-		motor[left1] = -127;
-		motor[left2] = -127;
-		motor[right1] = 127;
-		motor[right2] = 127;
+		motor[left1] = motor[left2] = -100;
+		motor[right1] =	motor[right2] = 100;
 	}
-	motor[left1] = 0;
-	motor[left2] = 0;
-	motor[right1] = 0;
-	motor[right2] = 0;
+	motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = 0;
 }
 void openClaw(){
 	motor[claw] = -127;
