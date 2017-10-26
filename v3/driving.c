@@ -50,19 +50,19 @@ task drive(){
 		if(vexRT[Btn8L]==1)
 			precision=!precision;
 		//6U/6D for dr4b, 5U for half speed
-
-		if(vexRT[Btn6U]==1){
+		if(vexRT[Btn6U]==1)
 			motor[rdr4b] = 60;
-		}else if(vexRT[Btn6D]==1){
+		else if(vexRT[Btn6D]==1)
 			motor[rdr4b] = -60;
-		}
-
+		else
+			motor[rdr4b] = 0;
 		//open and close claw
 		if(vexRT[Btn5U]==1)
 			motor[claw] = 127;
 		else if(vexRT[Btn5D]==1)
 			motor[claw] = -127;
-
+		else
+			motor[claw] = 0;
 		//sounds
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
@@ -87,6 +87,5 @@ task drive(){
 		displayLCDNumber(1,9,BackupBatteryLevel);
 		displayLCDString(1,13, " mV");
 		wait1Msec(25);
-
 	}
 }
