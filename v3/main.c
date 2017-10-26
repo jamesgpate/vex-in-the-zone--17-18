@@ -2,7 +2,7 @@
 #pragma config(Sensor, dgtl3,  rightDT,        sensorQuadEncoder)
 #pragma config(Sensor, dgtl5,  towerL,         sensorQuadEncoder)
 #pragma config(Sensor, dgtl7,  towerR,         sensorQuadEncoder)
-#pragma config(Motor,  port1,           left3,         tmotorVex393TurboSpeed_HBridge, openLoop, driveLeft)
+#pragma config(Motor,  port1,           left3,         tmotorVex393TurboSpeed_HBridge, openLoop, reversed, driveLeft)
 #pragma config(Motor,  port2,           left1,         tmotorVex393TurboSpeed_MC29, openLoop, driveLeft)
 #pragma config(Motor,  port3,           right1,        tmotorVex393TurboSpeed_MC29, openLoop, reversed, driveRight)
 #pragma config(Motor,  port4,           ldr4b,         tmotorVex393HighSpeed_MC29, PIDControl, encoderPort, dgtl5)
