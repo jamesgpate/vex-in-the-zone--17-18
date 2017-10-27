@@ -61,18 +61,14 @@ task drive(){
 			motor[claw] = 0;
 		//sounds
 		if(!bSoundActive){
-			if(vexRT[Btn8R]==1){
-				wait1Msec(200);
-				if(vexRT[Btn8R]==1){
-					playSoundFile("allstar.wav");
-				}
-			}
-			if(vexRT[Btn8U]==1){
-				wait1Msec(200);
-				if(vexRT[Btn8U]==1){
-					playSoundFile("autozone.wav");
-				}
-			}
+			if(vexRT[Btn8R]==1)
+				playSoundFile("allstar.wav");
+			if(vexRT[Btn8U]==1)
+				playSoundFile("autozone.wav");
+			if(SensorValue[towerR]>70)
+				playTone(440, 10);
+		}else{
+			clearSounds();
 		}
 		clearLCDLine(0);
 		clearLCDLine(1);
