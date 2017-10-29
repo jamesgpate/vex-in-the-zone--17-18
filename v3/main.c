@@ -42,7 +42,6 @@ const short leftButton = 1;
 const short centerButton = 2;
 const short rightButton = 4;
 
-
 void waitForRelease()
 {
 	while(nLCDButtons != 0)

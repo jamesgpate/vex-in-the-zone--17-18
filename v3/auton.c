@@ -16,7 +16,7 @@
 
 */
 const int DIAMWHEELS = 4;
-const int rOfRobot = 8.4;
+const int rOfRobot = 9;
 int count = 0;
 int getEncVal(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
 	float distance = 2*3.14159*rOfRobot;
@@ -30,7 +30,7 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	SensorValue[leftDT] = 0;
 	SensorValue[rightDT] = 0;
 	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
-		motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = 100;
+		motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = 66;
 	}
 	motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = 0;
 }
@@ -41,23 +41,27 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 	SensorValue[leftDT] = 0;
 	SensorValue[rightDT] = 0;
 	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
-		motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = -100;
+		motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = -66;
 	}
 	motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = 0;
 }
 void turnRight(int degrees){//this turns the robot to the right *degrees* degrees
 	int encValue = getEncVal(degrees);
+	SensorValue[leftDT] = 0;
+	SensorValue[rightDT] = 0;
 	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
-		motor[left1] = motor[left2] = 100;
-		motor[right1] =	motor[right2] = -100;
+		motor[left1] = motor[left2] = 66;
+		motor[right1] =	motor[right2] = -66;
 	}
 	motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = 0;
 }
 void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
 	int encValue = getEncVal(degrees);
-	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
-		motor[left1] = motor[left2] = -100;
-		motor[right1] =	motor[right2] = 100;
+	SensorValue[leftDT] = 0;
+	SensorValue[rightDT] = 0;
+	while(SensorValue[leftDT] > encValue && SensorValue[rightDT] > encValue){
+		motor[left1] = motor[left2] = -66;
+		motor[right1] =	motor[right2] = 66;
 	}
 	motor[left1] = motor[left2] = motor[left3] = motor[right1] = motor[right2] = motor[right3] = 0;
 }
@@ -71,30 +75,57 @@ void closeClaw(){
 	wait1Msec(300);
 	motor[claw] = 0;
 }
-void rotateDr4bUpTo(int degrees){//this rotates the dr4b *degrees* degrees up
+void rotateDr4bUpTo(float inches){//this rotates the dr4b *degrees* degrees up
 	motor[rdr4b] = 0;
-	while(SensorValue[towerL] < degrees && SensorValue[towerR] < degrees){
-		motor[rdr4b] = 63;
+	while((float)SensorValue[towerR] > -(inches/43.0)*90.0){
+		motor[rdr4b] = 100;
 	}
 	motor[rdr4b] = 0;
 }
-void rotateDr4bDownTo(int degrees){//this rotates the dr4b *degrees* degrees up
+void rotateDr4bDownTo(float inches){//this rotates the dr4b *degrees* degrees down
 	motor[rdr4b] = 0;
-	while(SensorValue[towerL] > degrees && SensorValue[towerR] > degrees){
-		motor[rdr4b] = -63;
+	while((float)SensorValue[towerR] < -(inches/43.0)*90.0){
+		motor[rdr4b] = -100;
 	}
 	motor[rdr4b] = 0;
 }
 task auton(){//main task
+	SensorValue[leftDT] = 0;
+	SensorValue[rightDT] = 0;
 	switch(count){
 		case 0://first auton
 			closeClaw();
-			moveForwards(10);
-			rotateDr4bUpTo(30);
-			moveForwards(10);
+			wait1Msec(1000);
+			rotateDr4bUpTo(35.0);
+			wait1Msec(1000);
+			moveForwards(10.0);
+			wait1Msec(1000);
+			rotateDr4bDownTo(25.0);
+			wait1Msec(1000);
 			openClaw();
-			moveBackwards(10);
-			rotateDr4bDownTo(0);
+			moveBackwards(5);
+			/*
+			rotateDr4bDownTo(5.0);
+			wait1Msec(1000);
+			turnLeft(30);
+			moveForwards(48);
+			closeClaw();
+			rotateDr4bUpTo(20.0);
+			wait1Msec(1000);
+			moveForwards(12);
+			rotateDr4bDownTo(5.0);
+			openClaw();
+			wait1Msec(1000);
+			moveBackwards(12);
+			turnRight(30);
+			moveForwards(8);
+			closeClaw();
+			wait1Msec(1000);
+			rotateDr4bUpTo(25.0);
+			turnLeft(30);
+			rotateDr4bDownTo(5.0);
+			openClaw();
+			*/
 			break;
 		case 1:
 			break;

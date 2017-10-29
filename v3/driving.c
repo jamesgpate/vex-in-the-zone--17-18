@@ -61,14 +61,14 @@ task drive(){
 			motor[claw] = 0;
 		//sounds
 		if(!bSoundActive){
-			if(vexRT[Btn8R]==1)
+			if(vexRT[Btn8R]==1){
+				wait1Msec(100);
 				playSoundFile("allstar.wav");
-			if(vexRT[Btn8U]==1)
-				playSoundFile("autozone.wav");
-			if(SensorValue[towerR]>70)
-				playTone(440, 10);
-		}else{
-			clearSounds();
+			}
+			if(vexRT[Btn8U]==1){
+				wait1Msec(100);
+				playSoundFile("omae_wa_mou_shindeiru.wav");
+			}
 		}
 		clearLCDLine(0);
 		clearLCDLine(1);
