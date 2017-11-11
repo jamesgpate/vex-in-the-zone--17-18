@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #pragma config(Sensor, dgtl1,  ldt, sensorQuadEncoder)
 #pragma config(Sensor, dgtl3,  rdt, sensorQuadEncoder)
 #pragma config(Sensor, dgtl5, towerEnc, sensorQuadEncoder)
@@ -7,6 +8,16 @@
 #pragma config(Sensor, in3, potentiometer, sensorPotentiometer)
 #pragma config(Motor, port1, claw, tmotorVex393TurboSpeed_HBridge, PIDControl)
 #pragma config(Motor, port2, elbow, tmotorVex393TurboSpeed_MC29, PIDControl)
+=======
+#pragma config(Sensor, dgtl1,  ldt1, sensorQuadEncoder)
+#pragma config(Sensor, dgtl3,  ldt2, sensorQuadEncoder)
+#pragma config(Sensor, dgtl5,  rdt1, sensorQuadEncoder)
+#pragma config(Sensor, dgtl7,  rdt2, sensorQuadEncoder)
+#pragma config(Sensor, in1, gyro1, sensorGyro)
+#pragma config(Sensor, in2, gyro2, sensorGyro)
+#pragma config(Motor, port1, claw, tmotorVex393TurboSpeed_HBridge, openLoop)
+#pragma config(Motor, port2, joint, tmotorVex393TurboSpeed_MC29, openLoop)
+>>>>>>> 2f3748ed4acd1f35ec66dafbc61d36f6fc67d927
 #pragma config(Motor, port3, tower, tmotorVex393TurboSpeed_MC29, openLoop)
 #pragma config(Motor, port4, bldt, tmotorVex393HighSpeed_MC29, openLoop)
 #pragma config(Motor, port5, brdt, tmotorVex393TurboSpeed_MC29, openLoop)
