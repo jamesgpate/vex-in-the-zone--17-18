@@ -19,8 +19,6 @@ task drive(){
 	bool precision = false;
 	int c2 = 0;
 	int c3 = 0;
-	SensorValue[towerL] = 0;
-	SensorValue[towerR] = 0;
 	while(true){
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
@@ -34,31 +32,17 @@ task drive(){
 			c3 = 0;
 		//regular speed
 		if(!precision){
-			motor[left1] = motor[left2] = motor[left3] = c3;
-			motor[right1] = motor[right2] = motor[right3] = c2;
+			motor[fldt] = motor[bldt] = c3;
+			motor[frdt] = motor[brdt] = c2;
 		}
 		//half speed
 		if(precision){
-			motor[left1] = motor[left2] = motor[left3] = c3/2;
-			motor[right1] = motor[right2] = motor[right3] = c2/2;
+			motor[fldt] = motor[bldt] = c3/2;
+			motor[frdt] = motor[brdt] = c2/2;
 		}
 		//switch for above
 		if(vexRT[Btn8L]==1)
 			precision=!precision;
-		//6U/6D for dr4b, 5U for half speed
-		if(vexRT[Btn6U]==1)
-			motor[rdr4b] = 60;
-		else if(vexRT[Btn6D]==1)
-			motor[rdr4b] = -60;
-		else
-			motor[rdr4b] = 0;
-		//open and close claw
-		if(vexRT[Btn5U]==1)
-			motor[claw] = 127;
-		else if(vexRT[Btn5D]==1)
-			motor[claw] = -127;
-		else
-			motor[claw] = 0;
 		//sounds
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
