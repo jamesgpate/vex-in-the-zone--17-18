@@ -43,6 +43,9 @@ task drive(){
 		//switch for above
 		if(vexRT[Btn8L]==1)
 			precision=!precision;
+		if(vexRT[Btn5U])motor[mgml] = motor[mgmr] = 60;
+		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = -60;
+		else motor[mgml] = motor[mgmr] = 0;
 		//sounds
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
