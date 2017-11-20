@@ -15,6 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
+
 task drive(){
 	bool precision = false;
 	int c4 = 0;
@@ -22,7 +23,7 @@ task drive(){
 	while(true){
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
-		if(abs(vexRT[Ch2])>THRESHOLD)
+		if(abs(vexRT[Ch4])>THRESHOLD)
 			c4 = vexRT[Ch4];
 		else
 			c4 = 0;
@@ -33,12 +34,12 @@ task drive(){
 		//regular speed
 		if(!precision){
 			motor[fldt] = motor[bldt] = c4+c3;
-			motor[frdt] = motor[brdt] = c4-c3;
+			motor[frdt] = motor[brdt] = -c4+c3;
 		}
 		//half speed
 		if(precision){
 			motor[fldt] = motor[bldt] = (c4+c3)/2;
-			motor[frdt] = motor[brdt] = (c4-c3)/2;
+			motor[frdt] = motor[brdt] = (-c4+c3)/2;
 		}
 		//switch for above
 		if(vexRT[Btn8L]==1)
@@ -48,7 +49,8 @@ task drive(){
 		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = -60;
 		else motor[mgml] = motor[mgmr] = 0;
 		//
-		
+		motor[elbow]=vexRT[Ch1];
+		motor[tower]=vexRT[Ch2];
 		//sounds
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
