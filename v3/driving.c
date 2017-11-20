@@ -17,28 +17,28 @@
 */
 task drive(){
 	bool precision = false;
-	int c2 = 0;
+	int c4 = 0;
 	int c3 = 0;
 	while(true){
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
 		if(abs(vexRT[Ch2])>THRESHOLD)
-			c2 = vexRT[Ch2];
+			c4 = vexRT[Ch4];
 		else
-			c2 = 0;
+			c4 = 0;
 		if(abs(vexRT[Ch3])>THRESHOLD)
 			c3 = vexRT[Ch3];
 		else
 			c3 = 0;
 		//regular speed
 		if(!precision){
-			motor[fldt] = motor[bldt] = c3;
-			motor[frdt] = motor[brdt] = c2;
+			motor[fldt] = motor[bldt] = c4+c3;
+			motor[frdt] = motor[brdt] = c4-c3;
 		}
 		//half speed
 		if(precision){
-			motor[fldt] = motor[bldt] = c3/2;
-			motor[frdt] = motor[brdt] = c2/2;
+			motor[fldt] = motor[bldt] = (c4+c3)/2;
+			motor[frdt] = motor[brdt] = (c4-c3)/2;
 		}
 		//switch for above
 		if(vexRT[Btn8L]==1)
@@ -48,9 +48,7 @@ task drive(){
 		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = -60;
 		else motor[mgml] = motor[mgmr] = 0;
 		//
-		if(vexRT[Btn8U]==1){
-			
-		}
+		
 		//sounds
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
