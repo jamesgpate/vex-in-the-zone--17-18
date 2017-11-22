@@ -16,6 +16,54 @@
 
 */
 
+void sendByte(int byte) //Send 8 bits, most significant to least significant.
+{
+	for(int i = 128; i >= 1; i = i / 2)
+	{
+		SensorValue[data] = byte & i;
+		SensorValue[clock] = 1;
+		//This is where you may want to add a delay if it is being unreliable
+		SensorValue[clock] = 0;
+	}
+}
+void startTransmission() //Send Start Frame
+{
+	for(int i = 0; i < 4; i++)
+	{
+		sendByte(0);
+	}
+}
+
+void endTransmission() //Send End Frame
+{
+	for(int i = 0; i < 4; i++)
+	{
+		sendByte(255);
+	}
+}
+//Send a single LED frame, these get pushed down the strip as more and more are added
+//Brightness: From 0 to 31, an LED-wide modifier to the brightness
+//R,G,B: The RGB color value of the LED
+void sendLEDFrame(int brightness, int r, int g, int b)
+{
+	sendByte(224 | brightness); //The brightness byte is 111xxxxx, there are only 5 bits that you can use
+	sendByte(b);
+	sendByte(g);
+	sendByte(r);
+}
+
+//Sets the whole strip's color and brightness
+//Length: How many LEDs are in the strip
+//Brightness, R,G,B: Same as above
+void setStripColor(int length, int brightness, int r, int g, int b) //Set the whole strip to a uniform color.
+{
+	startTransmission();
+	for(int i = 0; i < length; i++)
+	{
+		sendLEDFrame(brightness, r, g, b);
+	}
+	endTransmission();
+}
 task drive(){
 	bool precision = false;
 	int c4 = 0;
@@ -49,8 +97,30 @@ task drive(){
 		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = -60;
 		else motor[mgml] = motor[mgmr] = 0;
 		//
-		motor[elbow]=vexRT[Ch1];
-		motor[tower]=vexRT[Ch2];
+		if(vexRT[Btn6U]==1){
+			motor[claw]=127;
+		}else if(vexRT[Btn6D]==1){
+			motor[claw]=-127;
+		}else{
+			motor[claw]=0;
+		}
+		//
+		if(vexRT[Btn7L]==1){
+			setPIDforMotor(tower, true);
+			setPIDforMotor(elbow, true);
+      motor[tower]=100;
+			motor[elbow]=100;
+		}else if(vexRT[Btn7R]==1){
+			setPIDforMotor(tower, true);
+			setPIDforMotor(elbow, true);
+			motor[tower]=-100;
+			motor[elbow]=-100;
+		}else{
+			setPIDforMotor(tower, false);
+			setPIDforMotor(elbow, false);
+			motor[elbow]=(abs(vexRT[Ch1])>15?vexRT[Ch1]/3*2:0);
+			motor[tower]=(abs(vexRT[Ch2])>25?vexRT[Ch2]/3*2:0);
+		}
 		//sounds
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
@@ -62,6 +132,7 @@ task drive(){
 				playSoundFile("omae_wa_mou_shindeiru.wav");
 			}
 		}
+		setStripColor(120,15,27,1,68);
 		clearLCDLine(0);
 		clearLCDLine(1);
 		displayLCDString(0,0,"Battery: ");
