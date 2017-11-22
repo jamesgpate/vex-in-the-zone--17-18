@@ -65,9 +65,9 @@ void setStripColor(int length, int brightness, int r, int g, int b) //Set the wh
 	endTransmission();
 }
 task drive(){
-	bool precision = false;
 	int c4 = 0;
 	int c3 = 0;
+	short r = 27, g = 0, b = 63;
 	while(true){
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
@@ -79,19 +79,9 @@ task drive(){
 			c3 = vexRT[Ch3];
 		else
 			c3 = 0;
-		//regular speed
-		if(!precision){
-			motor[fldt] = motor[bldt] = c4+c3;
-			motor[frdt] = motor[brdt] = -c4+c3;
-		}
-		//half speed
-		if(precision){
-			motor[fldt] = motor[bldt] = (c4+c3)/2;
-			motor[frdt] = motor[brdt] = (-c4+c3)/2;
-		}
-		//switch for above
-		if(vexRT[Btn8L]==1)
-			precision=!precision;
+		//
+		motor[fldt] = motor[bldt] = c4+c3;
+		motor[frdt] = motor[brdt] = -c4+c3;
 		//
 		if(vexRT[Btn5U])motor[mgml] = motor[mgmr] = 60;
 		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = -60;
@@ -108,7 +98,7 @@ task drive(){
 		if(vexRT[Btn7L]==1){
 			setPIDforMotor(tower, true);
 			setPIDforMotor(elbow, true);
-      motor[tower]=100;
+      		motor[tower]=100;
 			motor[elbow]=100;
 		}else if(vexRT[Btn7R]==1){
 			setPIDforMotor(tower, true);
@@ -132,7 +122,14 @@ task drive(){
 				playSoundFile("omae_wa_mou_shindeiru.wav");
 			}
 		}
-		setStripColor(120,15,27,1,68);
+		//
+		if(vexRT[Btn7U]==1)r++;
+		if(vexRT[Btn7D]==1)r--;
+		if(vexRT[Btn8L]==1)g++;
+		if(vexRT[Btn8R]==1)g--;
+		if(vexRT[Btn8U]==1)b++;
+		if(vexRT[Btn8D]==1)b--;
+		setStripColor(120,15,(int)r,(int)g,(int)b);
 		clearLCDLine(0);
 		clearLCDLine(1);
 		displayLCDString(0,0,"Battery: ");
