@@ -123,12 +123,12 @@ task drive(){
 			}
 		}
 		//
-		if(vexRT[Btn7U]==1)r++;
-		if(vexRT[Btn7D]==1)r--;
-		if(vexRT[Btn8L]==1)g++;
-		if(vexRT[Btn8R]==1)g--;
-		if(vexRT[Btn8U]==1)b++;
-		if(vexRT[Btn8D]==1)b--;
+		if(vexRT[Btn7U]==1)r+=5;
+		if(vexRT[Btn7D]==1)r-=5;
+		if(vexRT[Btn8L]==1)g+=5;
+		if(vexRT[Btn8R]==1)g-=5;
+		if(vexRT[Btn8U]==1)b+=5;
+		if(vexRT[Btn8D]==1)b-=5;
 		setStripColor(120,15,(int)r,(int)g,(int)b);
 		clearLCDLine(0);
 		clearLCDLine(1);

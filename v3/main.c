@@ -61,11 +61,9 @@ void pre_auton(){//Selects auton program
 	clearLCDLine(0);
 	clearLCDLine(1);
 	bLCDBacklight = true;
-	SensorType[gyro1] = sensorNone;
-	SensorType[gyro2] = sensorNone;
+	SensorType[gyro] = sensorNone;
 	wait1Msec(1500);
-	SensorType[gyro1] = sensorGyro;
-	SensorType[gyro2] = sensorGyro;
+	SensorType[gyro] = sensorGyro;
 	playTone(440,10);
 	wait1Msec(100);
 	playTone(660,10);
