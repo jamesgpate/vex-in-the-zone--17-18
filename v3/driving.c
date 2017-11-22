@@ -129,7 +129,7 @@ task drive(){
 		if(vexRT[Btn8R]==1)g-=5;
 		if(vexRT[Btn8U]==1)b+=5;
 		if(vexRT[Btn8D]==1)b-=5;
-		setStripColor(120,15,(int)r,(int)g,(int)b);
+		setStripColor(120,31,(int)r,(int)g,(int)b);
 		clearLCDLine(0);
 		clearLCDLine(1);
 		displayLCDString(0,0,"Battery: ");
