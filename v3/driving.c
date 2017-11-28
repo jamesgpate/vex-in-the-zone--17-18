@@ -64,6 +64,61 @@ void setStripColor(int length, int brightness, int r, int g, int b) //Set the wh
 	}
 	endTransmission();
 }
+void fadeColors(){
+	short r =255;
+	short g =0;
+	short b =0;
+	startTransmission();
+	for(int i=0; i < 255; i++)
+	{
+		sendLEDFrame(31, r, g, b);
+		wait1Msec(3);
+		g++;
+	}
+	endTransmission();
+	startTransmission();
+	for(int i=0; i < 255; i++)
+	{
+		sendLEDFrame(31, r, g, b);
+		wait1Msec(3);
+		r--;
+	}
+	endTransmission();
+	startTransmission();
+	for(int i=0; i < 255; i++)
+	{
+		sendLEDFrame(31, r, g, b);
+		wait1Msec(3);
+		b++;
+	}
+	endTransmission();
+	startTransmission();
+	for(int i=0; i < 255; i++)
+	{
+		sendLEDFrame(31, r, g, b);
+		wait1Msec(3);
+		g--;
+	}
+	endTransmission();
+	startTransmission();
+	for(int i=0; i < 255; i++)
+	{
+		sendLEDFrame(31, r, g, b);
+		wait1Msec(3);
+		r++;
+	}
+	endTransmission();
+	startTransmission();
+	for(int i=0; i < 255; i++)
+	{
+		sendLEDFrame(31, r, g, b);
+		wait1Msec(3);
+		b--;
+	}
+	endTransmission();
+
+}
+
 task drive(){
 	int c4 = 0;
 	int c3 = 0;
@@ -94,7 +149,7 @@ task drive(){
 		}else{
 			motor[claw]=0;
 		}
-		//
+		/*
 		if(vexRT[Btn7L]==1){
 			setPIDforMotor(tower, true);
 			setPIDforMotor(elbow, true);
@@ -110,7 +165,7 @@ task drive(){
 			setPIDforMotor(elbow, false);
 			motor[elbow]=(abs(vexRT[Ch1])>15?vexRT[Ch1]/3*2:0);
 			motor[tower]=(abs(vexRT[Ch2])>25?vexRT[Ch2]/3*2:0);
-		}
+		}*/
 		//sounds
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
@@ -123,7 +178,7 @@ task drive(){
 			}
 		}
 		//
-		if(vexRT[Btn7U]==1)r+=5;
+		if(vexRT[Btn7U]==1)fadeColors();
 		if(vexRT[Btn7D]==1)r-=5;
 		if(vexRT[Btn8L]==1)g+=5;
 		if(vexRT[Btn8R]==1)g-=5;
