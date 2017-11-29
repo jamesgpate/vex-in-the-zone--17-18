@@ -1,18 +1,18 @@
 /*
-    Copyright (C) 2017 Quantum Robotics
+Copyright (C) 2017 Quantum Robotics
 
-    This program is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Affero General Public License as published
-    by the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published
+by the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    This program is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU Affero General Public License for more details.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
 
-    You should have received a copy of the GNU Affero General Public License
-    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 
@@ -117,28 +117,41 @@ task smoothWave(){
 	short g = 0;
 	short b = 0;
 	startTransmission();
-	for(g, g<128, g++){
+	for(g = 0; g<128; g++){
 		sendLEDFrame(31,r,g,b);
+		wait1Msec(4);
 	}
+	endTransmission();
 	wait1Msec(100);
-	for(g, g<255, g++){
+	startTransmission();
+
+	for(g = 128; g<255; g++){
 		sendLEDFrame(31,r,g,b);
+		wait1Msec(4);
 	}
+	endTransmission();
 	wait1Msec(100);
-	for(r, r>0, r--){
+	startTransmission();	for(r = 255; r>0; r--){
 		sendLEDFrame(31,r,g,b);
+		wait1Msec(4);
 	}
+	endTransmission();
 	wait1Msec(100);
-	for(g = 255 - b, b < 255, b++){
-		sendLEDFrame(31,r,g,b);
+	startTransmission();	for(b = 0; b < 255; b++){
+		sendLEDFrame(31,r,g = 255 - b,b);
+		wait1Msec(4);
 	}
+	endTransmission();
 	wait1Msec(100);
-	for(r, r < 128, r++){
+	startTransmission();	for(r = 0; r < 128; r++){
 		sendLEDFrame(31,r,g,b);
+		wait1Msec(4);
 	}
+	endTransmission();
 	wait1Msec(100);
-	for(b = 255 - 2(r-128), r < 255, r++){
-		sendLEDFrame(31,r,g,b);
+	startTransmission();	for(r = 128; r < 255; r++){
+		sendLEDFrame(31,r,g,b = 255-2*(r-128));
+		wait1Msec(4);
 	}
 	endTransmission();
 }
@@ -167,27 +180,27 @@ task drive(){
 		//
 		if(vexRT[Btn6U]==1){
 			motor[claw]=127;
-		}else if(vexRT[Btn6D]==1){
+			}else if(vexRT[Btn6D]==1){
 			motor[claw]=-127;
-		}else{
+			}else{
 			motor[claw]=0;
 		}
 		/*
 		if(vexRT[Btn7L]==1){
-			setPIDforMotor(tower, true);
-			setPIDforMotor(elbow, true);
-      		motor[tower]=100;
-			motor[elbow]=100;
+		setPIDforMotor(tower, true);
+		setPIDforMotor(elbow, true);
+		motor[tower]=100;
+		motor[elbow]=100;
 		}else if(vexRT[Btn7R]==1){
-			setPIDforMotor(tower, true);
-			setPIDforMotor(elbow, true);
-			motor[tower]=-100;
-			motor[elbow]=-100;
+		setPIDforMotor(tower, true);
+		setPIDforMotor(elbow, true);
+		motor[tower]=-100;
+		motor[elbow]=-100;
 		}else{
-			setPIDforMotor(tower, false);
-			setPIDforMotor(elbow, false);
-			motor[elbow]=(abs(vexRT[Ch1])>15?vexRT[Ch1]/3*2:0);
-			motor[tower]=(abs(vexRT[Ch2])>25?vexRT[Ch2]/3*2:0);
+		setPIDforMotor(tower, false);
+		setPIDforMotor(elbow, false);
+		motor[elbow]=(abs(vexRT[Ch1])>15?vexRT[Ch1]/3*2:0);
+		motor[tower]=(abs(vexRT[Ch2])>25?vexRT[Ch2]/3*2:0);
 		}*/
 		//sounds
 		if(!bSoundActive){
@@ -201,8 +214,8 @@ task drive(){
 			}
 		}
 		//
-		if(vexRT[Btn7U]==1)StartTask(fadeColors);
-		if(vexRT[Btn7D]==1)StartTask(smoothWave);
+		if(vexRT[Btn7U]==1)startTask(fadeColors);
+		if(vexRT[Btn7D]==1)startTask(smoothWave);
 		if(vexRT[Btn8L]==1)g+=5;
 		if(vexRT[Btn8R]==1)g-=5;
 		if(vexRT[Btn8U]==1)b+=5;
