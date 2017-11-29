@@ -46,3 +46,4 @@ task auton(){//main task
 			break;
 	}
 }
+//mgm up = 4095 mgm down 2550

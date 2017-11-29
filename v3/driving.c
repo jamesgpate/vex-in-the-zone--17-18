@@ -64,53 +64,47 @@ void setStripColor(int length, int brightness, int r, int g, int b) //Set the wh
 	}
 	endTransmission();
 }
-void fadeColors(){
-	short r =255;
-	short g =0;
-	short b =0;
+task fadeColors(){
+	short r = 255;
+	short g = 0;
+	short b = 0;
 	startTransmission();
-	for(int i=0; i < 255; i++)
-	{
+	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
 		wait1Msec(3);
 		g++;
 	}
 	endTransmission();
 	startTransmission();
-	for(int i=0; i < 255; i++)
-	{
+	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
 		wait1Msec(3);
 		r--;
 	}
 	endTransmission();
 	startTransmission();
-	for(int i=0; i < 255; i++)
-	{
+	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
 		wait1Msec(3);
 		b++;
 	}
 	endTransmission();
 	startTransmission();
-	for(int i=0; i < 255; i++)
-	{
+	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
 		wait1Msec(3);
 		g--;
 	}
 	endTransmission();
 	startTransmission();
-	for(int i=0; i < 255; i++)
-	{
+	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
 		wait1Msec(3);
 		r++;
 	}
 	endTransmission();
 	startTransmission();
-	for(int i=0; i < 255; i++)
-	{
+	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
 		wait1Msec(3);
 		b--;
@@ -118,11 +112,40 @@ void fadeColors(){
 	endTransmission();
 
 }
-
+task smoothWave(){
+	short r = 255;
+	short g = 0;
+	short b = 0;
+	startTransmission();
+	for(g, g<128, g++){
+		sendLEDFrame(31,r,g,b);
+	}
+	wait1Msec(100);
+	for(g, g<255, g++){
+		sendLEDFrame(31,r,g,b);
+	}
+	wait1Msec(100);
+	for(r, r>0, r--){
+		sendLEDFrame(31,r,g,b);
+	}
+	wait1Msec(100);
+	for(g = 255 - b, b < 255, b++){
+		sendLEDFrame(31,r,g,b);
+	}
+	wait1Msec(100);
+	for(r, r < 128, r++){
+		sendLEDFrame(31,r,g,b);
+	}
+	wait1Msec(100);
+	for(b = 255 - 2(r-128), r < 255, r++){
+		sendLEDFrame(31,r,g,b);
+	}
+	endTransmission();
+}
 task drive(){
 	int c4 = 0;
 	int c3 = 0;
-	short r = 27, g = 0, b = 63;
+	short r = 25, g = 0, b = 60;
 	while(true){
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
@@ -178,8 +201,8 @@ task drive(){
 			}
 		}
 		//
-		if(vexRT[Btn7U]==1)fadeColors();
-		if(vexRT[Btn7D]==1)r-=5;
+		if(vexRT[Btn7U]==1)StartTask(fadeColors);
+		if(vexRT[Btn7D]==1)StartTask(smoothWave);
 		if(vexRT[Btn8L]==1)g+=5;
 		if(vexRT[Btn8R]==1)g-=5;
 		if(vexRT[Btn8U]==1)b+=5;
