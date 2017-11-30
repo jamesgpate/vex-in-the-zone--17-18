@@ -65,93 +65,130 @@ void setStripColor(int length, int brightness, int r, int g, int b) //Set the wh
 	endTransmission();
 }
 task fadeColors(){
-	short r = 255;
-	short g = 0;
-	short b = 0;
+	int r = 255;
+	int g = 0;
+	int b = 0;
 	startTransmission();
 	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
-		wait1Msec(3);
+		wait1Msec(4);
 		g++;
 	}
 	endTransmission();
 	startTransmission();
 	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
-		wait1Msec(3);
+		wait1Msec(4);
 		r--;
 	}
 	endTransmission();
 	startTransmission();
 	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
-		wait1Msec(3);
+		wait1Msec(4);
 		b++;
 	}
 	endTransmission();
 	startTransmission();
 	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
-		wait1Msec(3);
+		wait1Msec(4);
 		g--;
 	}
 	endTransmission();
 	startTransmission();
 	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
-		wait1Msec(3);
+		wait1Msec(4);
 		r++;
 	}
 	endTransmission();
 	startTransmission();
 	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
-		wait1Msec(3);
+		wait1Msec(4);
 		b--;
 	}
 	endTransmission();
 
 }
 task smoothWave(){
-	short r = 255;
-	short g = 0;
-	short b = 0;
+	int r = 255;
+	int g = 0;
+	int b = 0;
 	startTransmission();
 	for(g = 0; g<128; g++){
 		sendLEDFrame(31,r,g,b);
 		wait1Msec(4);
 	}
 	endTransmission();
-	wait1Msec(100);
 	startTransmission();
-
 	for(g = 128; g<255; g++){
 		sendLEDFrame(31,r,g,b);
 		wait1Msec(4);
 	}
 	endTransmission();
-	wait1Msec(100);
-	startTransmission();	for(r = 255; r>0; r--){
+	startTransmission();
+	for(r = 255; r>0; r--){
 		sendLEDFrame(31,r,g,b);
 		wait1Msec(4);
 	}
 	endTransmission();
-	wait1Msec(100);
-	startTransmission();	for(b = 0; b < 255; b++){
-		sendLEDFrame(31,r,g = 255 - b,b);
-		wait1Msec(4);
-	}
-	endTransmission();
-	wait1Msec(100);
-	startTransmission();	for(r = 0; r < 128; r++){
+	startTransmission();
+	for(b = 0; b < 255; b++){
+		g = 255 - b;
 		sendLEDFrame(31,r,g,b);
 		wait1Msec(4);
 	}
 	endTransmission();
-	wait1Msec(100);
-	startTransmission();	for(r = 128; r < 255; r++){
-		sendLEDFrame(31,r,g,b = 255-2*(r-128));
+	startTransmission();
+	for(r = 0; r < 128; r++){
+		sendLEDFrame(31,r,g,b);
 		wait1Msec(4);
+	}
+	endTransmission();
+	startTransmission();
+	for(r = 128; r < 255; r++){
+		b = 255-2*(r-128);
+		sendLEDFrame(31,r,g,b);
+		wait1Msec(4);
+	}
+	endTransmission();
+}
+task smoothWaveFullStrip(){
+	int r = 255;
+	int g = 0;
+	int b = 0;
+	startTransmission();
+	for(g = 0; g<128; g++){
+		setStripColor(120,31,r,g,b);
+	}
+	endTransmission();
+	startTransmission();
+	for(g = 128; g<255; g++){
+		setStripColor(120,31,r,g,b);
+	}
+	endTransmission();
+	startTransmission();
+	for(r = 255; r>0; r--){
+		setStripColor(120,31,r,g,b);
+	}
+	endTransmission();
+	startTransmission();
+	for(b = 0; b < 255; b++){
+		g = 255 - b;
+		setStripColor(120,31,r,g,b);
+	}
+	endTransmission();
+	startTransmission();
+	for(r = 0; r < 128; r++){
+		setStripColor(120,31,r,g,b);
+	}
+	endTransmission();
+	startTransmission();
+	for(r = 128; r < 255; r++){
+		b = 255-2*(r-128);
+		setStripColor(120,31,r,g,b);
 	}
 	endTransmission();
 }
@@ -185,23 +222,16 @@ task drive(){
 			}else{
 			motor[claw]=0;
 		}
-		/*
 		if(vexRT[Btn7L]==1){
-		setPIDforMotor(tower, true);
-		setPIDforMotor(elbow, true);
-		motor[tower]=100;
-		motor[elbow]=100;
+			motor[tower]=100;
+			motor[elbow]=100;
 		}else if(vexRT[Btn7R]==1){
-		setPIDforMotor(tower, true);
-		setPIDforMotor(elbow, true);
-		motor[tower]=-100;
-		motor[elbow]=-100;
+			motor[tower]=-100;
+			motor[elbow]=-100;
 		}else{
-		setPIDforMotor(tower, false);
-		setPIDforMotor(elbow, false);
-		motor[elbow]=(abs(vexRT[Ch1])>15?vexRT[Ch1]/3*2:0);
-		motor[tower]=(abs(vexRT[Ch2])>25?vexRT[Ch2]/3*2:0);
-		}*/
+			motor[elbow]=(abs(vexRT[Ch1])>15?vexRT[Ch1]/3*2:0);
+			motor[tower]=(abs(vexRT[Ch2])>25?vexRT[Ch2]/3*2:0);
+		}
 		//sounds
 		if(!bSoundActive){
 			if(vexRT[Btn8R]==1){
@@ -216,11 +246,10 @@ task drive(){
 		//
 		if(vexRT[Btn7U]==1)startTask(fadeColors);
 		if(vexRT[Btn7D]==1)startTask(smoothWave);
-		if(vexRT[Btn8L]==1)g+=5;
+		if(vexRT[Btn8L]==1)startTask(smoothWaveFullStrip);
 		if(vexRT[Btn8R]==1)g-=5;
 		if(vexRT[Btn8U]==1)b+=5;
 		if(vexRT[Btn8D]==1)b-=5;
-		setStripColor(120,31,(int)r,(int)g,(int)b);
 		clearLCDLine(0);
 		clearLCDLine(1);
 		displayLCDString(0,0,"Battery: ");
