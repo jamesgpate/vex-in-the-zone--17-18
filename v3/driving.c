@@ -196,6 +196,8 @@ task drive(){
 	int c4 = 0;
 	int c3 = 0;
 	short r = 25, g = 0, b = 60;
+	resetMotorEncoder(tower);
+	resetMotorEncoder(elbow);
 	while(true){
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
@@ -222,6 +224,7 @@ task drive(){
 			}else{
 			motor[claw]=0;
 		}
+		/*
 		if(vexRT[Btn7L]==1){
 			motor[tower]=100;
 			motor[elbow]=100;
@@ -229,8 +232,19 @@ task drive(){
 			motor[tower]=-100;
 			motor[elbow]=-100;
 		}else{
-			motor[elbow]=(abs(vexRT[Ch1])>15?vexRT[Ch1]/3*2:0);
-			motor[tower]=(abs(vexRT[Ch2])>25?vexRT[Ch2]/3*2:0);
+			motor[elbow]=(abs(vexRT[Ch1])>20?vexRT[Ch1]/3*2:0);
+			motor[tower]=(abs(vexRT[Ch2])>20?vexRT[Ch2]/3*2:0);
+		}
+		*/
+		if(vexRT[Btn7L]==1){
+			moveMotorTarget(tower, 4, 50, true);
+      moveMotorTarget(elbow, 4, 50, true);
+		}else if(vexRT[Btn7R]==1){
+			moveMotorTarget(tower, -4, 50, true);
+      moveMotorTarget(elbow, -4, 50, true);
+     }else{
+			moveMotorTarget(tower, vexRT[Ch1]-20, 50, true);
+      moveMotorTarget(elbow, vexRT[Ch2]-20, 50, true);
 		}
 		//sounds
 		if(!bSoundActive){
