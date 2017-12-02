@@ -192,6 +192,8 @@ task smoothWaveFullStrip(){
 	}
 	endTransmission();
 }
+int currentTowerAngle = 0;
+int currentElbowAngle = 0;
 task drive(){
 	int c4 = 0;
 	int c3 = 0;
@@ -199,6 +201,8 @@ task drive(){
 	resetMotorEncoder(tower);
 	resetMotorEncoder(elbow);
 	while(true){
+		currentTowerAngle = (392*SensorValue[towerEnc])/(5*360)+180;
+		currentElbowAngle = (-627.2*SensorValue[elbowEnc])/(5*360) + currentTowerAngle;
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
 		if(abs(vexRT[Ch4])>THRESHOLD)
@@ -238,13 +242,13 @@ task drive(){
 		*/
 		if(vexRT[Btn7L]==1){
 			moveMotorTarget(tower, 4, 50, true);
-      moveMotorTarget(elbow, 4, 50, true);
+      		moveMotorTarget(elbow, 4, 50, true);
 		}else if(vexRT[Btn7R]==1){
 			moveMotorTarget(tower, -4, 50, true);
-      moveMotorTarget(elbow, -4, 50, true);
-     }else{
-			moveMotorTarget(tower, vexRT[Ch1]-20, 50, true);
-      moveMotorTarget(elbow, vexRT[Ch2]-20, 50, true);
+      		moveMotorTarget(elbow, -4, 50, true);
+     	}else{
+			moveMotorTarget(tower, vexRT[Ch1]/2, 50, true);
+      		moveMotorTarget(elbow, vexRT[Ch2]/2, 50, true);
 		}
 		//sounds
 		if(!bSoundActive){
