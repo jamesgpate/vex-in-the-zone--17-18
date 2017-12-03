@@ -247,8 +247,8 @@ task drive(){
 			moveMotorTarget(tower, -4, 50, true);
       		moveMotorTarget(elbow, -4, 50, true);
      	}else{
-			moveMotorTarget(tower, vexRT[Ch1]/2, 50, true);
-      		moveMotorTarget(elbow, vexRT[Ch2]/2, 50, true);
+			moveMotorTarget(tower, vexRT[Ch1]/2, 75, true);
+      		moveMotorTarget(elbow, vexRT[Ch2]/2, 75, true);
 		}
 		//sounds
 		if(!bSoundActive){
