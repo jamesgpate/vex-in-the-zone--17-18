@@ -223,12 +223,11 @@ task drive(){
 		//
 		if(vexRT[Btn6U]==1){
 			motor[claw]=127;
-			}else if(vexRT[Btn6D]==1){
+		}else if(vexRT[Btn6D]==1){
 			motor[claw]=-127;
-			}else{
+		}else{
 			motor[claw]=0;
 		}
-		/*
 		if(vexRT[Btn7L]==1){
 			motor[tower]=100;
 			motor[elbow]=100;
@@ -236,19 +235,9 @@ task drive(){
 			motor[tower]=-100;
 			motor[elbow]=-100;
 		}else{
-			motor[elbow]=(abs(vexRT[Ch1])>20?vexRT[Ch1]/3*2:0);
-			motor[tower]=(abs(vexRT[Ch2])>20?vexRT[Ch2]/3*2:0);
-		}
-		*/
-		if(vexRT[Btn7L]==1){
-			moveMotorTarget(tower, 4, 50, true);
-      		moveMotorTarget(elbow, 4, 50, true);
-		}else if(vexRT[Btn7R]==1){
-			moveMotorTarget(tower, -4, 50, true);
-      		moveMotorTarget(elbow, -4, 50, true);
-     	}else{
-			moveMotorTarget(tower, vexRT[Ch1]/2, 75, true);
-      		moveMotorTarget(elbow, vexRT[Ch2]/2, 75, true);
+			moveMotorTarget(tower, vexRT[Ch1]/4, 75, true);
+			moveMotorTarget(elbow, vexRT[Ch2]/4, 75, true);
+			
 		}
 		//sounds
 		if(!bSoundActive){
