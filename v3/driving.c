@@ -235,10 +235,8 @@ task drive(){
 			motor[tower]=-100;
 			motor[elbow]=-100;
 		}else{
-			//moveMotorTarget(tower, vexRT[Ch1]/8, 75, true);
-			//moveMotorTarget(elbow, vexRT[Ch2]/8, 75, true);
-			motor[tower] = -((.19*sinDegrees(currentTowerAngle)+.5*(.24*sinDegrees(currentElbowAngle)))/(.5+.19))*60;
-			motor[elbow] = ((.19*sinDegrees(currentTowerAngle)+.5*(.24*sinDegrees(currentElbowAngle)))/(.5+.19))*40;
+			motor[tower] = vexRT[Ch3Xmtr2]/2 + vexRT[Ch2] + (-((.19*sinDegrees(currentTowerAngle)+.5*(.24*sinDegrees(currentElbowAngle)))/(.5+.19))*60);
+			motor[elbow] = vexRT[Ch2Xmtr2]/2 + vexRt[Ch1] + ((.19*sinDegrees(currentTowerAngle)+.5*(.24*sinDegrees(currentElbowAngle)))/(.5+.19))*40;
 		}
 		//sounds
 		if(!bSoundActive){
