@@ -201,7 +201,7 @@ task drive(){
 	resetMotorEncoder(tower);
 	resetMotorEncoder(elbow);
 	while(true){
-		currentTowerAngle = (392*SensorValue[towerEnc])/(5*360)+180;
+		currentTowerAngle = (392*SensorValue[towerEnc])/(5*360);
 		currentElbowAngle = (-627.2*SensorValue[elbowEnc])/(5*360) + currentTowerAngle;
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
@@ -235,9 +235,10 @@ task drive(){
 			motor[tower]=-100;
 			motor[elbow]=-100;
 		}else{
-			moveMotorTarget(tower, vexRT[Ch1]/4, 75, true);
-			moveMotorTarget(elbow, vexRT[Ch2]/4, 75, true);
-			
+			//moveMotorTarget(tower, vexRT[Ch1]/8, 75, true);
+			//moveMotorTarget(elbow, vexRT[Ch2]/8, 75, true);
+			motor[tower] = -((.19*sinDegrees(currentTowerAngle)+.5*(.24*sinDegrees(currentElbowAngle)))/(.5+.19))*60;
+			motor[elbow] = ((.19*sinDegrees(currentTowerAngle)+.5*(.24*sinDegrees(currentElbowAngle)))/(.5+.19))*40;
 		}
 		//sounds
 		if(!bSoundActive){
