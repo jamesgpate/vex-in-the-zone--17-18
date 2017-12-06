@@ -67,7 +67,6 @@ task fadeColors(){
 		}
 		endTransmission();
 		if(vexRT[Btn7U]==1){
-			endTransmission();
 			break;
 		}else{
 			continue;
@@ -101,8 +100,8 @@ task smoothWave(){
 			b = 255-2*(r-128);
 			sendLEDFrame(31,r,g,b);
 		}
+		endTransmission();
 		if(vexRT[Btn7D]==1){
-			endTransmission();
 			break;
 		}else{
 			continue;
@@ -136,8 +135,8 @@ task smoothWaveFullStrip(){
 			b = 255-2*(r-128);
 			setStripColor(120,31,r,g,b);
 		}
+		endTransmission();
 		if(vexRT[Btn8L]==1){
-			endTransmission();
 			break;
 		}else{
 			continue;
@@ -147,7 +146,7 @@ task smoothWaveFullStrip(){
 //red and green pulses down strip
 task christmasLights(){
 	startTransmission();
-	playSoundFile("Jingle_Bells_7.wav")
+	playSoundFile("Jingle_Bells_7.wav");
 	while(true){
 		for(int i = 0; i < 31; i++){
 			sendLEDFrame(i, 255, 0, 0);
@@ -155,8 +154,8 @@ task christmasLights(){
 			sendLEDFrame(i, 0, 255, 0);
 			sendLEDFrame(i, 255, 255, 255);
 		}
+		endTransmission();
 		if(vexRT[Btn8R]==1){
-			endTransmission();
 			break;
 		}else{
 			continue;
