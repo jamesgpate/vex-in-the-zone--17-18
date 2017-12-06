@@ -40,125 +40,109 @@ task fadeColors(){
 	int g = 0;
 	int b = 0;
 	startTransmission();
-	while(true){
-		for(int i=0; i < 255; i++){
-			sendLEDFrame(31, r, g, b);
-			g++;
-		}
-		for(int i=0; i < 255; i++){
-			sendLEDFrame(31, r, g, b);
-			r--;
-		}
-		for(int i=0; i < 255; i++){
-			sendLEDFrame(31, r, g, b);
-			b++;
-		}
-		for(int i=0; i < 255; i++){
-			sendLEDFrame(31, r, g, b);
-			g--;
-		}
-		for(int i=0; i < 255; i++){
-			sendLEDFrame(31, r, g, b);
-			r++;
-		}
-		for(int i=0; i < 255; i++){
-			sendLEDFrame(31, r, g, b);
-			b--;
-		}
-		endTransmission();
-		if(vexRT[Btn7U]==1){
-			break;
-		}else{
-			continue;
-		}
+	for(int i=0; i < 255; i++){
+		sendLEDFrame(31, r, g, b);
+		g++;
+	}
+	for(int i=0; i < 255; i++){
+		sendLEDFrame(31, r, g, b);
+		r--;
+	}
+	for(int i=0; i < 255; i++){
+		sendLEDFrame(31, r, g, b);
+		b++;
+	}
+	for(int i=0; i < 255; i++){
+		sendLEDFrame(31, r, g, b);
+		g--;
+	}
+	for(int i=0; i < 255; i++){
+		sendLEDFrame(31, r, g, b);
+		r++;
+	}
+	for(int i=0; i < 255; i++){
+		sendLEDFrame(31, r, g, b);
+		b--;
+	}
+	endTransmission();
+	if(vexRT[Btn7U]==0){
+		startTask(fadeColors);
 	}
 }
 //smooth rainbow with all 6 colors in succession
 task smoothWave(){
-	while(true){
-		int r = 255;
-		int g = 0;
-		int b = 0;
-		startTransmission();
-		for(g = 0; g<128; g++){
-			sendLEDFrame(31,r,g,b);
-		}
-		for(g = 128; g<255; g++){
-			sendLEDFrame(31,r,g,b);
-		}
-		for(r = 255; r>0; r--){
-			sendLEDFrame(31,r,g,b);
-		}
-		for(b = 0; b < 255; b++){
-			g = 255 - b;
-			sendLEDFrame(31,r,g,b);
-		}
-		for(r = 0; r < 128; r++){
-			sendLEDFrame(31,r,g,b);
-		}
-		for(r = 128; r < 255; r++){
-			b = 255-2*(r-128);
-			sendLEDFrame(31,r,g,b);
-		}
-		endTransmission();
-		if(vexRT[Btn7D]==1){
-			break;
-		}else{
-			continue;
-		}
+	int r = 255;
+	int g = 0;
+	int b = 0;
+	startTransmission();
+	for(g = 0; g<128; g++){
+		sendLEDFrame(31,r,g,b);
+	}
+	for(g = 128; g<255; g++){
+		sendLEDFrame(31,r,g,b);
+	}
+	for(r = 255; r>0; r--){
+		sendLEDFrame(31,r,g,b);
+	}
+	for(b = 0; b < 255; b++){
+		g = 255 - b;
+		sendLEDFrame(31,r,g,b);
+	}
+	for(r = 0; r < 128; r++){
+		sendLEDFrame(31,r,g,b);
+	}
+	for(r = 128; r < 255; r++){
+		b = 255-2*(r-128);
+		sendLEDFrame(31,r,g,b);
+	}
+	endTransmission();
+	if(vexRT[Btn7D]==0){
+		startTask(fadeColors);
 	}
 }
 //almost same as above, but with whole LED strip
 task smoothWaveFullStrip(){
-	while(true){
-		int r = 255;
-		int g = 0;
-		int b = 0;
-		startTransmission();
-		for(g = 0; g<128; g++){
-			setStripColor(120,31,r,g,b);
-		}
-		for(g = 128; g<255; g++){
-			setStripColor(120,31,r,g,b);
-		}
-		for(r = 255; r>0; r--){
-			setStripColor(120,31,r,g,b);
-		}
-		for(b = 0; b < 255; b++){
-			g = 255 - b;
-			setStripColor(120,31,r,g,b);
-		}
-		for(r = 0; r < 128; r++){
-			setStripColor(120,31,r,g,b);
-		}
-		for(r = 128; r < 255; r++){
-			b = 255-2*(r-128);
-			setStripColor(120,31,r,g,b);
-		}
-		endTransmission();
-		if(vexRT[Btn8L]==1){
-			break;
-		}else{
-			continue;
-		}
+	int r = 255;
+	int g = 0;
+	int b = 0;
+	startTransmission();
+	for(g = 0; g<128; g++){
+		setStripColor(120,31,r,g,b);
+	}
+	for(g = 128; g<255; g++){
+		setStripColor(120,31,r,g,b);
+	}
+	for(r = 255; r>0; r--){
+		setStripColor(120,31,r,g,b);
+	}
+	for(b = 0; b < 255; b++){
+		g = 255 - b;
+		setStripColor(120,31,r,g,b);
+	}
+	for(r = 0; r < 128; r++){
+		setStripColor(120,31,r,g,b);
+	}
+	for(r = 128; r < 255; r++){
+		b = 255-2*(r-128);
+		setStripColor(120,31,r,g,b);
+	}
+	endTransmission();
+	if(vexRT[Btn8L]==0){
+		startTask(smoothWaveFullStrip);
 	}
 }
 //red and green pulses down strip
 task christmasLights(){
 	startTransmission();
 	playSoundFile("Jingle_Bells_7.wav");
-	while(true){
-		for(int i = 0; i < 31; i++){
-			sendLEDFrame(i, 255, 0, 0);
-			sendLEDFrame(i, 255, 255, 255);
-			sendLEDFrame(i, 0, 255, 0);
-			sendLEDFrame(i, 255, 255, 255);
-		}
-		endTransmission();
-		if(vexRT[Btn8R]==1){
-			break;
-		}else{
-			continue;
-		}
+	for(int i = 0; i < 31; i++){
+		sendLEDFrame(i, 255, 0, 0);
+		sendLEDFrame(i, 255, 255, 255);
+		sendLEDFrame(i, 0, 255, 0);
+		sendLEDFrame(i, 255, 255, 255);
+	}
+	endTransmission();
+	if(vexRT[Btn8R]==0){
+		startTask(christmasLights);
 	}
 }
