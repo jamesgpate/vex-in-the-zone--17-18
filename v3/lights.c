@@ -65,9 +65,6 @@ task fadeColors(){
 		b--;
 	}
 	endTransmission();
-	if(vexRT[Btn7U]==0){
-		startTask(fadeColors);
-	}
 }
 //smooth rainbow with all 6 colors in succession
 task smoothWave(){
@@ -96,9 +93,6 @@ task smoothWave(){
 		sendLEDFrame(31,r,g,b);
 	}
 	endTransmission();
-	if(vexRT[Btn7D]==0){
-		startTask(fadeColors);
-	}
 }
 //almost same as above, but with whole LED strip
 task smoothWaveFullStrip(){
@@ -127,22 +121,21 @@ task smoothWaveFullStrip(){
 		setStripColor(120,31,r,g,b);
 	}
 	endTransmission();
-	if(vexRT[Btn8L]==0){
-		startTask(smoothWaveFullStrip);
-	}
 }
+
 //red and green pulses down strip
 task christmasLights(){
 	startTransmission();
 	playSoundFile("Jingle_Bells_7.wav");
 	for(int i = 0; i < 31; i++){
 		sendLEDFrame(i, 255, 0, 0);
-		sendLEDFrame(i, 255, 255, 255);
 		sendLEDFrame(i, 0, 255, 0);
-		sendLEDFrame(i, 255, 255, 255);
 	}
 	endTransmission();
-	if(vexRT[Btn8R]==0){
-		startTask(christmasLights);
-	}
+}
+task stopLightTasks(){
+	stopTask(smoothWaveFullStrip);
+	stopTask(smoothWave);
+	stopTask(christmasLights);
+	stopTask(fadeColors);
 }

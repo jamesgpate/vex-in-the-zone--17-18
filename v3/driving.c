@@ -61,10 +61,22 @@ task drive(){
 			}
 		}*/
 		//light functions
-		if(vexRT[Btn7U]==1)startTask(fadeColors);
-		if(vexRT[Btn7D]==1)startTask(smoothWave);
-		if(vexRT[Btn8L]==1)startTask(smoothWaveFullStrip);
-		if(vexRT[Btn8R]==1)startTask(christmasLights);
+		if(vexRT[Btn7U]==1){
+			startTask(stopLightTasks);
+			startTask(fadeColors);
+		}
+		if(vexRT[Btn7D]==1){
+			startTask(stopLightTasks);
+			startTask(smoothWave);
+		}
+		if(vexRT[Btn8L]==1){
+			startTask(stopLightTasks);
+			startTask(smoothWaveFullStrip);
+		}
+		if(vexRT[Btn8R]==1){
+			startTask(stopLightTasks);
+			startTask(christmasLights);
+		}
 		//displays current battery and backup battery voltage
 		clearLCDLine(0);
 		clearLCDLine(1);
