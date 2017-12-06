@@ -69,128 +69,137 @@ task fadeColors(){
 	int g = 0;
 	int b = 0;
 	startTransmission();
-	for(int i=0; i < 255; i++){
-		sendLEDFrame(31, r, g, b);
-		wait1Msec(4);
-		g++;
+	while(true){
+		for(int i=0; i < 255; i++){
+			sendLEDFrame(31, r, g, b);
+			wait1Msec(4);
+			g++;
+		}
+		for(int i=0; i < 255; i++){
+			sendLEDFrame(31, r, g, b);
+			wait1Msec(4);
+			r--;
+		}
+		for(int i=0; i < 255; i++){
+			sendLEDFrame(31, r, g, b);
+			wait1Msec(4);
+			b++;
+		}
+		for(int i=0; i < 255; i++){
+			sendLEDFrame(31, r, g, b);
+			wait1Msec(4);
+			g--;
+		}
+		for(int i=0; i < 255; i++){
+			sendLEDFrame(31, r, g, b);
+			wait1Msec(4);
+			r++;
+		}
+		for(int i=0; i < 255; i++){
+			sendLEDFrame(31, r, g, b);
+			wait1Msec(4);
+			b--;
+		}
+		endTransmission();
+		if(vexRT[Btn7U]==1){
+			endTransmission();
+			break;
+		}else{
+			continue;
+		}
 	}
-	endTransmission();
-	startTransmission();
-	for(int i=0; i < 255; i++){
-		sendLEDFrame(31, r, g, b);
-		wait1Msec(4);
-		r--;
-	}
-	endTransmission();
-	startTransmission();
-	for(int i=0; i < 255; i++){
-		sendLEDFrame(31, r, g, b);
-		wait1Msec(4);
-		b++;
-	}
-	endTransmission();
-	startTransmission();
-	for(int i=0; i < 255; i++){
-		sendLEDFrame(31, r, g, b);
-		wait1Msec(4);
-		g--;
-	}
-	endTransmission();
-	startTransmission();
-	for(int i=0; i < 255; i++){
-		sendLEDFrame(31, r, g, b);
-		wait1Msec(4);
-		r++;
-	}
-	endTransmission();
-	startTransmission();
-	for(int i=0; i < 255; i++){
-		sendLEDFrame(31, r, g, b);
-		wait1Msec(4);
-		b--;
-	}
-	endTransmission();
-
 }
 task smoothWave(){
-	int r = 255;
-	int g = 0;
-	int b = 0;
-	startTransmission();
-	for(g = 0; g<128; g++){
-		sendLEDFrame(31,r,g,b);
-		wait1Msec(4);
+	while(true){
+		int r = 255;
+		int g = 0;
+		int b = 0;
+		startTransmission();
+		for(g = 0; g<128; g++){
+			sendLEDFrame(31,r,g,b);
+			wait1Msec(4);
+		}
+		for(g = 128; g<255; g++){
+			sendLEDFrame(31,r,g,b);
+			wait1Msec(4);
+		}
+		for(r = 255; r>0; r--){
+			sendLEDFrame(31,r,g,b);
+			wait1Msec(4);
+		}
+		for(b = 0; b < 255; b++){
+			g = 255 - b;
+			sendLEDFrame(31,r,g,b);
+			wait1Msec(4);
+		}
+		for(r = 0; r < 128; r++){
+			sendLEDFrame(31,r,g,b);
+			wait1Msec(4);
+		}
+		for(r = 128; r < 255; r++){
+			b = 255-2*(r-128);
+			sendLEDFrame(31,r,g,b);
+			wait1Msec(4);
+		}
+		if(vexRT[Btn7D]==1){
+			endTransmission();
+			break;
+		}else{
+			continue;
+		}
 	}
-	endTransmission();
-	startTransmission();
-	for(g = 128; g<255; g++){
-		sendLEDFrame(31,r,g,b);
-		wait1Msec(4);
-	}
-	endTransmission();
-	startTransmission();
-	for(r = 255; r>0; r--){
-		sendLEDFrame(31,r,g,b);
-		wait1Msec(4);
-	}
-	endTransmission();
-	startTransmission();
-	for(b = 0; b < 255; b++){
-		g = 255 - b;
-		sendLEDFrame(31,r,g,b);
-		wait1Msec(4);
-	}
-	endTransmission();
-	startTransmission();
-	for(r = 0; r < 128; r++){
-		sendLEDFrame(31,r,g,b);
-		wait1Msec(4);
-	}
-	endTransmission();
-	startTransmission();
-	for(r = 128; r < 255; r++){
-		b = 255-2*(r-128);
-		sendLEDFrame(31,r,g,b);
-		wait1Msec(4);
-	}
-	endTransmission();
 }
 task smoothWaveFullStrip(){
-	int r = 255;
-	int g = 0;
-	int b = 0;
-	startTransmission();
-	for(g = 0; g<128; g++){
-		setStripColor(120,31,r,g,b);
+	while(true){
+		int r = 255;
+		int g = 0;
+		int b = 0;
+		startTransmission();
+		for(g = 0; g<128; g++){
+			setStripColor(120,31,r,g,b);
+		}
+		for(g = 128; g<255; g++){
+			setStripColor(120,31,r,g,b);
+		}
+		for(r = 255; r>0; r--){
+			setStripColor(120,31,r,g,b);
+		}
+		for(b = 0; b < 255; b++){
+			g = 255 - b;
+			setStripColor(120,31,r,g,b);
+		}
+		for(r = 0; r < 128; r++){
+			setStripColor(120,31,r,g,b);
+		}
+		for(r = 128; r < 255; r++){
+			b = 255-2*(r-128);
+			setStripColor(120,31,r,g,b);
+		}
+		if(vexRT[Btn8L]==1){
+			endTransmission();
+			break;
+		}else{
+			continue;
+		}
 	}
-	endTransmission();
+}
+task christmasLights(){
 	startTransmission();
-	for(g = 128; g<255; g++){
-		setStripColor(120,31,r,g,b);
+	playSoundFile("Jingle_Bells_7.wav")
+	while(true){
+		for(int i = 0; i < 31; i++){
+			sendLEDFrame(i, 255, 0, 0);
+			sendLEDFrame(i, 255, 255, 255);
+			sendLEDFrame(i, 0, 255, 0);
+			sendLEDFrame(i, 255, 255, 255);
+		}
+		if(vexRT[Btn8R]==1){
+			endTransmission();
+			break;
+		}else{
+			continue;
+		}
 	}
-	endTransmission();
-	startTransmission();
-	for(r = 255; r>0; r--){
-		setStripColor(120,31,r,g,b);
-	}
-	endTransmission();
-	startTransmission();
-	for(b = 0; b < 255; b++){
-		g = 255 - b;
-		setStripColor(120,31,r,g,b);
-	}
-	endTransmission();
-	startTransmission();
-	for(r = 0; r < 128; r++){
-		setStripColor(120,31,r,g,b);
-	}
-	endTransmission();
-	startTransmission();
-	for(r = 128; r < 255; r++){
-		b = 255-2*(r-128);
-		setStripColor(120,31,r,g,b);
-	}
-	endTransmission();
 }
 int currentTowerAngle = 0;
 int currentElbowAngle = 0;
@@ -201,8 +210,8 @@ task drive(){
 	resetMotorEncoder(tower);
 	resetMotorEncoder(elbow);
 	while(true){
-		currentTowerAngle = (392*SensorValue[towerEnc])/(5*360);
-		currentElbowAngle = (-627.2*SensorValue[elbowEnc])/(5*360) + currentTowerAngle;
+		currentTowerAngle = (360*nMotorEncoder[tower])/(5*392);
+		currentElbowAngle = (-360*nMotorEncoder[elbow])/(5*627.2) + currentTowerAngle;
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
 		if(abs(vexRT[Ch4])>THRESHOLD)
@@ -240,11 +249,11 @@ task drive(){
 		}
 		//sounds
 		if(!bSoundActive){
-			if(vexRT[Btn8R]==1){
+			if(vexRT[Btn8U]==1){
 				wait1Msec(100);
 				playSoundFile("allstar.wav");
 			}
-			if(vexRT[Btn8U]==1){
+			if(vexRT[Btn8D]==1){
 				wait1Msec(100);
 				playSoundFile("omae_wa_mou_shindeiru.wav");
 			}
@@ -253,9 +262,7 @@ task drive(){
 		if(vexRT[Btn7U]==1)startTask(fadeColors);
 		if(vexRT[Btn7D]==1)startTask(smoothWave);
 		if(vexRT[Btn8L]==1)startTask(smoothWaveFullStrip);
-		if(vexRT[Btn8R]==1)g-=5;
-		if(vexRT[Btn8U]==1)b+=5;
-		if(vexRT[Btn8D]==1)b-=5;
+		if(vexRT[Btn8R]==1)startTask(christmasLights);
 		clearLCDLine(0);
 		clearLCDLine(1);
 		displayLCDString(0,0,"Battery: ");
