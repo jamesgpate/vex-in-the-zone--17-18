@@ -47,7 +47,7 @@ task drive(){
 		else if(vexRT[Btn6D]==1) motor[claw]=-127;
 		else motor[claw]=0;
 		//arm control with fancy schmancy holding technique
-		motor[tower] = /*vexRT[Ch3Xmtr2]/2 + */c2 - ((.19*sinDegrees(currentTowerAngle)+.5*(.24*sinDegrees(currentElbowAngle)))/(.5+.19))*20;
+		motor[tower] = /*vexRT[Ch3Xmtr2]/2 + */c2 - ((.19*sinDegrees(currentTowerAngle)+.5*(.24*sinDegrees(currentElbowAngle)))/(.5+.19))*15;
 		motor[elbow] = /*vexRT[Ch2Xmtr2]/2 + */c1 + ((.19*sinDegrees(currentTowerAngle)+.5*(.24*sinDegrees(currentElbowAngle)))/(.5+.19))*5;
 		//sounds
 		/*if(!bSoundActive){
