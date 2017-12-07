@@ -16,8 +16,14 @@
 
 */
 int count = 0;
-int getEncVal(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
-
+int dOfWheels = 4;
+int rOfRobot = 8;
+float PI = 3.1415926;
+int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
+	return (360*inches)/(dOfWheels*PI/2);
+}
+int getEncValForTurn(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
+	return (360*PI*2*rOfRobot)/(360*dOfWheels);
 }
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
 
