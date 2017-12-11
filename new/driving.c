@@ -31,7 +31,7 @@ task drive(){
 		else c1 = 0;
 		//send these values to the motor
 		motor[ldt1] = motor[ldt2] = motor[ldt3] = c4+c3;
-		motor[rdt1] = motor[rdt2] = motor[rdt3] = -c4+c3;
+		motor[rdt1] = motor[rdt2] = motor[rdt3] = c4+c3;
 		//mobile goal
 		if(vexRT[Btn5U])motor[mgml] = motor[mgmr] = 90;
 		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = -90;
