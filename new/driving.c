@@ -19,6 +19,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 task drive(){
 	int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
 	while(true){
+		clearTimer(T1);
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
 		if(abs(vexRT[Ch4])>THRESHOLD) c4 = vexRT[Ch4];
@@ -73,6 +74,7 @@ task drive(){
 		displayLCDString(1,0,"Backup: ");
 		displayLCDNumber(1,9,BackupBatteryLevel);
 		displayLCDString(1,13, " mV");
-		wait1Msec(25);
+		wait1Msec(25-time1[T1]);
+		endTimeSlice();
 	}
 }
