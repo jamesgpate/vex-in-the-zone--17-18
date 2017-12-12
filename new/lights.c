@@ -44,22 +44,32 @@ task fadeColors(){
 		sendLEDFrame(31, r, g, b);
 		g++;
 	}
+	endTransmission();
+	startTransmission();
 	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
 		r--;
 	}
+	endTransmission();
+	startTransmission();
 	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
 		b++;
 	}
+	endTransmission();
+	startTransmission();
 	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
 		g--;
 	}
+	endTransmission();
+	startTransmission();
 	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
 		r++;
 	}
+	endTransmission();
+	startTransmission();
 	for(int i=0; i < 255; i++){
 		sendLEDFrame(31, r, g, b);
 		b--;
@@ -75,19 +85,29 @@ task smoothWave(){
 	for(g = 0; g<128; g++){
 		sendLEDFrame(31,r,g,b);
 	}
+	endTransmission();
+	startTransmission();
 	for(g = 128; g<255; g++){
 		sendLEDFrame(31,r,g,b);
 	}
+	endTransmission();
+	startTransmission();
 	for(r = 255; r>0; r--){
 		sendLEDFrame(31,r,g,b);
 	}
+	endTransmission();
+	startTransmission();
 	for(b = 0; b < 255; b++){
 		g = 255 - b;
 		sendLEDFrame(31,r,g,b);
 	}
+	endTransmission();
+	startTransmission();
 	for(r = 0; r < 128; r++){
 		sendLEDFrame(31,r,g,b);
 	}
+	endTransmission();
+	startTransmission();
 	for(r = 128; r < 255; r++){
 		b = 255-2*(r-128);
 		sendLEDFrame(31,r,g,b);
@@ -103,19 +123,29 @@ task smoothWaveFullStrip(){
 	for(g = 0; g<128; g++){
 		setStripColor(120,31,r,g,b);
 	}
+	endTransmission();
+	startTransmission();
 	for(g = 128; g<255; g++){
 		setStripColor(120,31,r,g,b);
 	}
+	endTransmission();
+	startTransmission();
 	for(r = 255; r>0; r--){
 		setStripColor(120,31,r,g,b);
 	}
+	endTransmission();
+	startTransmission();
 	for(b = 0; b < 255; b++){
 		g = 255 - b;
 		setStripColor(120,31,r,g,b);
 	}
+	endTransmission();
+	startTransmission();
 	for(r = 0; r < 128; r++){
 		setStripColor(120,31,r,g,b);
 	}
+	endTransmission();
+	startTransmission();
 	for(r = 128; r < 255; r++){
 		b = 255-2*(r-128);
 		setStripColor(120,31,r,g,b);
@@ -129,13 +159,17 @@ task christmasLights(){
 	playSoundFile("Jingle_Bells_7.wav");
 	for(int i = 0; i < 31; i++){
 		sendLEDFrame(i, 255, 0, 0);
+		wait1Msec(20);
 		sendLEDFrame(i, 0, 255, 0);
+		wait1Msec(20);
 	}
 	endTransmission();
 }
 task stopLightTasks(){
+	wait1Msec(50);
 	stopTask(smoothWaveFullStrip);
 	stopTask(smoothWave);
 	stopTask(christmasLights);
 	stopTask(fadeColors);
+	wait1Msec(50);
 }
