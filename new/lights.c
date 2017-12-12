@@ -156,7 +156,7 @@ task smoothWaveFullStrip(){
 //red and green pulses down strip
 task christmasLights(){
 	startTransmission();
-	playSoundFile("Jingle_Bells_7.wav");
+	//playSoundFile("Jingle_Bells_7.wav");
 	for(int i = 0; i < 31; i++){
 		sendLEDFrame(i, 255, 0, 0);
 		wait1Msec(20);

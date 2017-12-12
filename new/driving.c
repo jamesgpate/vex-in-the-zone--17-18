@@ -1,18 +1,18 @@
 /*
-Copyright (C) 2017 Quantum Robotics
+	Copyright (C) 2017 Quantum Robotics
 
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Affero General Public License as published
-by the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+	This program is free software: you can redistribute it and/or modify
+	it under the terms of the GNU Affero General Public License as published
+	by the Free Software Foundation, either version 3 of the License, or
+	(at your option) any later version.
 
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU Affero General Public License for more details.
+	This program is distributed in the hope that it will be useful,
+	but WITHOUT ANY WARRANTY; without even the implied warranty of
+	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	GNU Affero General Public License for more details.
 
-You should have received a copy of the GNU Affero General Public License
-along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	You should have received a copy of the GNU Affero General Public License
+	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
 #include "lights.c"
@@ -31,8 +31,8 @@ task drive(){
 		if(abs(vexRT[Ch1])>THRESHOLD) c1 = vexRT[Ch1];
 		else c1 = 0;
 		//send these values to the motor
-		motor[ldt1] = motor[ldt2] = motor[ldt3] = -c4+c3;
-		motor[rdt1] = motor[rdt2] = motor[rdt3] = c4+c3;
+		motor[ldt1] = motor[ldt2] = motor[ldt3] = c3+(c4/2);
+		motor[rdt1] = motor[rdt2] = motor[rdt3] = -c3+(c4/2);
 		//mobile goal
 		if(vexRT[Btn5U])motor[mgml] = motor[mgmr] = -90;
 		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = 90;
@@ -75,6 +75,6 @@ task drive(){
 		displayLCDNumber(1,9,BackupBatteryLevel);
 		displayLCDString(1,13, " mV");
 		wait1Msec(25-time1[T1]);
-		endTimeSlice();
+		EndTimeSlice();
 	}
 }

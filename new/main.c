@@ -1,5 +1,4 @@
 #pragma config(Sensor, in1, gyro, sensorGyro)
-#pragma config(Sensor, in2, mgmp, sensorPotentiometer)
 #pragma config(Sensor, dgtl1, ldtEnc, sensorQuadEncoder)
 #pragma config(Sensor, dgtl3, rdtEnc, sensorQuadEncoder)
 #pragma config(Sensor, dgtl5, mgmEnc, sensorQuadEncoder)
