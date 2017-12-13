@@ -15,7 +15,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-int count = 0;
+int ledCount = 0;
 int dOfWheels = 4;
 int rOfRobot = 8;
 float C_PI = 3.1415926;
@@ -39,7 +39,7 @@ void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
 }
 
 task auton(){//main task
-	switch(count){
+	switch(ledCount){
 		case 0://first auton
 			break;
 		case 1:

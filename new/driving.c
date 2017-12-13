@@ -15,7 +15,7 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 */
-#include "lights.c"
+//#include "lights.c"
 task drive(){
 	int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
 	while(true){
@@ -31,12 +31,16 @@ task drive(){
 		if(abs(vexRT[Ch1])>THRESHOLD) c1 = vexRT[Ch1];
 		else c1 = 0;
 		//send these values to the motor
-		motor[ldt1] = motor[ldt2] = motor[ldt3] = c3+(c4/2);
-		motor[rdt1] = motor[rdt2] = motor[rdt3] = -c3+(c4/2);
+		motor[ldt1] = motor[ldt2] = c3+(c4/2);
+		motor[rdt1] = motor[rdt2] = -c3+(c4/2);
 		//mobile goal
 		if(vexRT[Btn5U])motor[mgml] = motor[mgmr] = -90;
 		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = 90;
 		else motor[mgml] = motor[mgmr] = 0;
+		//dr4b
+		if(vexRT[Btn5U])motor[ldr4b] = motor[rdr4b] = -90;
+		else if(vexRT[Btn5D])motor[ldr4b] = motor[rdr4b] = 90;
+		else motor[ldr4b] = motor[rdr4b] = 0;
 		//sounds
 		/*if(!bSoundActive){
 			if(vexRT[Btn8U]==1){
@@ -49,7 +53,7 @@ task drive(){
 			}
 		}*/
 		//light functions
-		if(vexRT[Btn7U]==1){
+		/*if(vexRT[Btn7U]==1){
 			startTask(stopLightTasks);
 			startTask(fadeColors);
 		}
@@ -64,7 +68,7 @@ task drive(){
 		if(vexRT[Btn8R]==1){
 			startTask(stopLightTasks);
 			startTask(christmasLights);
-		}
+		}*/
 		//displays current battery and backup battery voltage
 		clearLCDLine(0);
 		clearLCDLine(1);
