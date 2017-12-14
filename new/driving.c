@@ -31,15 +31,21 @@ task drive(){
 		if(abs(vexRT[Ch1])>THRESHOLD) c1 = vexRT[Ch1];
 		else c1 = 0;
 		//send these values to the motor
-		motor[ldt1] = motor[ldt2] = c3+(c4/2);
-		motor[rdt1] = motor[rdt2] = -c3+(c4/2);
+		if(vexRT[Btn8L]==0){
+			motor[ldt1] = motor[ldt2] = c3+(c4/2);
+			motor[rdt1] = motor[rdt2] = -c3+(c4/2);
+		}
+		else if(vexRT[Btn8L]==1){
+			motor[ldt1] = motor[ldt2] = c3+(c4/4);
+			motor[rdt1] = motor[rdt2] = -c3+(c4/4);
+		}
 		//mobile goal
-		if(vexRT[Btn5U])motor[mgml] = motor[mgmr] = -90;
-		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = 90;
+		if(vexRT[Btn5U])motor[mgml] = motor[mgmr] = -127;
+		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = 127;
 		else motor[mgml] = motor[mgmr] = 0;
 		//dr4b
-		if(vexRT[Btn5U])motor[ldr4b] = motor[rdr4b] = -90;
-		else if(vexRT[Btn5D])motor[ldr4b] = motor[rdr4b] = 90;
+		if(vexRT[Btn5U])motor[ldr4b] = motor[rdr4b] = -100;
+		else if(vexRT[Btn5D])motor[ldr4b] = motor[rdr4b] = 100;
 		else motor[ldr4b] = motor[rdr4b] = 0;
 		//sounds
 		/*if(!bSoundActive){

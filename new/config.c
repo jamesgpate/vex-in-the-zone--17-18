@@ -16,6 +16,3 @@
 #pragma autonomousDuration(15)
 #pragma userControlDuration(105)
 #pragma platform(VEX2)
-#include "Vex_Competition_Includes.c"
-#include "driving.c"
-#include "auton.c"

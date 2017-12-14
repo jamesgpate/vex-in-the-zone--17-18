@@ -21,16 +21,16 @@ const int C_rOfRobot = 8;
 const float C_PI = 3.1415926;
 const int C_motorPower = 80;
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
-	return (360*inches)/(dOfWheels*C_PI/2);
+	return (360*inches)/(C_dOfWheels*C_PI/2);
 }
 int getEncValForTurn(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
-	return (360*C_PI*2*rOfRobot)/(360*dOfWheels);
+	return (360*C_PI*2*C_rOfRobot)/(360*C_dOfWheels);
 }
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]<encVal){
+	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>encVal){
 		motor[ldt1] = motor[ldt2] = C_motorPower;
 		motor[rdt1] = motor[rdt2] = -C_motorPower;
 	}
@@ -41,7 +41,7 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>encVal || SensorValue[rdtEnc]>encVal){
+	while(SensorValue[ldtEnc]>encVal || SensorValue[rdtEnc]<encVal){
 		motor[ldt1] = motor[ldt2] = -C_motorPower;
 		motor[rdt1] = motor[rdt2] = C_motorPower;
 	}
@@ -52,7 +52,7 @@ void turnRight(int degrees){//this turns the robot to the right *degrees* degree
 	int encVal = getEncValForTurn(degrees);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]<encVal){
+	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>encVal){
 		motor[ldt1] = motor[ldt2] = C_motorPower;
 		motor[rdt1] = motor[rdt2] = C_motorPower;
 	}
@@ -63,7 +63,7 @@ void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
 	int encVal = getEncValForTurn(degrees);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>encVal || SensorValue[rdtEnc]>encVal){
+	while(SensorValue[ldtEnc]>encVal || SensorValue[rdtEnc]<encVal){
 		motor[ldt1] = motor[ldt2] = -C_motorPower;
 		motor[rdt1] = motor[rdt2] = -C_motorPower;
 	}
@@ -83,6 +83,20 @@ void raiseMGM(){
 task auton(){//main task
 	switch(lcdCount){
 		case 0://first auton
+			moveForwards(60);
+			lowerMGM();
+			moveForwards(5);
+			raiseMGM();
+			turnRight(180);
+			moveForwards(40);
+			turnLeft(45);
+			moveForwards(10);
+			turnRight(90);
+			moveForwards(20);
+			lowerMGM();
+			moveForwards(5);
+			raiseMGM();
+			moveBackwards(5);
 			break;
 		case 1:
 			break;
