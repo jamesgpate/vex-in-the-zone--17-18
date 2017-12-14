@@ -44,9 +44,17 @@ task drive(){
 		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = 127;
 		else motor[mgml] = motor[mgmr] = 0;
 		//dr4b
-		if(vexRT[Btn5U])motor[ldr4b] = motor[rdr4b] = -100;
-		else if(vexRT[Btn5D])motor[ldr4b] = motor[rdr4b] = 100;
-		else motor[ldr4b] = motor[rdr4b] = 0;
+		if(vexRT[Btn6U]){
+			motor[ldr4b] = -100; 
+			motor[rdr4b] = 100;
+		}else if(vexRT[Btn6D]){
+			motor[ldr4b] = 100; 
+			motor[rdr4b] = -100;
+		}else{
+			motor[ldr4b] = motor[rdr4b] = 0;
+		}
+		//chainbar
+		motor[chainbar] = vexRT[Ch2];
 		//sounds
 		/*if(!bSoundActive){
 			if(vexRT[Btn8U]==1){

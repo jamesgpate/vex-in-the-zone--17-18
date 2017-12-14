@@ -5,6 +5,7 @@
 #pragma config(Sensor, dgtl7, ldr4bEnc, sensorQuadEncoder)
 #pragma config(Sensor, dgtl9, rdr4bEnc, sensorQuadEncoder)
 #pragma config(Motor, port1, mgmr, tmotorVex393_HBridge, openLoop)
+#pragma config(Motor, port2, chainbar, tmotorVex393_MC29, openLoop)
 #pragma config(Motor, port3, ldr4b, tmotorVex393_MC29, openLoop)
 #pragma config(Motor, port4, ldt1, tmotorVex393_MC29, openLoop)
 #pragma config(Motor, port5, ldt2, tmotorVex393_MC29, openLoop)
