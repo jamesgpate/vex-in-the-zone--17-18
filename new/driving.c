@@ -45,16 +45,16 @@ task drive(){
 		else motor[mgml] = motor[mgmr] = 0;
 		//dr4b
 		if(vexRT[Btn6U]){
-			motor[ldr4b] = -100; 
+			motor[ldr4b] = -100;
 			motor[rdr4b] = 100;
 		}else if(vexRT[Btn6D]){
-			motor[ldr4b] = 100; 
+			motor[ldr4b] = 100;
 			motor[rdr4b] = -100;
 		}else{
 			motor[ldr4b] = motor[rdr4b] = 0;
 		}
 		//chainbar
-		motor[chainbar] = vexRT[Ch2];
+		motor[fourbar] = c2;
 		//sounds
 		/*if(!bSoundActive){
 			if(vexRT[Btn8U]==1){
