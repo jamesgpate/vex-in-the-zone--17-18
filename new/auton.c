@@ -19,7 +19,7 @@ int lcdCount = 0;
 const int C_dOfWheels = 4;
 const int C_rOfRobot = 8;
 const float C_PI = 3.1415926;
-const int C_motorPower = 80;
+const int C_motorPower = 40;
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
 	return (360*inches)/(C_dOfWheels*C_PI/2);
 }
