@@ -19,7 +19,7 @@
 task drive(){
 	int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
 	while(true){
-		clearTimer(T1);
+		long sysTime = nSysTime;
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
 		if(abs(vexRT[Ch4])>THRESHOLD) c4 = vexRT[Ch4];
@@ -87,12 +87,14 @@ task drive(){
 		clearLCDLine(0);
 		clearLCDLine(1);
 		displayLCDString(0,0,"Battery: ");
-		displayLCDNumber(0,9, nImmediateBatteryLevel);
+		displayLCDNumber(0,9, nAvgBatteryLevel);
 		displayLCDString(0,13, " mV");
 		displayLCDString(1,0,"Backup: ");
 		displayLCDNumber(1,9,BackupBatteryLevel);
 		displayLCDString(1,13, " mV");
-		wait1Msec(25-time1[T1]);
+		//keep the loop timing consistent
+		int timeDiff = nSysTime - sysTime;
+		wait1Msec(25-timeDiff);
 		EndTimeSlice();
 	}
 }
