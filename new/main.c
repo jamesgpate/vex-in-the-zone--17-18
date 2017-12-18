@@ -77,8 +77,10 @@ void pre_auton(){//Selects auton program
 	while(nLCDButtons != centerButton){
 		switch(lcdCount){
 		case 0:
-			displayLCDCenteredString(0, "Autonomous 1");
-			displayLCDCenteredString(1, "<         Enter        >");
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, "Left Side MGM");
+			displayLCDString(1,0, "<         Enter        >");
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -90,8 +92,10 @@ void pre_auton(){//Selects auton program
 			}
 		break;
 		case 1:
-			displayLCDCenteredString(0, "Autonomous 2");
-			displayLCDCenteredString(1, "<         Enter        >");
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, "Right Side MGM");
+			displayLCDString(1,0, "<         Enter        >");
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -103,8 +107,10 @@ void pre_auton(){//Selects auton program
 			}
 			break;
 		case 2:
-			displayLCDCenteredString(0, "Autonomous 3");
-			displayLCDCenteredString(1, "<         Enter        >");
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, "Autonomous 3");
+			displayLCDString(1,0, "<         Enter        >");
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -116,8 +122,10 @@ void pre_auton(){//Selects auton program
 			}
 			break;
 		case 3:
-			displayLCDCenteredString(0, "Autonomous 4");
-			displayLCDCenteredString(1, "<         Enter        >");
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, "Autonomous 4");
+			displayLCDString(1,0, "<         Enter        >");
 			waitForPress();
 			if(nLCDButtons == leftButton)
 			{

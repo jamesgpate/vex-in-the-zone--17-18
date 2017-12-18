@@ -83,22 +83,42 @@ void raiseMGM(){
 task auton(){//main task
 	switch(lcdCount){
 		case 0://first auton
-			moveForwards(60);
-			lowerMGM();
-			moveForwards(5);
-			raiseMGM();
-			turnRight(180);
 			moveForwards(40);
-			turnLeft(45);
-			moveForwards(10);
-			turnRight(90);
-			moveForwards(20);
 			lowerMGM();
-			moveForwards(5);
+			moveForwards(8);
 			raiseMGM();
-			moveBackwards(5);
+			moveBackwards(8);
+			turnRight(180);
+			moveForwards(36);
+			turnLeft(90);
+			moveForwards(18);
+			turnRight(90);
+			moveForwards(16);
+			turnRight(45);
+			moveForwards(36);
+			lowerMGM();
+			moveBackwards(8);
+			raiseMGM();
+			moveBackwards(8);
 			break;
 		case 1:
+			moveForwards(40);
+			lowerMGM();
+			moveForwards(8);
+			raiseMGM();
+			moveBackwards(8);
+			turnLeft(180);
+			moveForwards(36);
+			turnRight(90);
+			moveForwards(18);
+			turnLeft(90);
+			moveForwards(16);
+			turnLeft(45);
+			moveForwards(36);
+			lowerMGM();
+			moveBackwards(8);
+			raiseMGM();
+			moveBackwards(8);
 			break;
 		case 2:
 			break;
