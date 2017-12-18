@@ -12,6 +12,7 @@
 #pragma config(Motor,port6,rdt1,tmotorVex393_MC29,PIDControl,encoderPort,dgtl3)
 #pragma config(Motor,port7,rdt2,tmotorVex393_MC29,PIDControl,encoderPort,dgtl3)
 #pragma config(Motor,port8,rdr4b,tmotorVex393_MC29,PIDControl,encoderPort,dgtl9)
+#pragma config(Motor,port9,claw,tmotorVex393_MC29,openLoop)
 #pragma config(Motor,port10,mgml,tmotorVex393_HBridge,openLoop)
 #pragma config(MotorPidSetting,port3,50,90,1000,3,10,33,45,60)
 #pragma config(MotorPidSetting,port4,50,90,1000,3,10,33,45,60)

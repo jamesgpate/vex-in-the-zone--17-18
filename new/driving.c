@@ -31,11 +31,11 @@ task drive(){
 		if(abs(vexRT[Ch1])>THRESHOLD) c1 = vexRT[Ch1];
 		else c1 = 0;
 		//send these values to the motor
-		if(vexRT[Btn8L]==0){
+		if(!vexRT[Btn8L]){
 			motor[ldt1] = motor[ldt2] = c3+(c4/2);
 			motor[rdt1] = motor[rdt2] = -c3+(c4/2);
 		}
-		else if(vexRT[Btn8L]==1){
+		else if(vexRT[Btn8L]){
 			motor[ldt1] = motor[ldt2] = c3+(c4/4);
 			motor[rdt1] = motor[rdt2] = -c3+(c4/4);
 		}
@@ -43,6 +43,10 @@ task drive(){
 		if(vexRT[Btn5U])motor[mgml] = motor[mgmr] = -127;
 		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = 127;
 		else motor[mgml] = motor[mgmr] = 0;
+		//
+		if(vexRT[Btn8U]||vexRT[Btn6UXmtr2])motor[claw] = 127;
+		else if(vexRT[Btn8D]||vexRT[Btn6DXmtr2])motor[claw] = -127;
+		else motor[claw] =  0;
 		//dr4b
 		if(vexRT[Btn6U]){
 			motor[ldr4b] = -100;
@@ -51,10 +55,10 @@ task drive(){
 			motor[ldr4b] = 100;
 			motor[rdr4b] = -100;
 		}else{
-			motor[ldr4b] = motor[rdr4b] = 0;
+			motor[ldr4b] = motor[rdr4b] = vexRT[Ch3Xmtr2];
 		}
 		//chainbar
-		motor[fourbar] = c2;
+		motor[fourbar] = c2 + vexRT[Ch2Xmtr2];
 		//sounds
 		/*if(!bSoundActive){
 			if(vexRT[Btn8U]==1){
