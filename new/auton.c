@@ -99,6 +99,7 @@ task auton(){//main task
 	switch(lcdCount){
 		case 0://first auton
 			moveForwards(40);
+			rotateDr4bUpTo(30);
 			lowerMGM();
 			moveForwards(8);
 			raiseMGM();
@@ -118,6 +119,7 @@ task auton(){//main task
 			break;
 		case 1:
 			moveForwards(40);
+			rotateDr4bUpTo(30);
 			lowerMGM();
 			moveForwards(8);
 			raiseMGM();
