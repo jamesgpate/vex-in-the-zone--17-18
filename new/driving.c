@@ -1,6 +1,7 @@
 //#include "lights.c"
 task drive(){
 	int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
+	float potTarget = SensorValue[fourbarPot], potError = 0, potLastError = 0, potDerivative = 0, potIntegral = 0, potKp = .5, potKi = .5, potKd = .5, potPower;
 	while(true){
 		long sysTime = nSysTime;
 		//set threshold to 20 and make sure it is zero under it
@@ -26,10 +27,9 @@ task drive(){
 		if(vexRT[Btn5U])motor[mgml] = motor[mgmr] = -127;
 		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = 127;
 		else motor[mgml] = motor[mgmr] = 0;
-		//
-		if(vexRT[Btn8U]||vexRT[Btn6UXmtr2])motor[claw] = 127;
-		else if(vexRT[Btn8D]||vexRT[Btn6DXmtr2])motor[claw] = -127;
-		else motor[claw] =  0;
+		//claw
+		if(vexRT[Btn7D]||vexRT[Btn6DXmtr2])motor[claw] = -20;
+		else motor[claw] =  20;
 		//dr4b
 		if(vexRT[Btn6U]){
 			motor[ldr4b] = -100;
@@ -38,10 +38,30 @@ task drive(){
 			motor[ldr4b] = 100;
 			motor[rdr4b] = -100;
 		}else{
-			motor[ldr4b] = motor[rdr4b] = vexRT[Ch3Xmtr2];
+			motor[ldr4b] = vexRT[Ch3Xmtr2];
+			motor[rdr4b] = -vexRT[Ch3Xmtr2];
 		}
-		//chainbar
-		motor[fourbar] = c2 + vexRT[Ch2Xmtr2];
+		//fourbar
+		if(vexRT[Btn8R]){
+			potTarget = 1880;
+		}else{
+			potTarget += c2/4;
+		}
+		if(potKi != 0){
+			if(abs(potError) < 50)
+				potIntegral = potIntegral + potError;
+			else
+				potIntegral = 0;
+		}
+		else
+			potIntegral = 0;
+		potError = potTarget - SensorValue[fourbarPot];
+		potDerivative = potError - potError;
+		potLastError = potError;
+		potPower = (potKp * potError) + (potKi * potIntegral) + (potKd * potDerivative);
+		if(potPower>127)potPower = 127;
+		else if (potPower<-127)potPower = -127;
+		motor[fourbar] = potPower;
 		//sounds
 		/*if(!bSoundActive){
 			if(vexRT[Btn8U]==1){
@@ -79,7 +99,7 @@ task drive(){
 		displayLCDString(1,0,"Backup: ");
 		displayLCDNumber(1,9,BackupBatteryLevel);
 		displayLCDString(1,13, " mV");
-		//keep the loop timing consistent
+		//keep the loop timing consistently 25 ms
 		int timeDiff = nSysTime - sysTime;
 		wait1Msec(25-timeDiff);
 		EndTimeSlice();
