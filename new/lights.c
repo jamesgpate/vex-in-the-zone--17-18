@@ -1,4 +1,3 @@
-
 //Send 8 bits, most significant to least significant.
 void sendByte(int byte){
 	for(int i = 128; i >= 1; i = i / 2){
