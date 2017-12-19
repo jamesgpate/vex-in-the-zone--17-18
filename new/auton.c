@@ -20,6 +20,7 @@ const int C_dOfWheels = 4;
 const int C_rOfRobot = 8;
 const float C_PI = 3.1415926;
 const int C_motorPower = 40;
+const float C_dr4bconstant = .5;
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
 	return (360*inches)/(C_dOfWheels*C_PI/2);
 }
@@ -30,7 +31,7 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>encVal){
+	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>-encVal){
 		motor[ldt1] = motor[ldt2] = C_motorPower;
 		motor[rdt1] = motor[rdt2] = -C_motorPower;
 	}
@@ -41,7 +42,7 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>encVal || SensorValue[rdtEnc]<encVal){
+	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]<encVal){
 		motor[ldt1] = motor[ldt2] = -C_motorPower;
 		motor[rdt1] = motor[rdt2] = C_motorPower;
 	}
@@ -52,7 +53,7 @@ void turnRight(int degrees){//this turns the robot to the right *degrees* degree
 	int encVal = getEncValForTurn(degrees);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>encVal){
+	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>-encVal){
 		motor[ldt1] = motor[ldt2] = C_motorPower;
 		motor[rdt1] = motor[rdt2] = C_motorPower;
 	}
@@ -63,7 +64,7 @@ void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
 	int encVal = getEncValForTurn(degrees);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>encVal || SensorValue[rdtEnc]<encVal){
+	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]<encVal){
 		motor[ldt1] = motor[ldt2] = -C_motorPower;
 		motor[rdt1] = motor[rdt2] = -C_motorPower;
 	}
@@ -79,6 +80,20 @@ void raiseMGM(){
 	motor[mgml] = motor[mgmr] = -C_motorPower;
 	wait1Msec(500);
 	motor[mgml] = motor[mgmr] = 0;
+}
+void rotateDr4bUpTo(int distance){
+	int encVal = distance*C_dr4bconstant;
+	while(SensorValue[ldr4bEnc]>-encVal || SensorValue[rdr4bEnc]<encVal){
+		motor[ldr4b] = motor[rdr4b] = C_motorPower;
+	}
+	motor[ldr4b] = motor[rdr4b] = 0;
+}
+void rotateDr4bDownTo(int distance){
+	int encVal = distance*C_dr4bconstant;
+	while(SensorValue[ldr4bEnc]<encVal || SensorValue[rdr4bEnc]>-encVal){
+		motor[ldr4b] = motor[rdr4b] = -C_motorPower;
+	}
+	motor[ldr4b] = motor[rdr4b] = 0;
 }
 task auton(){//main task
 	switch(lcdCount){
