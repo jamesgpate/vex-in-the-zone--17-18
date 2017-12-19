@@ -19,7 +19,7 @@ int lcdCount = 0;
 const int C_dOfWheels = 4;
 const int C_rOfRobot = 8;
 const float C_PI = 3.1415926;
-const int C_motorPower = 40;
+const int C_motorPower = 70;
 const float C_dr4bconstant = .5;
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
 	return (360*inches)/(C_dOfWheels*C_PI/2);
@@ -95,13 +95,37 @@ void rotateDr4bDownTo(int distance){
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
+void harvesterUp(){
+	motor[claw] = C_motorPower;
+	wait1Msec(500);
+	motor[claw] = 0;
+}
+void harvesterDown(){
+	motor[claw] = -C_motorPower;
+	wait1Msec(500);
+	motor[claw] = 0;
+}
+void rotateFourbarTo(int degrees){
+	int potDegValue = SensorValue[fourbarPot]*250/4095;
+	if(degrees<potDegValue){
+		while(degrees<potDegValue){
+			motor[fourbar] = C_motorPower;
+		}
+	}else if(degrees>potDegValue){
+		while(degrees>potDegValue){
+			motor[fourbar] = -C_motorPower;
+		}
+	}
+	motor[fourbar] = 0;
 task auton(){//main task
 	switch(lcdCount){
 		case 0://first auton
 			moveForwards(40);
+			harvesterUp();
 			rotateDr4bUpTo(30);
 			lowerMGM();
 			moveForwards(8);
+			harvesterDown();
 			raiseMGM();
 			moveBackwards(8);
 			turnRight(180);
@@ -119,9 +143,11 @@ task auton(){//main task
 			break;
 		case 1:
 			moveForwards(40);
+			harvesterUp();
 			rotateDr4bUpTo(30);
 			lowerMGM();
 			moveForwards(8);
+			harvesterDown();
 			raiseMGM();
 			moveBackwards(8);
 			turnLeft(180);
