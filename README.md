@@ -55,8 +55,10 @@ It is MIT licensed, so you can do whatever you want so long as you credit me.
         motor[rdt1] = motor[rdt2] = 0;
     }
     ```
-    I can insert this anywhere in my autonomous script and it will move forward how many inches I want it to. Please don't copy and paste the same thing over and over. I've been there and I am never going back.
+    I can insert `moveForwards(5)` anywhere in my autonomous script and it will move forward 5 inches. Please don't copy and paste the same thing over and over. I've been there and I am never going back.
 
 * Whenever your team wants you to program something, tell them it needs to be in the form of a deliverable. "I want to be able to do this." Have them be specific though, like "I want to have arcade drive on the drivetrain with channel 4 controlling forwards and backwards and channel 3 controlling turning." Also, have them create a sheet with the ports for the motors/sensors. This will make your life much easier.
 
 * Those links up there are pretty helpful. You should check them out.
+
+* __**Source control please!**__ Please use Git or some other version control system (Not Google Drive or a flash drive, stop it) and a personal thing from me, make it open source so other people can use it, like I do. [Github has some nice tutorials about Git and its usefulness.](https://guides.github.com/activities/hello-world/)
