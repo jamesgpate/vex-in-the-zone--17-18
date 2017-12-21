@@ -1,8 +1,8 @@
-<title>8332A Quantum Robotics</title>
 
-# \\/\\/\\/ HEY YOU! YEAH YOU! LOOK DOWN HERE! \\/\\/\\/
+# Quantum Robotics
+## \\/\\/\\/ HEY YOU! YEAH YOU! LOOK DOWN HERE! \\/\\/\\/
 ## My Git repo for Vex and stuff
-<img src="https://github.com/notjoms/vex-in-the-zone--17-18/page_assets/main_logo.png" height=200 width=200/>
+<img src="https://github.com/notjoms/vex-in-the-zone--17-18/blob/master/page_assets/main_logo.png" height=200 width=200/>
 
 
 [CSHS](https://cshs.csisd.org) Team [__8332A__](https://vexdb.io/teams/view/8332A) Quantum Robotics
