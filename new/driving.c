@@ -1,7 +1,9 @@
 //#include "lights.c"
 task drive(){
+	int dr4bEncAvg = (SensorValue[ldr4bEnc]+SensorValue[rdr4bEnc])/2;
 	int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
 	float potTarget = SensorValue[fourbarPot], potError = 0, potLastError = 0, potDerivative = 0, potIntegral = 0, potKp = .5, potKi = .5, potKd = .5, potPower;
+	float dr4bTarget = dr4bEncAvg, dr4bError = 0, dr4bLastError = 0, dr4bDerivative = 0, dr4bIntegral = 0, dr4bKp = .5, dr4bKi = .5, dr4bKd = .5, dr4bPower;
 	while(true){
 		long sysTime = nSysTime;
 		//set threshold to 20 and make sure it is zero under it
@@ -30,17 +32,20 @@ task drive(){
 		//claw
 		if(vexRT[Btn7D]||vexRT[Btn6DXmtr2])motor[claw] = -20;
 		else motor[claw] =  20;
-		//dr4b
-		if(vexRT[Btn6U]){
-			motor[ldr4b] = -100;
-			motor[rdr4b] = 100;
-		}else if(vexRT[Btn6D]){
-			motor[ldr4b] = 100;
-			motor[rdr4b] = -100;
-		}else{
-			motor[ldr4b] = vexRT[Ch3Xmtr2];
-			motor[rdr4b] = -vexRT[Ch3Xmtr2];
+		// TODO - dr4b
+		dr4bTarget += (vexRT[Btn6U]-vexRT[Btn6D]);
+		if(dr4bKi != 0){
+			if(abs(dr4bError) < 50)
+				dr4bIntegral = dr4bIntegral + dr4bError;
+			else
+				dr4bIntegral = 0;
 		}
+		else
+			dr4bIntegral = 0;
+		dr4bError = dr4bTarget - dr4bEncAvg;
+		dr4bDerivative = dr4bError - dr4bError;
+		dr4bLastError = dr4bError;
+		dr4bPower = (dr4bKp * dr4bError) + (dr4bKi * dr4bIntegral) + (dr4bKd * dr4bDerivative);
 		//fourbar
 		if(vexRT[Btn8R]){
 			potTarget = 1880;

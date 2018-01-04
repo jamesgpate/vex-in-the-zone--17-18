@@ -45,16 +45,9 @@ void pre_auton(){//Selects auton program
 	clearLCDLine(0);
 	clearLCDLine(1);
 	bLCDBacklight = true;
-	/*
-	SensorType[gyro] = sensorNone;
-	wait1Msec(1500);
-	SensorType[gyro] = sensorGyro;
-	*/
 	playTone(440,10);
 	wait1Msec(100);
 	playTone(660,10);
-	//setStripColor(120, 31, 0, 0, 255);
-
 	while(nLCDButtons != centerButton){
 		switch(lcdCount){
 		case 0:
