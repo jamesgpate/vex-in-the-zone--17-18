@@ -34,30 +34,18 @@ task drive(){
 		else motor[claw] =  20;
 		// TODO - dr4b
 		dr4bTarget += (vexRT[Btn6U]-vexRT[Btn6D]);
-		if(potKi != 0){
-			if(abs(potError) < 50)
-				potIntegral = potIntegral + potError;
+		if(dr4bKi != 0){
+			if(abs(dr4bError) < 50)
+				dr4bIntegral = dr4bIntegral + dr4bError;
 			else
-				potIntegral = 0;
+				dr4bIntegral = 0;
 		}
 		else
-			potIntegral = 0;
-		potError = potTarget - SensorValue[fourbarPot];
-		potDerivative = potError - potError;
-		potLastError = potError;
-		potPower = (potKp * potError) + (potKi * potIntegral) + (potKd * potDerivative);
-		/*
-		if(vexRT[Btn6U]){
-			motor[ldr4b] = -100;
-			motor[rdr4b] = 100;
-		}else if(vexRT[Btn6D]){
-			motor[ldr4b] = 100;
-			motor[rdr4b] = -100;
-		}else{
-			motor[ldr4b] = vexRT[Ch3Xmtr2];
-			motor[rdr4b] = -vexRT[Ch3Xmtr2];
-		}
-		*/
+			dr4bIntegral = 0;
+		dr4bError = dr4bTarget - dr4bEncAvg;
+		dr4bDerivative = dr4bError - dr4bError;
+		dr4bLastError = dr4bError;
+		dr4bPower = (dr4bKp * dr4bError) + (dr4bKi * dr4bIntegral) + (dr4bKd * dr4bDerivative);
 		//fourbar
 		if(vexRT[Btn8R]){
 			potTarget = 1880;
