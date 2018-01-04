@@ -33,7 +33,7 @@ task drive(){
 		if(vexRT[Btn7D]||vexRT[Btn6DXmtr2])motor[claw] = -20;
 		else motor[claw] =  20;
 		//dr4b
-		dr4bTarget += (vexRT[Btn6U]-vexRT[Btn6D]);
+		dr4bTarget += ((float)(vexRT[Btn6U]-vexRT[Btn6D]))/2;
 		if(dr4bKi != 0){
 			if(abs(dr4bError) < 50)
 				dr4bIntegral = dr4bIntegral + dr4bError;
