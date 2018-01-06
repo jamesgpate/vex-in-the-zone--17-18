@@ -1,9 +1,11 @@
 //#include "lights.c"
+#include "auton.c"
 task drive(){
 	int dr4bEncAvg = (SensorValue[ldr4bEnc]+SensorValue[rdr4bEnc])/2;
 	int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
-	float potTarget = SensorValue[fourbarPot], potError = 0, potLastError = 0, potDerivative = 0, potIntegral = 0, potKp = .5, potKi = .5, potKd = .5, potPower;
-	float dr4bTarget = dr4bEncAvg, dr4bError = 0, dr4bLastError = 0, dr4bDerivative = 0, dr4bIntegral = 0, dr4bKp = 30, dr4bKi = 30, dr4bKd = 30, dr4bPower;
+	int mode = 0;
+	float potTarget = SensorValue[potEnc], potError = 0, potLastError = 0, potDerivative = 0, potIntegral = 0, potKp = .5, potKi = .5, potKd = .5, potPower;
+	float dr4bTarget = dr4bEncAvg, dr4bError = 0, dr4bLastError = 0, dr4bDerivative = 0, dr4bIntegral = 0, dr4bKp = 75, dr4bKi = 0, dr4bKd = 0, dr4bPower;
 	while(true){
 		long sysTime = nSysTime;
 		//set threshold to 20 and make sure it is zero under it
@@ -26,14 +28,78 @@ task drive(){
 			motor[rdt1] = motor[rdt2] = -c3+(c4/4);
 		}
 		//mobile goal
-		if(vexRT[Btn5U])motor[mgml] = motor[mgmr] = -127;
-		else if(vexRT[Btn5D])motor[mgml] = motor[mgmr] = 127;
+		if(vexRT[Btn8D])motor[mgml] = motor[mgmr] = -127;
+		else if(vexRT[Btn8U])motor[mgml] = motor[mgmr] = 127;
 		else motor[mgml] = motor[mgmr] = 0;
 		//claw
-		if(vexRT[Btn7D]||vexRT[Btn6DXmtr2])motor[claw] = -20;
-		else motor[claw] =  20;
+		switch(mode){
+			case 0:
+				if((SensorValue[potEnc]-33)>-45&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<25){
+						motor[claw]=127;
+					if(vexRT[Btn5D]==1){
+						motor[claw]=-127;
+					}
+				}
+				else{
+					motor[claw]=15;
+					if(vexRT[Btn5D]==1){
+						motor[claw]=-127;
+					}
+				}
+					break;
+			case 1:
+				if((SensorValue[potEnc]-33)>-55&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<60){
+						motor[claw]=127;
+					if(vexRT[Btn5D]==1){
+						motor[claw]=-127;
+					}
+				}
+				else{
+					motor[claw]=15;
+					if(vexRT[Btn5D]==1){
+						motor[claw]=-127;
+					}
+				}
+				break;
+			case 2:
+			if(vexRT[Btn5D])motor[claw]=-127;
+			if(vexRT[Btn5U])motor[claw]=127;
+			if(!(vexRT[btn5D])&&!(vexRT[Btn5U]))motor[claw]=-10;
+			break;
+	}
+	if(vexRT[Btn7D])mode=0;
+	if(vexRT[Btn7U])mode=1;
+	if(vexRT[Btn7L])mode=2;
+	if(vexRT[Btn7R])mode=3;
+
+	if(mode==3){																			//X=height of cone Y=radius of 4b Z=height of mg
+		for(int i=0;i<12;i++){
+			rotateDr4bUpTo((12+C_fourbarRadius+C_coneHeight*i);
+			rotateFourbarTo(90); //change
+			harvesterUp();
+			rotateFourbarTo(180); //change
+			rotateDr4bDownTo((12+C_fourbarRadius-(C_coneHeight*i);
+			harvesterDown();
+		}
+	}
+
+
+
+
 		//dr4b
-		dr4bTarget += ((float)(vexRT[Btn6U]-vexRT[Btn6D]))/2;
+/*		if(vexRT[Btn6U]==1){													//Start PID
+			dr4bTarget++;
+		}
+		if(vexRT[Btn6D]==1){
+			dr4bTarget--;
+		}
+		if(dr4bTarget>95){
+			dr4bTarget=95;
+		}
+		writeDebugStreamLine("Value:",dr4bTarget);
+
+		dr4bError = dr4bTarget - dr4bEncAvg;
+		dr4bDerivative = dr4bError - dr4bLastError;
 		if(dr4bKi != 0){
 			if(abs(dr4bError) < 50)
 				dr4bIntegral = dr4bIntegral + dr4bError;
@@ -42,33 +108,26 @@ task drive(){
 		}
 		else
 			dr4bIntegral = 0;
-		dr4bError = dr4bTarget - dr4bEncAvg;
-		dr4bDerivative = dr4bError - dr4bLastError;
-		dr4bLastError = dr4bError;
+	dr4bLastError = dr4bError;
 		dr4bPower = (dr4bKp * dr4bError) + (dr4bKi * dr4bIntegral) + (dr4bKd * dr4bDerivative);
-		motor[ldr4b] = dr4bPower;
-		motor[rdr4b] = -dr4bPower;
+	//	motor[ldr4b] = -dr4bPower;
+	//	motor[rdr4b] = dr4bPower;
+		wait1Msec(35); */					//End PID
+	if(vexRT[Btn6U]){
+			motor[ldr4b]=-127;
+			motor[rdr4b]=127;
+		}
+		if(vexRT[Btn6D]){
+			motor[ldr4b]=127;
+			motor[rdr4b]=-127;
+		}
+		if(vexRT[Btn6U]==0&&vexRT[Btn6D]==0){
+			motor[ldr4b]=0;
+			motor[rdr4b]=0;
+		}
+
 		//fourbar
-		if(vexRT[Btn8R]){
-			potTarget = 1880;
-		}else{
-			potTarget += c2/4;
-		}
-		if(potKi != 0){
-			if(abs(potError) < 50)
-				potIntegral = potIntegral + potError;
-			else
-				potIntegral = 0;
-		}
-		else
-			potIntegral = 0;
-		potError = potTarget - SensorValue[fourbarPot];
-		potDerivative = potError - potLastError;
-		potLastError = potError;
-		potPower = (potKp * potError) + (potKi * potIntegral) + (potKd * potDerivative);
-		if(potPower>127)potPower = 127;
-		else if (potPower<-127)potPower = -127;
-		motor[fourbar] = potPower;
+		motor[fourbar] = c2;
 		//sounds
 		/*if(!bSoundActive){
 			if(vexRT[Btn8U]==1){

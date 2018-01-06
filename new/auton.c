@@ -4,6 +4,9 @@ const int C_rOfRobot = 8;
 const float C_PI = 3.1415926;
 const int C_motorPower = 70;
 const float C_dr4bconstant = 2.714;
+const double C_coneHeight = 7;		 // Plz double check
+const double C_fourbarRadius = 0;  // Plz double check
+
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
 	return (360*inches)/(C_dOfWheels*C_PI/2);
 }
@@ -65,31 +68,31 @@ void raiseMGM(){
 	motor[mgml] = motor[mgmr] = 0;
 }
 void rotateDr4bUpTo(int distance){
-	int encVal = distance*C_dr4bconstant;
+	int encVal = abs(distance*C_dr4bconstant);
 	while(SensorValue[ldr4bEnc]>-encVal || SensorValue[rdr4bEnc]<encVal){
 		motor[ldr4b] = motor[rdr4b] = C_motorPower;
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
 void rotateDr4bDownTo(int distance){
-	int encVal = distance*C_dr4bconstant;
+	int encVal = abs(distance*C_dr4bconstant);
 	while(SensorValue[ldr4bEnc]<encVal || SensorValue[rdr4bEnc]>-encVal){
 		motor[ldr4b] = motor[rdr4b] = -C_motorPower;
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
 void harvesterUp(){
-	motor[claw] = C_motorPower;
-	wait1Msec(500);
-	motor[claw] = 0;
-}
-void harvesterDown(){
 	motor[claw] = -C_motorPower;
 	wait1Msec(500);
 	motor[claw] = 0;
 }
+void harvesterDown(){
+	motor[claw] = C_motorPower;
+	wait1Msec(500);
+	motor[claw] = 0;
+}
 void rotateFourbarTo(int degrees){
-	int potDegValue = SensorValue[fourbarPot]*250/4095;
+	int potDegValue = (SensorValue[potEnc]%360)*360; //Double Check Joms?
 	if(degrees<potDegValue){
 		while(degrees<potDegValue){
 			motor[fourbar] = C_motorPower;
