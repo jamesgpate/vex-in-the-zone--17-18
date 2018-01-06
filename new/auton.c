@@ -13,6 +13,7 @@ int getEncValForDistance(int inches){//this returns the encoder value for drivet
 int getEncValForTurn(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
 	return (360*C_PI*2*C_rOfRobot)/(360*C_dOfWheels);
 }
+void turn
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;

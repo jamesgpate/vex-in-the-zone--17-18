@@ -1,6 +1,8 @@
+#pragma config(Sensor, in1,    Gyro,           sensorGyro)
 #pragma config(Sensor, dgtl1,  ldtEnc,         sensorQuadEncoder)
 #pragma config(Sensor, dgtl3,  rdtEnc,         sensorQuadEncoder)
-#pragma config(Sensor, dgtl5,  mgmEnc,         sensorQuadEncoder)
+#pragma config(Sensor, dgtl5,  data,           sensorDigitalOut)
+#pragma config(Sensor, dgtl6,  clock,          sensorDigitalOut)
 #pragma config(Sensor, dgtl7,  ldr4bEnc,       sensorQuadEncoder)
 #pragma config(Sensor, dgtl9,  rdr4bEnc,       sensorQuadEncoder)
 #pragma config(Sensor, dgtl11, potEnc,         sensorQuadEncoder)
@@ -25,6 +27,7 @@
 #include "Vex_Competition_Includes.c"
 #include "driving.c"
 #include "auton.c"
+#include "lights.c"
 const short leftButton = 1;
 const short centerButton = 2;
 const short rightButton = 4;
@@ -121,6 +124,6 @@ task autonomous(){
 	startTask(auton);
 }
 task usercontrol(){
-
+	startTask(smoothWaveFullStrip);
 	startTask(drive);
 }

@@ -1,4 +1,4 @@
-//#include "lights.c"
+#include "lights.c"
 #include "auton.c"
 task drive(){
 	int dr4bEncAvg = (SensorValue[ldr4bEnc]+SensorValue[rdr4bEnc])/2;
@@ -19,14 +19,10 @@ task drive(){
 		if(abs(vexRT[Ch1])>THRESHOLD) c1 = vexRT[Ch1];
 		else c1 = 0;
 		//send these values to the motor
-		if(!vexRT[Btn8L]){
+
 			motor[ldt1] = motor[ldt2] = c3+(c4/2);
 			motor[rdt1] = motor[rdt2] = -c3+(c4/2);
-		}
-		else if(vexRT[Btn8L]){
-			motor[ldt1] = motor[ldt2] = c3+(c4/4);
-			motor[rdt1] = motor[rdt2] = -c3+(c4/4);
-		}
+
 		//mobile goal
 		if(vexRT[Btn8D])motor[mgml] = motor[mgmr] = -127;
 		else if(vexRT[Btn8U])motor[mgml] = motor[mgmr] = 127;
@@ -48,7 +44,9 @@ task drive(){
 				}
 					break;
 			case 1:
-				if((SensorValue[potEnc]-33)>-55&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<60){
+			motor[ldt1]=motor[ldt2]=10;
+			motor[rdt1]=motor[rdt2]=-10;
+				if((SensorValue[potEnc]-33)>-70&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<60){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -61,27 +59,42 @@ task drive(){
 					}
 				}
 				break;
-			case 2:
-			if(vexRT[Btn5D])motor[claw]=-127;
-			if(vexRT[Btn5U])motor[claw]=127;
-			if(!(vexRT[btn5D])&&!(vexRT[Btn5U]))motor[claw]=-10;
-			break;
 	}
-	if(vexRT[Btn7D])mode=0;
-	if(vexRT[Btn7U])mode=1;
-	if(vexRT[Btn7L])mode=2;
-	if(vexRT[Btn7R])mode=3;
+	if(vexRT[Btn8L])mode=0;
+	if(vexRT[Btn8R])mode=1;
 
-	if(mode==3){																			//X=height of cone Y=radius of 4b Z=height of mg
-		for(int i=0;i<12;i++){
-			rotateDr4bUpTo((12+C_fourbarRadius+C_coneHeight*i);
-			rotateFourbarTo(90); //change
-			harvesterUp();
-			rotateFourbarTo(180); //change
-			rotateDr4bDownTo((12+C_fourbarRadius-(C_coneHeight*i);
-			harvesterDown();
-		}
+	if(vexRT[Btn5U]){
+		SensorValue[rdr4bEnc]=0;
+		SensorValue[ldr4bEnc]=0;;
+		SensorValue[potEnc]=0;
 	}
+
+	while(vexRT[Btn7L]==1){
+		int error = 10-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
+		motor[ldr4b]=-4*error;
+		motor[rdr4b]=4*error;
+
+	}
+	while(vexRT[Btn7R]==1){
+		int error = 32-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
+		motor[ldr4b]=-4*error;
+		motor[rdr4b]=4*error;
+	}
+	while(vexRT[Btn8L]==1){
+		int error = 1-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
+		motor[ldr4b]=-4*error;
+		motor[rdr4b]=4*error;
+
+	}
+	while(vexRT[Btn7R]==1){
+		int error = 90-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
+		motor[ldr4b]=-4*error;
+		motor[rdr4b]=4*error;
+	}
+
+
+
+
 
 
 
