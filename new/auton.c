@@ -13,7 +13,6 @@ int getEncValForDistance(int inches){//this returns the encoder value for drivet
 int getEncValForTurn(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
 	return (360*C_PI*2*C_rOfRobot)/(360*C_dOfWheels);
 }
-void turn
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
@@ -58,24 +57,24 @@ void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
 	motor[ldt1] = motor[ldt2] = 0;
 	motor[rdt1] = motor[rdt2] = 0;
 }
-void lowerMGM(){
+void lowerMGM(){//lowers mgm
 	motor[mgml] = motor[mgmr] = C_motorPower;
 	wait1Msec(500);
 	motor[mgml] = motor[mgmr] = 0;
 }
-void raiseMGM(){
+void raiseMGM(){//raises mgm
 	motor[mgml] = motor[mgmr] = -C_motorPower;
 	wait1Msec(500);
 	motor[mgml] = motor[mgmr] = 0;
 }
-void rotateDr4bUpTo(int distance){
+void rotateDr4bUpTo(int distance){//rotates double reverse fourbar up to *distance* height
 	int encVal = abs(distance*C_dr4bconstant);
 	while(SensorValue[ldr4bEnc]>-encVal || SensorValue[rdr4bEnc]<encVal){
 		motor[ldr4b] = motor[rdr4b] = C_motorPower;
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
-void rotateDr4bDownTo(int distance){
+void rotateDr4bDownTo(int distance){//rotates double reverse fourbar down to *distance* height
 	int encVal = abs(distance*C_dr4bconstant);
 	while(SensorValue[ldr4bEnc]<encVal || SensorValue[rdr4bEnc]>-encVal){
 		motor[ldr4b] = motor[rdr4b] = -C_motorPower;
@@ -93,7 +92,7 @@ void harvesterDown(){
 	motor[claw] = 0;
 }
 void rotateFourbarTo(int degrees){
-	int potDegValue = (SensorValue[potEnc]%360)*360; //Double Check Joms?
+	int potDegValue = SensorValue[fourbarPot]*250/4095; //correct originally
 	if(degrees<potDegValue){
 		while(degrees<potDegValue){
 			motor[fourbar] = C_motorPower;
