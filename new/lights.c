@@ -1,3 +1,5 @@
+TVexJoysticks sendRainbowDownStripButton = vexRT[Btn7D];
+TVexJoysticks fadeColorsButton = vexRT[Btn7U];
 //Send 8 bits, most significant to least significant.
 void sendByte(int byte){
 	for(int i = 128; i >= 1; i = i / 2){
@@ -74,4 +76,30 @@ task fadeColors(){
 		b--;
 	}
 	endTransmission();
+	if(!fadeColorsButton){
+		wait1Msec(100);
+		if(!fadeColorsButton){
+			startTask(fadeColors);
+		}
+	}
+}
+task sendRainbowDownStrip(){
+	setStripColor(120,31,255,255,255);
+	startTransmission();
+	sendLEDFrame(31,255,0,0);
+	sendLEDFrame(31,255,128,0);
+	sendLEDFrame(31,255,255,0);
+	sendLEDFrame(31,0,255,0);
+	sendLEDFrame(31,0,0,255);
+	sendLEDFrame(31,255,0,255);
+	for(int i = 0; i < 114; i++){
+		sendLEDFrame(31,255,255,255);
+	}
+	endTransmission();
+	if(!sendRainbowDownStripButton){
+		wait1Msec(100);
+		if(!sendRainbowDownStripButton){
+			startTask(sendRainbowDownStrip);
+		}
+	}
 }

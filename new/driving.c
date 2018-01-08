@@ -1,4 +1,4 @@
-//#include "lights.c"
+#include "lights.c"
 #include "auton.c"
 float potKp = .5; 
 float potKi = .5; 
@@ -129,6 +129,17 @@ task drive(){
 		}*/
 		//fourbar
 		motor[fourbar] = c2;
+		//lights
+		if(fadeColorsButton){
+			stopTask(fadeColors);
+			stopTask(sendRainbowDownStrip);
+			startTask(fadeColors);
+		}
+		if(sendRainbowDownStripButton){
+			stopTask(fadeColors);
+			stopTask(sendRainbowDownStrip);
+			startTask(sendRainbowDownStrip);
+		}
 		//displays current battery and backup battery voltage
 		clearLCDLine(0);
 		clearLCDLine(1);
