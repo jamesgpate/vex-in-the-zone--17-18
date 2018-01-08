@@ -1,10 +1,10 @@
 #include "lights.c"
 #include "auton.c"
-float potKp = .5; 
-float potKi = .5; 
-float potKd = .5;
-float dr4bKp = 75; 
-float dr4bKi = 0; 
+float potKp = 20;
+float potKi = 0;
+float potKd = 0;
+float dr4bKp = 12;
+float dr4bKi = 0;
 float dr4bKd = 0;
 task drive(){
 	int dr4bEncAvg = (SensorValue[ldr4bEnc]+SensorValue[rdr4bEnc])/2;
@@ -34,7 +34,7 @@ task drive(){
 		//claw
 		switch(mode){
 			case 0:
-				if((SensorValue[potEnc]-33)>-45&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<25){
+				if((SensorValue[potEnc]-33)>-45&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<30){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -48,9 +48,7 @@ task drive(){
 				}
 				break;
 			case 1:
-				motor[ldt1]=motor[ldt2]=10;
-				motor[rdt1]=motor[rdt2]=-10;
-				if((SensorValue[potEnc]-33)>-70&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<60){
+				if((SensorValue[potEnc]-33)>-80&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<70){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -69,39 +67,47 @@ task drive(){
 			SensorValue[ldr4bEnc]=0;
 			SensorValue[potEnc]=0;
 		}
-		while(vexRT[Btn7L]==1){
-			int error = 10-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
+		while(vexRT[Btn7L]){
+			int error = 15-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
 			motor[ldr4b]=-4*error;
 			motor[rdr4b]=4*error;
+			mode=0;
 
 		}
-		while(vexRT[Btn7R]==1){
-			int error = 32-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
+		while(vexRT[Btn7R]){
+			int error = 37-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
 			motor[ldr4b]=-4*error;
 			motor[rdr4b]=4*error;
+			mode=1;
 		}
-		while(vexRT[Btn8L]==1){
+		while(vexRT[Btn7D]){
 			int error = 1-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
 			motor[ldr4b]=-4*error;
 			motor[rdr4b]=4*error;
 
 		}
-		while(vexRT[Btn8R]==1){
+		while(vexRT[Btn7U]){
 			int error = 90-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
 			motor[ldr4b]=-4*error;
 			motor[rdr4b]=4*error;
+		}
+		if(vexRT[Btn8L]){
+			mode = 0;
+		}
+		if(vexRT[Btn8R]){
+			mode = 1;
 		}
 		//dr4b - PID version
 		dr4bTarget += vexRT[Btn6U]-vexRT[Btn6D];
 		if(dr4bTarget>95){
 			dr4bTarget = 95;
 		}
-		else if(dr4bTarget<0){
-			dr4bTarget = 0;
+		else if(dr4bTarget<1){
+			dr4bTarget = 1;
 		}
 		writeDebugStreamLine("Value:",dr4bTarget);
-		dr4bError = dr4bTarget - dr4bEncAvg;
-		dr4bDerivative = dr4bError - dr4bLastError;
+		dr4bError = dr4bTarget - ((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2;
+	/*	dr4bDerivative = dr4bError - dr4bLastError;
 		if(dr4bKi != 0){
 			if(abs(dr4bError) < 50)
 				dr4bIntegral = dr4bIntegral + dr4bError;
@@ -110,8 +116,8 @@ task drive(){
 		}
 		else
 			dr4bIntegral = 0;
-		dr4bLastError = dr4bError;
-		dr4bPower = (dr4bKp * dr4bError) + (dr4bKi * dr4bIntegral) + (dr4bKd * dr4bDerivative);
+		dr4bLastError = dr4bError;*/
+		dr4bPower = (dr4bKp * dr4bError) //+ (dr4bKi * dr4bIntegral) + (dr4bKd * dr4bDerivative);
 		motor[ldr4b] = -dr4bPower;
 		motor[rdr4b] = dr4bPower;
 		//dr4b - Non-PID version
@@ -151,7 +157,7 @@ task drive(){
 		displayLCDString(1,13, " mV");
 		//keep the loop timing consistently 25 ms
 		int timeDiff = nSysTime - sysTime;
-		wait1Msec(25-timeDiff);
+		wait1Msec(20-timeDiff);
 		EndTimeSlice();
 	}
 }
