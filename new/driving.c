@@ -157,7 +157,11 @@ task drive(){
 		displayLCDString(1,13, " mV");
 		//keep the loop timing consistently 25 ms
 		int timeDiff = nSysTime - sysTime;
+<<<<<<< HEAD
 		wait1Msec(20-timeDiff);
+=======
+		wait1Msec(15-timeDiff);
+>>>>>>> 47e6991e8ba7ffb4390dd5540c46159ea4f2e9e4
 		EndTimeSlice();
 	}
 }
