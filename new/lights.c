@@ -1,5 +1,5 @@
-TVexJoysticks sendRainbowDownStripButton = vexRT[Btn7D];
-TVexJoysticks fadeColorsButton = vexRT[Btn7U];
+word sendRainbowDownStripButton = vexRT[Btn7D];
+word fadeColorsButton = vexRT[Btn7U];
 //Send 8 bits, most significant to least significant.
 void sendByte(int byte){
 	for(int i = 128; i >= 1; i = i / 2){

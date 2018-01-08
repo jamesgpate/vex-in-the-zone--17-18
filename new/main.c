@@ -10,7 +10,7 @@
 #pragma config(Motor,  port2,           fourbar,       tmotorVex393TurboSpeed_MC29, openLoop)
 #pragma config(Motor,  port3,           ldr4b,         tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port4,           ldt1,          tmotorVex393HighSpeed_MC29, openLoop)
-#pragma config(Motor,  port5,           ldt2,          tmotorVex393TurboSpeed_MC29, openLoop)
+#pragma config(Motor,  port5,           ldt2,          tmotorVex393HighSpeed_MC29, openLoop)
 #pragma config(Motor,  port6,           rdt1,          tmotorVex393HighSpeed_MC29, openLoop)
 #pragma config(Motor,  port7,           rdt2,          tmotorVex393HighSpeed_MC29, openLoop)
 #pragma config(Motor,  port8,           rdr4b,         tmotorVex393_MC29, openLoop)
@@ -65,6 +65,9 @@ void pre_auton(){//Selects auton program
 				waitForRelease();
 				lcdCount++;
 			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[potEnc]=0;
 		break;
 		case 1:
 			clearLCDLine(0);
@@ -80,6 +83,9 @@ void pre_auton(){//Selects auton program
 				waitForRelease();
 				lcdCount++;
 			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[potEnc]=0;
 			break;
 		case 2:
 			clearLCDLine(0);
@@ -95,6 +101,9 @@ void pre_auton(){//Selects auton program
 				waitForRelease();
 				lcdCount++;
 			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[potEnc]=0;
 			break;
 		case 3:
 			clearLCDLine(0);
@@ -112,9 +121,15 @@ void pre_auton(){//Selects auton program
 				waitForRelease();
 				lcdCount = 0;
 			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[potEnc]=0;
 			break;
 		default:
 			lcdCount = 0;
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[potEnc]=0;
 			break;
 
 		}
@@ -124,6 +139,5 @@ task autonomous(){
 	startTask(auton);
 }
 task usercontrol(){
-	startTask(smoothWaveFullStrip);
 	startTask(drive);
 }
