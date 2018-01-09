@@ -92,13 +92,13 @@ void harvesterDown(){
 	motor[claw] = 0;
 }
 void rotateFourbarTo(int degrees){
-	int potDegValue = (SensorValue[potEnc]%360)*360; //correct
-	if(degrees<potDegValue){
-		while(degrees<potDegValue){
+	int fourbarDegValue = (SensorValue[fourbarEnc]%360)*360; //correct
+	if(degrees<fourbarDegValue){
+		while(degrees<fourbarDegValue){
 			motor[fourbar] = C_motorPower;
 		}
-	}else if(degrees>potDegValue){
-		while(degrees>potDegValue){
+	}else if(degrees>fourbarDegValue){
+		while(degrees>fourbarDegValue){
 			motor[fourbar] = -C_motorPower;
 		}
 	}
