@@ -1,12 +1,12 @@
 int lcdCount = 0;
 const int C_dOfWheels = 4;
-const int C_rOfRobot = 8;
+const int C_rOfRobot = 13;
 const float C_PI = 3.1415926;
 const int C_motorPower = 70;
 const float C_dr4bconstant = 2.714;
 const float C_coneHeight = 7;		 // Plz double check
-const float C_fourbarRadius = 0;  // Plz double check
-
+const float C_fourbarRadius = 8.75;  // Plz double check
+//
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
 	return (360*inches)/(C_dOfWheels*C_PI/2);
 }
@@ -70,14 +70,16 @@ void raiseMGM(){//raises mgm
 void rotateDr4bUpTo(int distance){//rotates double reverse fourbar up to *distance* height
 	int encVal = abs(distance*C_dr4bconstant);
 	while(SensorValue[ldr4bEnc]>-encVal || SensorValue[rdr4bEnc]<encVal){
-		motor[ldr4b] = motor[rdr4b] = C_motorPower;
+		motor[ldr4b] = -C_motorPower;
+		motor[rdr4b] = C_motorPower;
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
 void rotateDr4bDownTo(int distance){//rotates double reverse fourbar down to *distance* height
 	int encVal = abs(distance*C_dr4bconstant);
 	while(SensorValue[ldr4bEnc]<encVal || SensorValue[rdr4bEnc]>-encVal){
-		motor[ldr4b] = motor[rdr4b] = -C_motorPower;
+		motor[ldr4b] = C_motorPower;
+		motor[rdr4b] = -C_motorPower;
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
