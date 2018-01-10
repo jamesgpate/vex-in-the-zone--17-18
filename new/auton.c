@@ -1,156 +1,133 @@
-int lcdCount = 0;
-const int C_dOfWheels = 4;
-const int C_rOfRobot = 13;
-const float C_PI = 3.1415926;
-const int C_motorPower = 70;
-const float C_dr4bconstant = 2.714;
-const float C_coneHeight = 7;		 // Plz double check
-const float C_fourbarRadius = 8.75;  // Plz double check
-//
-int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
-	return (360*inches)/(C_dOfWheels*C_PI/2);
-}
-int getEncValForTurn(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
-	return (360*C_PI*2*C_rOfRobot)/(360*C_dOfWheels);
+/*
+    Copyright (C) 2017 Quantum Robotics
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
+const int DIAMWHEELS = 4;
+const int rOfRobot = 9;
+int count = 0;
+int getEncVal(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
+	float distance = 2*3.14159*rOfRobot;
+	float rotations = distance/(DIAMWHEELS*3.14159);
+	return rotations*360;
 }
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
-	int encVal = getEncValForDistance(distance);
-	SensorValue[ldtEnc] = 0;
-	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>-encVal){
-		motor[ldt1] = motor[ldt2] = C_motorPower;
-		motor[rdt1] = motor[rdt2] = -C_motorPower;
+	float circumference = DIAMWHEELS*3.14159;
+	float rotations = distance/circumference;
+	int encValue = rotations*360;
+	SensorValue[leftDT] = 0;
+	SensorValue[rightDT] = 0;
+	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
+		motor[port4] = motor[port6]   = motor[port5] = motor[port7]   = 66;
 	}
-	motor[ldt1] = motor[ldt2] = 0;
-	motor[rdt1] = motor[rdt2] = 0;
+	motor[port4] = motor[port6]   = motor[port5] = motor[port7]   = 0;
 }
 void moveBackwards(int distance){//this moves the robot backwards *distance* inches
-	int encVal = getEncValForDistance(distance);
-	SensorValue[ldtEnc] = 0;
-	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]<encVal){
-		motor[ldt1] = motor[ldt2] = -C_motorPower;
-		motor[rdt1] = motor[rdt2] = C_motorPower;
+	float circumference = DIAMWHEELS*3.14159;
+	float rotations = distance/circumference;
+	int encValue = rotations*360;
+	SensorValue[leftDT] = 0;
+	SensorValue[rightDT] = 0;
+	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
+		motor[port4] = motor[port6]   = motor[port5] = motor[port7]   = -66;
 	}
-	motor[ldt1] = motor[ldt2] = 0;
-	motor[rdt1] = motor[rdt2] = 0;
+	motor[port4] = motor[port6]   = motor[port5] = motor[port7]   = 0;
 }
 void turnRight(int degrees){//this turns the robot to the right *degrees* degrees
-	int encVal = getEncValForTurn(degrees);
-	SensorValue[ldtEnc] = 0;
-	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>-encVal){
-		motor[ldt1] = motor[ldt2] = C_motorPower;
-		motor[rdt1] = motor[rdt2] = C_motorPower;
+	int encValue = getEncVal(degrees);
+	SensorValue[leftDT] = 0;
+	SensorValue[rightDT] = 0;
+	while(SensorValue[leftDT] < encValue && SensorValue[rightDT] < encValue){
+		motor[port4] = motor[port6] = 66;
+		motor[port5] =	motor[port7] = -66;
 	}
-	motor[ldt1] = motor[ldt2] = 0;
-	motor[rdt1] = motor[rdt2] = 0;
+	motor[port4] = motor[port6]   = motor[port5] = motor[port7]   = 0;
 }
 void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
-	int encVal = getEncValForTurn(degrees);
-	SensorValue[ldtEnc] = 0;
-	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]<encVal){
-		motor[ldt1] = motor[ldt2] = -C_motorPower;
-		motor[rdt1] = motor[rdt2] = -C_motorPower;
+	int encValue = getEncVal(degrees);
+	SensorValue[leftDT] = 0;
+	SensorValue[rightDT] = 0;
+	while(SensorValue[leftDT] > encValue && SensorValue[rightDT] > encValue){
+		motor[port4] = motor[port6] = -66;
+		motor[port5] =	motor[port7] = 66;
 	}
-	motor[ldt1] = motor[ldt2] = 0;
-	motor[rdt1] = motor[rdt2] = 0;
+	motor[port4] = motor[port6]   = motor[port5] = motor[port7]   = 0;
 }
-void lowerMGM(){//lowers mgm
-	motor[mgml] = motor[mgmr] = C_motorPower;
-	wait1Msec(500);
-	motor[mgml] = motor[mgmr] = 0;
-}
-void raiseMGM(){//raises mgm
-	motor[mgml] = motor[mgmr] = -C_motorPower;
-	wait1Msec(500);
-	motor[mgml] = motor[mgmr] = 0;
-}
-void rotateDr4bUpTo(int distance){//rotates double reverse fourbar up to *distance* height
-	int encVal = abs(distance*C_dr4bconstant);
-	while(SensorValue[ldr4bEnc]>-encVal || SensorValue[rdr4bEnc]<encVal){
-		motor[ldr4b] = -C_motorPower;
-		motor[rdr4b] = C_motorPower;
-	}
-	motor[ldr4b] = motor[rdr4b] = 0;
-}
-void rotateDr4bDownTo(int distance){//rotates double reverse fourbar down to *distance* height
-	int encVal = abs(distance*C_dr4bconstant);
-	while(SensorValue[ldr4bEnc]<encVal || SensorValue[rdr4bEnc]>-encVal){
-		motor[ldr4b] = C_motorPower;
-		motor[rdr4b] = -C_motorPower;
-	}
-	motor[ldr4b] = motor[rdr4b] = 0;
-}
-void harvesterUp(){
-	motor[claw] = -C_motorPower;
-	wait1Msec(500);
+void openClaw(){
+	motor[claw] = -127;
+	wait1Msec(300);
 	motor[claw] = 0;
 }
-void harvesterDown(){
-	motor[claw] = C_motorPower;
-	wait1Msec(500);
+void closeClaw(){
+	motor[claw] = 127;
+	wait1Msec(300);
 	motor[claw] = 0;
 }
-void rotateFourbarTo(int degrees){
-	int fourbarDegValue = (SensorValue[fourbarEnc]%360)*360; //correct
-	if(degrees<fourbarDegValue){
-		while(degrees<fourbarDegValue){
-			motor[fourbar] = C_motorPower;
-		}
-	}else if(degrees>fourbarDegValue){
-		while(degrees>fourbarDegValue){
-			motor[fourbar] = -C_motorPower;
-		}
+void rotateDr4bUpTo(float inches){//this rotates the dr4b *degrees* degrees up
+	motor[rdr4b] = 0;
+	while((float)SensorValue[towerR] > -(inches/43.0)*90.0){
+		motor[rdr4b] = 100;
 	}
-	motor[fourbar] = 0;
+	motor[rdr4b] = 0;
+}
+void rotateDr4bDownTo(float inches){//this rotates the dr4b *degrees* degrees down
+	motor[rdr4b] = 0;
+	while((float)SensorValue[towerR] < -(inches/43.0)*90.0){
+		motor[rdr4b] = -100;
+	}
+	motor[rdr4b] = 0;
 }
 task auton(){//main task
-	switch(lcdCount){
+	SensorValue[leftDT] = 0;
+	SensorValue[rightDT] = 0;
+	switch(count){
 		case 0://first auton
-			moveForwards(40);
-			harvesterUp();
-			rotateDr4bUpTo(30);
-			lowerMGM();
+			closeClaw();
+			wait1Msec(1000);
+			rotateDr4bUpTo(35.0);
+			wait1Msec(1000);
+			moveForwards(10.0);
+			wait1Msec(1000);
+			rotateDr4bDownTo(25.0);
+			wait1Msec(1000);
+			openClaw();
+			moveBackwards(5);
+			/*
+			rotateDr4bDownTo(5.0);
+			wait1Msec(1000);
+			turnLeft(30);
+			moveForwards(48);
+			closeClaw();
+			rotateDr4bUpTo(20.0);
+			wait1Msec(1000);
+			moveForwards(12);
+			rotateDr4bDownTo(5.0);
+			openClaw();
+			wait1Msec(1000);
+			moveBackwards(12);
+			turnRight(30);
 			moveForwards(8);
-			harvesterDown();
-			raiseMGM();
-			moveBackwards(8);
-			turnRight(180);
-			moveForwards(36);
-			turnLeft(90);
-			moveForwards(18);
-			turnRight(90);
-			moveForwards(16);
-			turnRight(45);
-			moveForwards(36);
-			lowerMGM();
-			moveBackwards(8);
-			raiseMGM();
-			moveBackwards(8);
+			closeClaw();
+			wait1Msec(1000);
+			rotateDr4bUpTo(25.0);
+			turnLeft(30);
+			rotateDr4bDownTo(5.0);
+			openClaw();
+			*/
 			break;
 		case 1:
-			moveForwards(40);
-			harvesterUp();
-			rotateDr4bUpTo(30);
-			lowerMGM();
-			moveForwards(8);
-			harvesterDown();
-			raiseMGM();
-			moveBackwards(8);
-			turnLeft(180);
-			moveForwards(36);
-			turnRight(90);
-			moveForwards(18);
-			turnLeft(90);
-			moveForwards(16);
-			turnLeft(45);
-			moveForwards(36);
-			lowerMGM();
-			moveBackwards(8);
-			raiseMGM();
-			moveBackwards(8);
 			break;
 		case 2:
 			break;
