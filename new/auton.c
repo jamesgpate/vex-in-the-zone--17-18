@@ -23,7 +23,7 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]<encVal){
+	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>-encVal){
 		motor[ldt1] = motor[ldt2] = C_motorPower;
 		motor[rdt1] = motor[rdt2] = -C_motorPower;
 	}
@@ -34,7 +34,7 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>-encVal){
+	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]<encVal){
 		motor[ldt1] = motor[ldt2] = -C_motorPower;
 		motor[rdt1] = motor[rdt2] = C_motorPower;
 	}
@@ -45,7 +45,7 @@ void turnRight(int degrees){//this turns the robot to the right *degrees* degree
 	int encVal = getEncValForTurn(degrees);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]>-encVal){
+	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]<encVal){
 		motor[ldt1] = motor[ldt2] = C_motorPower;
 		motor[rdt1] = motor[rdt2] = C_motorPower;
 	}
@@ -56,7 +56,7 @@ void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
 	int encVal = getEncValForTurn(degrees);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]<encVal){
+	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]>-encVal){
 		motor[ldt1] = motor[ldt2] = -C_motorPower;
 		motor[rdt1] = motor[rdt2] = -C_motorPower;
 	}
@@ -219,6 +219,8 @@ task auton(){//main task
 			displayLCDString(0,0, fourthAutonString);
 			displayLCDString(1,0, "is running!");
 			moveForwards(20);
+			displayLCDNumber(0,0,SensorValue[rdtEnc]);
+			displayLCDNumber(0,7,SensorValue[ldtEnc]);
 			break;
 		default:
 			break;
