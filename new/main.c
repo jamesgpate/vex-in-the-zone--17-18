@@ -5,12 +5,12 @@
 #pragma config(Sensor, dgtl6,  clock,          sensorDigitalOut)
 #pragma config(Sensor, dgtl7,  ldr4bEnc,       sensorQuadEncoder)
 #pragma config(Sensor, dgtl9,  rdr4bEnc,       sensorQuadEncoder)
-#pragma config(Sensor, dgtl11, fourbarEnc,     sensorQuadEncoder)
+#pragma config(Sensor, dgtl11, potEnc,         sensorQuadEncoder)
 #pragma config(Motor,  port1,           mgmr,          tmotorVex393HighSpeed_HBridge, openLoop)
 #pragma config(Motor,  port2,           fourbar,       tmotorVex393TurboSpeed_MC29, openLoop)
 #pragma config(Motor,  port3,           ldr4b,         tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port4,           ldt1,          tmotorVex393HighSpeed_MC29, openLoop)
-#pragma config(Motor,  port5,           ldt2,          tmotorVex393HighSpeed_MC29, openLoop)
+#pragma config(Motor,  port5,           ldt2,          tmotorVex393TurboSpeed_MC29, openLoop)
 #pragma config(Motor,  port6,           rdt1,          tmotorVex393HighSpeed_MC29, openLoop)
 #pragma config(Motor,  port7,           rdt2,          tmotorVex393HighSpeed_MC29, openLoop)
 #pragma config(Motor,  port8,           rdr4b,         tmotorVex393_MC29, openLoop)
@@ -22,20 +22,16 @@
 #pragma autonomousDuration(15)
 #pragma userControlDuration(105)
 #pragma platform(VEX2)
-
+//#pragma config(Sensor, dgtl9, data, sensorDigitalOut)
+//#pragma config(Sensor, dgtl10, clock, sensorDigitalOut)
 #include "Vex_Competition_Includes.c"
 #include "driving.c"
 #include "auton.c"
 #include "lights.c"
-
 const short leftButton = 1;
 const short centerButton = 2;
 const short rightButton = 4;
-const char[]* enterString = "<     Enter    >";
-const char[]* firstAutonString = "Left Side MGM";
-const char[]* secondAutonString = "Right Side MGM";
-const char[]* thirdAutonString = "Autonomous 3";
-const char[]* fourthAutonString = "Autonomous 4";
+
 void waitForRelease()
 {
 	while(nLCDButtons != 0)
@@ -58,8 +54,8 @@ void pre_auton(){//Selects auton program
 		case 0:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, firstAutonString);
-			displayLCDString(1,0, enterString);
+			displayLCDString(0,0, "Left Side MGM");
+			displayLCDString(1,0, "<    Enter    >");
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -69,15 +65,12 @@ void pre_auton(){//Selects auton program
 				waitForRelease();
 				lcdCount++;
 			}
-			SensorValue[rdr4bEnc]=0;
-			SensorValue[ldr4bEnc]=0;
-			SensorValue[fourbarEnc]=0;
 		break;
 		case 1:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, secondAutonString);
-			displayLCDString(1,0, enterString);
+			displayLCDString(0,0, "Right Side MGM");
+			displayLCDString(1,0, "<    Enter    >");
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -87,15 +80,12 @@ void pre_auton(){//Selects auton program
 				waitForRelease();
 				lcdCount++;
 			}
-			SensorValue[rdr4bEnc]=0;
-			SensorValue[ldr4bEnc]=0;
-			SensorValue[fourbarEnc]=0;
 			break;
 		case 2:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, thirdAutonString);
-			displayLCDString(1,0, enterString);
+			displayLCDString(0,0, "Autonomous 3");
+			displayLCDString(1,0, "<    Enter    >");
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -105,15 +95,12 @@ void pre_auton(){//Selects auton program
 				waitForRelease();
 				lcdCount++;
 			}
-			SensorValue[rdr4bEnc]=0;
-			SensorValue[ldr4bEnc]=0;
-			SensorValue[fourbarEnc]=0;
 			break;
 		case 3:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, fourthAutonString);
-			displayLCDString(1,0, enterString);
+			displayLCDString(0,0, "Autonomous 4");
+			displayLCDString(1,0, "<    Enter    >");
 			waitForPress();
 			if(nLCDButtons == leftButton)
 			{
@@ -125,15 +112,9 @@ void pre_auton(){//Selects auton program
 				waitForRelease();
 				lcdCount = 0;
 			}
-			SensorValue[rdr4bEnc]=0;
-			SensorValue[ldr4bEnc]=0;
-			SensorValue[fourbarEnc]=0;
 			break;
 		default:
 			lcdCount = 0;
-			SensorValue[rdr4bEnc]=0;
-			SensorValue[ldr4bEnc]=0;
-			SensorValue[fourbarEnc]=0;
 			break;
 
 		}
@@ -143,5 +124,6 @@ task autonomous(){
 	startTask(auton);
 }
 task usercontrol(){
+	startTask(smoothWaveFullStrip);
 	startTask(drive);
 }

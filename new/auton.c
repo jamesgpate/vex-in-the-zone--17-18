@@ -1,18 +1,17 @@
-#include "main.c"
 int lcdCount = 0;
-const int C_rOfWheels = 2;
-const int C_rOfRobot = 13;
+const int C_dOfWheels = 4;
+const int C_rOfRobot = 8;
 const float C_PI = 3.1415926;
 const int C_motorPower = 70;
 const float C_dr4bconstant = 2.714;
-const float C_coneHeight = 7;		 // Plz double check
-const float C_fourbarRadius = 8.75;  // Plz double check
-//
+const double C_coneHeight = 7;		 // Plz double check
+const double C_fourbarRadius = 0;  // Plz double check
+
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
-	return (360*inches)/(C_rOfWheels*C_PI*2);
+	return (360*inches)/(C_dOfWheels*C_PI/2);
 }
 int getEncValForTurn(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
-	return degrees*C_rOfRobot/C_rOfWheels;
+	return (360*C_PI*2*C_rOfRobot)/(360*C_dOfWheels);
 }
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
 	int encVal = getEncValForDistance(distance);
@@ -71,18 +70,14 @@ void raiseMGM(){//raises mgm
 void rotateDr4bUpTo(int distance){//rotates double reverse fourbar up to *distance* height
 	int encVal = abs(distance*C_dr4bconstant);
 	while(SensorValue[ldr4bEnc]>-encVal || SensorValue[rdr4bEnc]<encVal){
-		motor[ldr4b] = -C_motorPower;
-		motor[rdr4b] = C_motorPower;
-		encVal = abs(distance*C_dr4bconstant);
+		motor[ldr4b] = motor[rdr4b] = C_motorPower;
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
 void rotateDr4bDownTo(int distance){//rotates double reverse fourbar down to *distance* height
 	int encVal = abs(distance*C_dr4bconstant);
 	while(SensorValue[ldr4bEnc]<encVal || SensorValue[rdr4bEnc]>-encVal){
-		motor[ldr4b] = C_motorPower;
-		motor[rdr4b] = -C_motorPower;
-		encVal = abs(distance*C_dr4bconstant);
+		motor[ldr4b] = motor[rdr4b] = -C_motorPower;
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
@@ -97,31 +92,21 @@ void harvesterDown(){
 	motor[claw] = 0;
 }
 void rotateFourbarTo(int degrees){
-	degrees = -degrees;
-	int fourbarDegValue = (SensorValue[fourbarEnc]%360)*360; //correct
-	if(degrees<fourbarDegValue){
-		while(degrees<fourbarDegValue){
+	int potDegValue = SensorValue[fourbarPot]*250/4095; //correct originally
+	if(degrees<potDegValue){
+		while(degrees<potDegValue){
 			motor[fourbar] = C_motorPower;
-			fourbarDegValue = (SensorValue[fourbarEnc]%360)*360;
 		}
-	}else if(degrees>fourbarDegValue){
-		while(degrees>fourbarDegValue){
+	}else if(degrees>potDegValue){
+		while(degrees>potDegValue){
 			motor[fourbar] = -C_motorPower;
-			fourbarDegValue = (SensorValue[fourbarEnc]%360)*360;
 		}
 	}
 	motor[fourbar] = 0;
 }
-void robotInit(){
-	motor[claw]=20;
-	rotateFourbarTo(33);
-}
 task auton(){//main task
 	switch(lcdCount){
 		case 0://first auton
-			displayLCDString(0,0, firstAutonString);
-			displayLCDString(1,0, "is running!");
-			robotInit();
 			moveForwards(40);
 			harvesterUp();
 			rotateDr4bUpTo(30);
@@ -144,9 +129,6 @@ task auton(){//main task
 			moveBackwards(8);
 			break;
 		case 1:
-			displayLCDString(0,0, secondAutonString);
-			displayLCDString(1,0, "is running!");
-			robotInit();
 			moveForwards(40);
 			harvesterUp();
 			rotateDr4bUpTo(30);
@@ -169,12 +151,8 @@ task auton(){//main task
 			moveBackwards(8);
 			break;
 		case 2:
-			displayLCDString(0,0, thirdAutonString);
-			displayLCDString(1,0, "is running!");
 			break;
 		case 3:
-			displayLCDString(0,0, fourthAutonString);
-			displayLCDString(1,0, "is running!");
 			break;
 		default:
 			break;
