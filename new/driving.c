@@ -95,7 +95,7 @@ task drive(){
 			SensorValue[fourbarEnc]=0;
 		}
 		//dr4b - PID version
-		dr4bTarget += vexRT[Btn6U]-vexRT[Btn6D];
+		/*dr4bTarget += vexRT[Btn6U]-vexRT[Btn6D];
 		if(dr4bTarget>95){
 			dr4bTarget = 95;
 		}
@@ -103,7 +103,7 @@ task drive(){
 			dr4bTarget = 1;
 		}
 		dr4bError = dr4bTarget - (SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2;
-		/*	dr4bDerivative = dr4bError - dr4bLastError;
+		dr4bDerivative = dr4bError - dr4bLastError;
 		if(dr4bKi != 0){
 			if(abs(dr4bError) < 50)
 				dr4bIntegral = dr4bIntegral + dr4bError;
@@ -112,12 +112,12 @@ task drive(){
 		}
 		else
 			dr4bIntegral = 0;
-		dr4bLastError = dr4bError;*/
+		dr4bLastError = dr4bError;
 		dr4bPower = (dr4bKp * dr4bError); //+ (dr4bKi * dr4bIntegral) + (dr4bKd * dr4bDerivative);
 		motor[ldr4b] = -dr4bPower;
-		motor[rdr4b] = dr4bPower;
+		motor[rdr4b] = dr4bPower;*/
 		//dr4b - Non-PID version
-		/*if(vexRT[Btn6U]){
+		if(vexRT[Btn6U]){
 			motor[ldr4b]=-127;
 			motor[rdr4b]=127;
 		}
@@ -128,7 +128,7 @@ task drive(){
 		if(vexRT[Btn6U]==0&&vexRT[Btn6D]==0){
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
-		}*/
+		}
 		//fourbar
 		motor[fourbar] = c2;
 		//lights
@@ -145,14 +145,12 @@ task drive(){
 		//displays current battery and backup battery voltage
 		clearLCDLine(0);
 		clearLCDLine(1);
-		/*
 		displayLCDString(0,0,"Battery: ");
 		displayLCDNumber(0,9, nAvgBatteryLevel);
 		displayLCDString(0,13, " mV");
 		displayLCDString(1,0,"Backup: ");
 		displayLCDNumber(1,9,BackupBatteryLevel);
-		displayLCDString(1,13, " mV");*/
-		displayLCDNumber(0,0,SensorValue[rdtEnc]);
+		displayLCDString(1,13, " mV");
 		//keep the loop timing consistently 20 ms
 		int timeDiff = nSysTime - sysTime;
 		wait1Msec(20-timeDiff);

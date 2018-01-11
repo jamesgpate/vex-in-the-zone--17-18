@@ -26,7 +26,76 @@
 #include "driving.c"
 #include "auton.c"
 //#include "lights.c"
+struct gyroConfig{
+	float stdDev;
+	float avg;
+	float voltsPerDPS;
+	char gyroFlipped;
+};
+typedef struct {
+	struct gyroConfig config;
+	int portNum;
+} Gyro;
+#define GYRO_STD_DEVS 3
+#define GYRO_OVERSAMPLE 1
+#define GYRO_CALIBRATION_POINTS 2000
+float calibrationBuffer [GYRO_CALIBRATION_POINTS];
+float gyroGetRate (Gyro gyro);
+void gyroCalibrate (Gyro gyro){
+	float rawAverage = 0.0;
+	float stdDev = 0.0;
+	//calculate average gyro reading with no motion
+	for(int i = 0; i < GYRO_CALIBRATION_POINTS; ++i){
+		float raw = SensorValue (gyro.portNum);
+		rawAverage += raw;
+		calibrationBuffer [i] = raw;
+		delay (1);
+	}
+	rawAverage /= GYRO_CALIBRATION_POINTS;
+	gyro.config.avg = rawAverage;
+	//calcuate the standard devation, or the average distance
+	//from the average on the data read
+	for (int i = 0; i < GYRO_CALIBRATION_POINTS; ++i)
+		stdDev += fabs (rawAverage - calibrationBuffer [i]);
+	stdDev /= (float) GYRO_CALIBRATION_POINTS;
+	gyro.config.stdDev = stdDev;
+	gyro.config.voltsPerDPS = 0.0011 * 1.515;
+}
+void gyroInit (Gyro gyro, int portNum, char gyroFlipped) {
+	gyro.portNum = portNum;
+	gyro.config.gyroFlipped = gyroFlipped;
+	gyroCalibrate (gyro);
+}
+float gyroGetRate (Gyro gyro){
+	float gyroRead = 0.0;
 
+	#if defined (GYRO_OVERSAMPLE)
+		if (GYRO_OVERSAMPLE > 0) {
+			int sampleSum = 0;
+			int nSamples = pow (4, GYRO_OVERSAMPLE);
+
+			for (int i = 0; i < nSamples; ++i)
+				sampleSum += SensorValue(gyro.portNum);
+			gyroRead = (float) sampleSum / (float) nSamples;
+		}
+		else
+			gyroRead = SensorValue (gyro.portNum);
+	#else
+		gyroRead = SensorValue (gyro.portNum);
+	#endif
+	float gyroDiff = gyroRead - gyro.config.avg;
+	float gyroVoltage = gyroDiff * 5.0 / 4095.0;
+
+	if (fabs (gyroDiff) > GYRO_STD_DEVS * gyro.config.stdDev)
+		if (gyro.config.gyroFlipped)
+			return -1 * gyroVoltage / gyro.config.voltsPerDPS;
+		else
+			return gyroVoltage / gyro.config.voltsPerDPS;
+	return 0;
+}
+Gyro gyro1, gyro2;
+gyroInit(gyro1,1,1);
+gyroInit(gyro2,2,1);
 const short leftButton = 1;
 const short centerButton = 2;
 const short rightButton = 4;
@@ -130,8 +199,9 @@ void pre_auton(){//Selects auton program
 			SensorValue[ldr4bEnc]=0;
 			SensorValue[fourbarEnc]=0;
 			break;
-
 		}
+		SensorValue[ldtEnc]=0;
+		SensorValue[rdtEnc]=0;
 	}
 }
 task autonomous(){

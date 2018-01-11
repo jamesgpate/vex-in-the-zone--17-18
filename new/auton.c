@@ -3,7 +3,7 @@ const string enterString = "<     Enter    >";
 const string firstAutonString = "Left Side MGM";
 const string secondAutonString = "Right Side MGM";
 const string thirdAutonString = "Luke";
-const string fourthAutonString = "Straight";
+const string fourthAutonString = "Test";
 int lcdCount = 0;
 const int C_rOfWheels = 2;
 const int C_rOfRobot = 13;
@@ -218,9 +218,8 @@ task auton(){//main task
 		case 3:
 			displayLCDString(0,0, fourthAutonString);
 			displayLCDString(1,0, "is running!");
-			moveForwards(20);
-			displayLCDNumber(0,0,SensorValue[rdtEnc]);
-			displayLCDNumber(0,7,SensorValue[ldtEnc]);
+			turnRight(90);
+			turnLeft(90);
 			break;
 		default:
 			break;
