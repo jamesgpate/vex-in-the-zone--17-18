@@ -72,6 +72,7 @@ void rotateDr4bUpTo(int distance){//rotates double reverse fourbar up to *distan
 	while(SensorValue[ldr4bEnc]>-encVal || SensorValue[rdr4bEnc]<encVal){
 		motor[ldr4b] = -C_motorPower;
 		motor[rdr4b] = C_motorPower;
+		encVal = abs(distance*C_dr4bconstant);
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
@@ -80,6 +81,7 @@ void rotateDr4bDownTo(int distance){//rotates double reverse fourbar down to *di
 	while(SensorValue[ldr4bEnc]<encVal || SensorValue[rdr4bEnc]>-encVal){
 		motor[ldr4b] = C_motorPower;
 		motor[rdr4b] = -C_motorPower;
+		encVal = abs(distance*C_dr4bconstant);
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
@@ -94,17 +96,24 @@ void harvesterDown(){
 	motor[claw] = 0;
 }
 void rotateFourbarTo(int degrees){
+	degrees = -degrees;
 	int fourbarDegValue = (SensorValue[fourbarEnc]%360)*360; //correct
 	if(degrees<fourbarDegValue){
 		while(degrees<fourbarDegValue){
 			motor[fourbar] = C_motorPower;
+			fourbarDegValue = (SensorValue[fourbarEnc]%360)*360;
 		}
 	}else if(degrees>fourbarDegValue){
 		while(degrees>fourbarDegValue){
 			motor[fourbar] = -C_motorPower;
+			fourbarDegValue = (SensorValue[fourbarEnc]%360)*360;
 		}
 	}
 	motor[fourbar] = 0;
+}
+void robotInit(){
+	motor[claw]=20;
+	rotateFourbarTo(33);
 }
 task auton(){//main task
 	switch(lcdCount){
