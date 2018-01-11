@@ -1,5 +1,5 @@
 int lcdCount = 0;
-const int C_dOfWheels = 4;
+const int C_rOfWheels = 2;
 const int C_rOfRobot = 13;
 const float C_PI = 3.1415926;
 const int C_motorPower = 70;
@@ -8,10 +8,10 @@ const float C_coneHeight = 7;		 // Plz double check
 const float C_fourbarRadius = 8.75;  // Plz double check
 //
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
-	return (360*inches)/(C_dOfWheels*C_PI/2);
+	return (360*inches)/(C_rOfWheels*C_PI*2);
 }
 int getEncValForTurn(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
-	return (360*C_PI*2*C_rOfRobot)/(360*C_dOfWheels);
+	return degrees*C_rOfRobot/C_rOfWheels;
 }
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
 	int encVal = getEncValForDistance(distance);
