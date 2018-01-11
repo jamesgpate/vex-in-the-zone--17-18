@@ -1,3 +1,4 @@
+#include "main.c"
 int lcdCount = 0;
 const int C_rOfWheels = 2;
 const int C_rOfRobot = 13;
@@ -118,6 +119,9 @@ void robotInit(){
 task auton(){//main task
 	switch(lcdCount){
 		case 0://first auton
+			displayLCDString(0,0, firstAutonString);
+			displayLCDString(1,0, "is running!");
+			robotInit();
 			moveForwards(40);
 			harvesterUp();
 			rotateDr4bUpTo(30);
@@ -140,6 +144,9 @@ task auton(){//main task
 			moveBackwards(8);
 			break;
 		case 1:
+			displayLCDString(0,0, secondAutonString);
+			displayLCDString(1,0, "is running!");
+			robotInit();
 			moveForwards(40);
 			harvesterUp();
 			rotateDr4bUpTo(30);
@@ -162,8 +169,12 @@ task auton(){//main task
 			moveBackwards(8);
 			break;
 		case 2:
+			displayLCDString(0,0, thirdAutonString);
+			displayLCDString(1,0, "is running!");
 			break;
 		case 3:
+			displayLCDString(0,0, fourthAutonString);
+			displayLCDString(1,0, "is running!");
 			break;
 		default:
 			break;

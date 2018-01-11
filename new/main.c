@@ -31,7 +31,11 @@
 const short leftButton = 1;
 const short centerButton = 2;
 const short rightButton = 4;
-
+const char[]* enterString = "<     Enter    >";
+const char[]* firstAutonString = "Left Side MGM";
+const char[]* secondAutonString = "Right Side MGM";
+const char[]* thirdAutonString = "Autonomous 3";
+const char[]* fourthAutonString = "Autonomous 4";
 void waitForRelease()
 {
 	while(nLCDButtons != 0)
@@ -54,8 +58,8 @@ void pre_auton(){//Selects auton program
 		case 0:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, "Left Side MGM");
-			displayLCDString(1,0, "<    Enter    >");
+			displayLCDString(0,0, firstAutonString);
+			displayLCDString(1,0, enterString);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -72,8 +76,8 @@ void pre_auton(){//Selects auton program
 		case 1:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, "Right Side MGM");
-			displayLCDString(1,0, "<    Enter    >");
+			displayLCDString(0,0, secondAutonString);
+			displayLCDString(1,0, enterString);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -90,8 +94,8 @@ void pre_auton(){//Selects auton program
 		case 2:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, "Autonomous 3");
-			displayLCDString(1,0, "<    Enter    >");
+			displayLCDString(0,0, thirdAutonString);
+			displayLCDString(1,0, enterString);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -108,8 +112,8 @@ void pre_auton(){//Selects auton program
 		case 3:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, "Autonomous 4");
-			displayLCDString(1,0, "<    Enter    >");
+			displayLCDString(0,0, fourthAutonString);
+			displayLCDString(1,0, enterString);
 			waitForPress();
 			if(nLCDButtons == leftButton)
 			{
