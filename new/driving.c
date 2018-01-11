@@ -1,9 +1,5 @@
-#include "lights.c"
+//#include "lights.c"
 #include "auton.c"
-//
-float fourbarKp = 20;
-float fourbarKi = 0;	//Values for fourbar
-float fourbarKd = 0;
 //
 float dr4bKp = 12;
 float dr4bKi = 0;
@@ -68,13 +64,13 @@ task drive(){
 		}
 		//Positioning
 		while(vexRT[Btn7L]){
-			int error = 12-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Field Height
+			int error = 14-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Field Height
 			motor[ldr4b]=-4*error;
 			motor[rdr4b]=4*error;
 			mode=0;
 		}
 		while(vexRT[Btn7R]){
-			int error = 37-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Match Load Height
+			int error = 32-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Match Load Height
 			motor[ldr4b]=-4*error;
 			motor[rdr4b]=4*error;
 			mode=1;
@@ -106,7 +102,6 @@ task drive(){
 		else if(dr4bTarget<1){
 			dr4bTarget = 1;
 		}
-		writeDebugStreamLine("Value:",dr4bTarget);
 		dr4bError = dr4bTarget - (SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2;
 		/*	dr4bDerivative = dr4bError - dr4bLastError;
 		if(dr4bKi != 0){
@@ -137,7 +132,7 @@ task drive(){
 		//fourbar
 		motor[fourbar] = c2;
 		//lights
-		if(fadeColorsButton){
+		/*if(fadeColorsButton){
 			stopTask(fadeColors);
 			stopTask(sendRainbowDownStrip);
 			startTask(fadeColors);
@@ -146,16 +141,18 @@ task drive(){
 			stopTask(fadeColors);
 			stopTask(sendRainbowDownStrip);
 			startTask(sendRainbowDownStrip);
-		}
+		}*/
 		//displays current battery and backup battery voltage
 		clearLCDLine(0);
 		clearLCDLine(1);
+		/*
 		displayLCDString(0,0,"Battery: ");
 		displayLCDNumber(0,9, nAvgBatteryLevel);
 		displayLCDString(0,13, " mV");
 		displayLCDString(1,0,"Backup: ");
 		displayLCDNumber(1,9,BackupBatteryLevel);
-		displayLCDString(1,13, " mV");
+		displayLCDString(1,13, " mV");*/
+		displayLCDNumber(0,0,SensorValue[rdtEnc]);
 		//keep the loop timing consistently 20 ms
 		int timeDiff = nSysTime - sysTime;
 		wait1Msec(20-timeDiff);

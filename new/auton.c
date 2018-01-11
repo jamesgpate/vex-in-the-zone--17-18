@@ -1,4 +1,9 @@
 #include "main.c"
+const string enterString = "<     Enter    >";
+const string firstAutonString = "Left Side MGM";
+const string secondAutonString = "Right Side MGM";
+const string thirdAutonString = "Luke";
+const string fourthAutonString = "Straight";
 int lcdCount = 0;
 const int C_rOfWheels = 2;
 const int C_rOfRobot = 13;
@@ -18,7 +23,7 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>-encVal){
+	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]<encVal){
 		motor[ldt1] = motor[ldt2] = C_motorPower;
 		motor[rdt1] = motor[rdt2] = -C_motorPower;
 	}
@@ -29,7 +34,7 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]<encVal){
+	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>-encVal){
 		motor[ldt1] = motor[ldt2] = -C_motorPower;
 		motor[rdt1] = motor[rdt2] = C_motorPower;
 	}
@@ -40,7 +45,7 @@ void turnRight(int degrees){//this turns the robot to the right *degrees* degree
 	int encVal = getEncValForTurn(degrees);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>-encVal){
+	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]>-encVal){
 		motor[ldt1] = motor[ldt2] = C_motorPower;
 		motor[rdt1] = motor[rdt2] = C_motorPower;
 	}
@@ -51,7 +56,7 @@ void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
 	int encVal = getEncValForTurn(degrees);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]<encVal){
+	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]<encVal){
 		motor[ldt1] = motor[ldt2] = -C_motorPower;
 		motor[rdt1] = motor[rdt2] = -C_motorPower;
 	}
@@ -171,10 +176,49 @@ task auton(){//main task
 		case 2:
 			displayLCDString(0,0, thirdAutonString);
 			displayLCDString(1,0, "is running!");
+			robotInit();
+			rotateFourbarTo(85);
+			moveForwards(48);
+			lowerMGM();
+			moveForwards(20);
+			raiseMGM();
+			harvesterDown();
+			moveBackwards(36);
+			turnRight(45);
+			moveForwards(6);
+			turnLeft(45);
+			moveForwards(6);
+			rotateFourbarTo(33);
+			moveForwards(20);
+			harvesterUp();
+			rotateFourbarTo(85);
+			harvesterDown();
+			moveForwards(4);
+			rotateFourbarTo(33);
+			harvesterUp();
+			rotateDr4bUpTo(45);
+			rotateFourbarTo(85);
+			harvesterDown();
+			rotateFourbarTo(33);
+			rotateDr4bDownTo(1);
+			moveForwards(4);
+			harvesterUp();
+			rotateDr4bUpTo(45);
+			rotateFourbarTo(85);
+			harvesterDown();
+			turnLeft(180);
+			moveForwards(60);
+			turnRight(45);
+			moveForwards(20);
+			lowerMGM();
+			moveBackwards(5);
+			raiseMGM();
+			moveBackwards(15);
 			break;
 		case 3:
 			displayLCDString(0,0, fourthAutonString);
 			displayLCDString(1,0, "is running!");
+			moveForwards(20);
 			break;
 		default:
 			break;
