@@ -1,11 +1,20 @@
-#include "lights.c"
-#include "auton.c"
-float potKp = .5; 
-float potKi = .5; 
-float potKd = .5;
-float dr4bKp = 75; 
-float dr4bKi = 0; 
-float dr4bKd = 0;
+/*
+    Copyright (C) 2017 Quantum Robotics
+
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Affero General Public License as published
+    by the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Affero General Public License for more details.
+
+    You should have received a copy of the GNU Affero General Public License
+    along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+*/
 task drive(){
 	bool precision = false;
 	int c2 = 0;
@@ -61,24 +70,6 @@ task drive(){
 				playSoundFile("omae_wa_mou_shindeiru.wav");
 			}
 		}
-		if(vexRT[Btn6U]==0&&vexRT[Btn6D]==0){
-			motor[ldr4b]=0;
-			motor[rdr4b]=0;
-		}*/
-		//fourbar
-		motor[fourbar] = c2;
-		//lights
-		if(fadeColorsButton){
-			stopTask(fadeColors);
-			stopTask(sendRainbowDownStrip);
-			startTask(fadeColors);
-		}
-		if(sendRainbowDownStripButton){
-			stopTask(fadeColors);
-			stopTask(sendRainbowDownStrip);
-			startTask(sendRainbowDownStrip);
-		}
-		//displays current battery and backup battery voltage
 		clearLCDLine(0);
 		clearLCDLine(1);
 		displayLCDString(0,0,"Battery: ");
