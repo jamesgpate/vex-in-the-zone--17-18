@@ -1,4 +1,4 @@
-#include "lights.c"
+Q#include "lights.c"
 #include "auton.c"
 //
 float dr4bKp = 12;
