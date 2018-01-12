@@ -10,8 +10,6 @@ const int C_rOfRobot = 13;
 const float C_PI = 3.1415926;
 const int C_motorPower = 70;
 const float C_dr4bconstant = 2.714;
-const float C_coneHeight = 7;		 // Plz double check
-const float C_fourbarRadius = 8.75;  // Plz double check
 //
 struct gyroConfig{
 	float stdDev;
@@ -205,6 +203,7 @@ void robotInit(){
 	rotateFourbarTo(33);
 }
 task auton(){//main task
+	getEncValForTurn(1);
 	switch(lcdCount){
 		case 0://first auton
 			displayLCDString(0,0, firstAutonString);

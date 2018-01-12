@@ -18,7 +18,7 @@
 #pragma DebuggerWindows("Locals")
 #pragma DebuggerWindows("Sensors")
 #pragma DebuggerWindows("debugStream")
-#pragma DebuggerWindows("joystickGame")
+#pragma DebuggerWindows("joystickSimple")
 #pragma DebuggerWindows("VexLCD")
 #pragma DebuggerWindows("vexCompetitionControl")
 #pragma DebuggerWindows("taskStatus")
