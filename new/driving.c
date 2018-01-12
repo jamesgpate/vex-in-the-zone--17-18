@@ -1,16 +1,9 @@
-Q#include "lights.c"
 #include "auton.c"
-//
-float dr4bKp = 12;
-float dr4bKi = 0;
-float dr4bKd = 0;
 //
 task drive(){
 	int dr4bEncAvg = (SensorValue[ldr4bEnc]+SensorValue[rdr4bEnc])/2;
 	int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
 	int mode = 0;
-	float fourbarTarget = SensorValue[fourbarEnc], fourbarError = 0, fourbarLastError = 0, fourbarDerivative = 0, fourbarIntegral = 0, fourbarPower;
-	float dr4bTarget = dr4bEncAvg, dr4bError = 0, dr4bLastError = 0, dr4bDerivative = 0, dr4bIntegral = 0, dr4bPower;
 	while(true){
 		long sysTime = nSysTime;
 		//Drivetrain
@@ -94,28 +87,6 @@ task drive(){
 			SensorValue[ldr4bEnc]=0;
 			SensorValue[fourbarEnc]=0;
 		}
-		//dr4b - PID version
-		/*dr4bTarget += vexRT[Btn6U]-vexRT[Btn6D];
-		if(dr4bTarget>95){
-			dr4bTarget = 95;
-		}
-		else if(dr4bTarget<1){
-			dr4bTarget = 1;
-		}
-		dr4bError = dr4bTarget - (SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2;
-		dr4bDerivative = dr4bError - dr4bLastError;
-		if(dr4bKi != 0){
-			if(abs(dr4bError) < 50)
-				dr4bIntegral = dr4bIntegral + dr4bError;
-			else
-				dr4bIntegral = 0;
-		}
-		else
-			dr4bIntegral = 0;
-		dr4bLastError = dr4bError;
-		dr4bPower = (dr4bKp * dr4bError); //+ (dr4bKi * dr4bIntegral) + (dr4bKd * dr4bDerivative);
-		motor[ldr4b] = -dr4bPower;
-		motor[rdr4b] = dr4bPower;*/
 		//dr4b - Non-PID version
 		if(vexRT[Btn6U]){
 			motor[ldr4b]=-127;
@@ -131,17 +102,6 @@ task drive(){
 		}
 		//fourbar
 		motor[fourbar] = c2;
-		//lights
-		if(fadeColorsButton){
-			stopTask(fadeColors);
-			stopTask(sendRainbowDownStrip);
-			startTask(fadeColors);
-		}
-		if(sendRainbowDownStripButton){
-			stopTask(fadeColors);
-			stopTask(sendRainbowDownStrip);
-			startTask(sendRainbowDownStrip);
-		}
 		//displays current battery and backup battery voltage
 		clearLCDLine(0);
 		clearLCDLine(1);
