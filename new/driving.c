@@ -1,4 +1,4 @@
-//#include "lights.c"
+#include "lights.c"
 #include "auton.c"
 //
 float dr4bKp = 12;
@@ -34,7 +34,7 @@ task drive(){
 		//claw
 		switch(mode){
 			case 0:
-				if((SensorValue[fourbarEnc]-33)>-45&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<30){
+				if((SensorValue[fourbarEnc]-0)>-45&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<30){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -48,7 +48,7 @@ task drive(){
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarEnc]-33)>-80&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<70){
+				if((SensorValue[fourbarEnc]-0)>-80&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<70){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -64,7 +64,7 @@ task drive(){
 		}
 		//Positioning
 		while(vexRT[Btn7L]){
-			int error = 14-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Field Height
+			int error = 12-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Field Height
 			motor[ldr4b]=-4*error;
 			motor[rdr4b]=4*error;
 			mode=0;
@@ -132,7 +132,7 @@ task drive(){
 		//fourbar
 		motor[fourbar] = c2;
 		//lights
-		/*if(fadeColorsButton){
+		if(fadeColorsButton){
 			stopTask(fadeColors);
 			stopTask(sendRainbowDownStrip);
 			startTask(fadeColors);
@@ -141,7 +141,7 @@ task drive(){
 			stopTask(fadeColors);
 			stopTask(sendRainbowDownStrip);
 			startTask(sendRainbowDownStrip);
-		}*/
+		}
 		//displays current battery and backup battery voltage
 		clearLCDLine(0);
 		clearLCDLine(1);

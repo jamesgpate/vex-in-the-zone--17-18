@@ -13,6 +13,73 @@ const float C_dr4bconstant = 2.714;
 const float C_coneHeight = 7;		 // Plz double check
 const float C_fourbarRadius = 8.75;  // Plz double check
 //
+struct gyroConfig{
+	float stdDev;
+	float avg;
+	float voltsPerDPS;
+	char gyroFlipped;
+};
+typedef struct {
+	struct gyroConfig config;
+	int portNum;
+} Gyro;
+#define GYRO_STD_DEVS 3
+#define GYRO_OVERSAMPLE 1
+#define GYRO_CALIBRATION_POINTS 2000
+float calibrationBuffer [GYRO_CALIBRATION_POINTS];
+float gyroGetRate (Gyro gyro);
+void gyroCalibrate (Gyro gyro){
+	float rawAverage = 0.0;
+	float stdDev = 0.0;
+	//calculate average gyro reading with no motion
+	for(int i = 0; i < GYRO_CALIBRATION_POINTS; ++i){
+		float raw = SensorValue (gyro.portNum);
+		rawAverage += raw;
+		calibrationBuffer [i] = raw;
+		delay (1);
+	}
+	rawAverage /= GYRO_CALIBRATION_POINTS;
+	gyro.config.avg = rawAverage;
+	//calcuate the standard devation, or the average distance
+	//from the average on the data read
+	for (int i = 0; i < GYRO_CALIBRATION_POINTS; ++i)
+		stdDev += fabs (rawAverage - calibrationBuffer [i]);
+	stdDev /= (float) GYRO_CALIBRATION_POINTS;
+	gyro.config.stdDev = stdDev;
+	gyro.config.voltsPerDPS = 0.0011 * 1.515;
+}
+void gyroInit (Gyro gyro, int portNum, char gyroFlipped) {
+	gyro.portNum = portNum;
+	gyro.config.gyroFlipped = gyroFlipped;
+	gyroCalibrate (gyro);
+}
+float gyroGetRate(Gyro gyro){
+	float gyroRead = 0.0;
+	#if defined (GYRO_OVERSAMPLE)
+		if (GYRO_OVERSAMPLE > 0) {
+			int sampleSum = 0;
+			int nSamples = pow (4, GYRO_OVERSAMPLE);
+
+			for (int i = 0; i < nSamples; ++i)
+				sampleSum += SensorValue(gyro.portNum);
+			gyroRead = (float) sampleSum / (float) nSamples;
+		}
+		else
+			gyroRead = SensorValue (gyro.portNum);
+	#else
+		gyroRead = SensorValue (gyro.portNum);
+	#endif
+	float gyroDiff = gyroRead - gyro.config.avg;
+	float gyroVoltage = gyroDiff * 5.0 / 4095.0;
+	if (fabs (gyroDiff) > GYRO_STD_DEVS * gyro.config.stdDev)
+		if (gyro.config.gyroFlipped)
+			return -1 * gyroVoltage / gyro.config.voltsPerDPS;
+		else
+			return gyroVoltage / gyro.config.voltsPerDPS;
+	return 0;
+}
+Gyro gyro1, gyro2;
+
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
 	return (360*inches)/(C_rOfWheels*C_PI*2);
 }
@@ -41,27 +108,43 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 	motor[ldt1] = motor[ldt2] = 0;
 	motor[rdt1] = motor[rdt2] = 0;
 }
-void turnRight(int degrees){//this turns the robot to the right *degrees* degrees
-	int encVal = getEncValForTurn(degrees);
-	SensorValue[ldtEnc] = 0;
-	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]<encVal){
-		motor[ldt1] = motor[ldt2] = C_motorPower;
-		motor[rdt1] = motor[rdt2] = C_motorPower;
+void gyroTurn(float fTarget){
+	bool bAtGyro = false;
+	long liAtTargetTime = nPgmTime;
+	long liTimer = nPgmTime;
+	float fGyroAngle = 0;
+	while(!bAtGyro){
+		//Calculate the delta time from the last iteration of the loop
+		float fDeltaTime = (float)(nPgmTime - liTimer)/1000.0;
+		//Reset loop timer
+		liTimer = nPgmTime;
+
+		fGyroAngle += gyroGetRate(gyro1) * fDeltaTime;
+		int motorFlip;
+		if(fTarget>0){
+			motorFlip = 1;
+		}
+		else if(fTarget>0){
+			motorFlip = -1;
+		}
+		motor[ldt1] = motor[ldt2] = C_motorPower*motorFlip;
+		motor[rdt1] = motor[rdt2] = C_motorPower*motorFlip;
+
+		//Stop the turn function when the angle has been within 3 degrees of the desired angle for 350ms
+		if(abs(fTarget - fGyroAngle) > 3)
+			liAtTargetTime = nPgmTime;
+		if(nPgmTime - liAtTargetTime > 350){
+			bAtGyro = true;
+			motor[ldt1] = motor[ldt2] = 0;
+			motor[rdt1] = motor[rdt2] = 0;
+		}
 	}
-	motor[ldt1] = motor[ldt2] = 0;
-	motor[rdt1] = motor[rdt2] = 0;
+}
+void turnRight(int degrees){//this turns the robot to the right *degrees* degrees
+	gyroTurn((float)degrees);
 }
 void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
-	int encVal = getEncValForTurn(degrees);
-	SensorValue[ldtEnc] = 0;
-	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]>-encVal){
-		motor[ldt1] = motor[ldt2] = -C_motorPower;
-		motor[rdt1] = motor[rdt2] = -C_motorPower;
-	}
-	motor[ldt1] = motor[ldt2] = 0;
-	motor[rdt1] = motor[rdt2] = 0;
+	gyroTurn((float)(-degrees));
 }
 void lowerMGM(){//lowers mgm
 	motor[mgml] = motor[mgmr] = C_motorPower;
