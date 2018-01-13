@@ -88,7 +88,7 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]<encVal || SensorValue[rdtEnc]>-encVal){
+	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]>-encVal){
 		motor[ldt1] = motor[ldt2] = C_motorPower;
 		motor[rdt1] = motor[rdt2] = -C_motorPower;
 	}

@@ -9,7 +9,7 @@ task drive(){
 		//Drivetrain
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
-		if(abs(vexRT[Ch4])>THRESHOLD) c4 = vexRT[Ch4];
+		if(abs(vexRT[Ch4])>THRESHOLD) c4 = -1*vexRT[Ch4];
 		else c4 = 0;
 		if(abs(vexRT[Ch3])>THRESHOLD) c3 = vexRT[Ch3];
 		else c3 = 0;
@@ -21,8 +21,8 @@ task drive(){
 		motor[ldt1] = motor[ldt2] = c3+(c4/2);
 		motor[rdt1] = motor[rdt2] = -c3+(c4/2);
 		//mobile goal
-		if(vexRT[Btn8D])motor[mgml] = motor[mgmr] = -127;
-		else if(vexRT[Btn8U])motor[mgml] = motor[mgmr] = 127;
+		if(vexRT[Btn8U])motor[mgml] = motor[mgmr] = -127;
+		else if(vexRT[Btn8D])motor[mgml] = motor[mgmr] = 127;
 		else motor[mgml] = motor[mgmr] = 0;
 		//claw
 		switch(mode){
@@ -58,35 +58,38 @@ task drive(){
 		//Positioning
 		while(vexRT[Btn7L]){
 			int error = 12-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Field Height
-			motor[ldr4b]=-4*error;
-			motor[rdr4b]=4*error;
+			motor[ldr4b]=-8*error;
+			motor[rdr4b]=8*error;
 			mode=0;
 		}
 		while(vexRT[Btn7R]){
 			int error = 32-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Match Load Height
-			motor[ldr4b]=-4*error;
-			motor[rdr4b]=4*error;
-			mode=1;
+			motor[ldr4b]=-8*error;
+			motor[rdr4b]=8*error;
 		}
 		while(vexRT[Btn7D]){
 			int error = 1-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);//Minimum Height
-			motor[ldr4b]=-4*error;
-			motor[rdr4b]=4*error;
+			motor[ldr4b]=-8*error;
+			motor[rdr4b]=8*error;
 		}
 		while(vexRT[Btn7U]){
 			int error = 90-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Maximum Height
-			motor[ldr4b]=-4*error;
-			motor[rdr4b]=4*error;
+			motor[ldr4b]=-8*error;
+			motor[rdr4b]=8*error;
 		}
 		//Changing modes
 		if(vexRT[Btn8L]) mode = 0;
 		if(vexRT[Btn8R]) mode = 1;
 		//Reset the sensors for testing
+
 		if(vexRT[Btn5U]){
 			SensorValue[rdr4bEnc]=0;
 			SensorValue[ldr4bEnc]=0;
 			SensorValue[fourbarEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
 		}
+
 		//dr4b - Non-PID version
 		if(vexRT[Btn6U]){
 			motor[ldr4b]=-127;
@@ -101,7 +104,15 @@ task drive(){
 			motor[rdr4b]=0;
 		}
 		//fourbar
-		motor[fourbar] = c2;
+		if(SensorValue[fourbarEnc]>0){
+			if(c2>0){
+				motor[fourbar]=c2;
+			}
+			else motor[fourbar]=0;
+		}
+		else{
+			motor[fourbar]=c2;
+		}
 		//displays current battery and backup battery voltage
 		clearLCDLine(0);
 		clearLCDLine(1);
