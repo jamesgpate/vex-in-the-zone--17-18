@@ -1,5 +1,4 @@
-#pragma config(Sensor, in1,    gyroBot,        sensorGyro)
-#pragma config(Sensor, in2,    gyroTop,        sensorGyro)
+#pragma config(Sensor, in2,    gyro,           sensorGyro)
 #pragma config(Sensor, dgtl1,  ldtEnc,         sensorQuadEncoder)
 #pragma config(Sensor, dgtl5,  rdtEnc,         sensorQuadEncoder)
 #pragma config(Sensor, dgtl7,  ldr4bEnc,       sensorQuadEncoder)
@@ -21,7 +20,6 @@
 #pragma DebuggerWindows("Locals")
 #pragma DebuggerWindows("Sensors")
 #pragma DebuggerWindows("debugStream")
-#pragma DebuggerWindows("joystickSimple")
 #pragma DebuggerWindows("VexLCD")
 #pragma DebuggerWindows("vexCompetitionControl")
 #pragma DebuggerWindows("taskStatus")
@@ -47,8 +45,8 @@ void waitForPress()
 		wait1Msec(5);
 }
 void pre_auton(){//Selects auton program
-	gyroInit(gyro1,1,1);
-	gyroInit(gyro2,2,1);
+	delay(1100);
+	gyroInit(gyro1,2,1);
 	clearLCDLine(0);
 	clearLCDLine(1);
 	bLCDBacklight = true;
@@ -138,7 +136,7 @@ void pre_auton(){//Selects auton program
 			SensorValue[rdtEnc]=0;
 			break;
 		default:
-			lcdCount = 0;
+			lcdCount = 3;
 			SensorValue[rdr4bEnc]=0;
 			SensorValue[ldr4bEnc]=0;
 			SensorValue[fourbarEnc]=0;

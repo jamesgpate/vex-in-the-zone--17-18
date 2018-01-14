@@ -27,7 +27,7 @@ task drive(){
 		//claw
 		switch(mode){
 			case 0:
-				if((SensorValue[fourbarEnc]-0)>-45&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<30){
+				if((SensorValue[fourbarEnc]-0)>-60&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<30){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -41,7 +41,7 @@ task drive(){
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarEnc]-0)>-80&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<70){
+				if((SensorValue[fourbarEnc]-0)>-130&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<50){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -57,15 +57,16 @@ task drive(){
 		}
 		//Positioning
 		while(vexRT[Btn7L]){
-			int error = 12-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Field Height
+			int error = 10-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Field Height
 			motor[ldr4b]=-8*error;
 			motor[rdr4b]=8*error;
 			mode=0;
 		}
 		while(vexRT[Btn7R]){
-			int error = 32-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Match Load Height
+			int error = 27-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Match Load Height
 			motor[ldr4b]=-8*error;
 			motor[rdr4b]=8*error;
+			mode=1;
 		}
 		while(vexRT[Btn7D]){
 			int error = 1-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);//Minimum Height

@@ -2,14 +2,14 @@
 const string enterString = "<     Enter    >";
 const string firstAutonString = "Left Side MGM";
 const string secondAutonString = "Right Side MGM";
-const string thirdAutonString = "Luke";
-const string fourthAutonString = "Test";
+const string thirdAutonString = "Stationary";
+const string fourthAutonString = "Nothing";
 int lcdCount = 0;
 const int C_rOfWheels = 2;
 const int C_rOfRobot = 13;
 const float C_PI = 3.1415926;
-const int C_motorPower = 70;
-const float C_dr4bconstant = 2.714;
+const int C_motorPower = 100;
+const float C_dr4bconstant = 2.5;
 //
 struct gyroConfig{
 	float stdDev;
@@ -76,7 +76,7 @@ float gyroGetRate(Gyro gyro){
 			return gyroVoltage / gyro.config.voltsPerDPS;
 	return 0;
 }
-Gyro gyro1, gyro2;
+Gyro gyro1;
 
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
 	return (360*inches)/(C_rOfWheels*C_PI*2);
@@ -85,13 +85,12 @@ int getEncValForTurn(int degrees){//this returns how many times an encoder on th
 	return degrees*C_rOfRobot/C_rOfWheels;
 }
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
-	int encVal = getEncValForDistance(distance);
+	int encVal = -1 * getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]>-encVal){
-		motor[ldt1] = motor[ldt2] = C_motorPower;
-		motor[rdt1] = motor[rdt2] = -C_motorPower;
-	}
+	motor[ldt1] = motor[ldt2] = C_motorPower;
+	motor[rdt1] = motor[rdt2] = -C_motorPower;
+	while(encVal<SensorValue[ldtEnc]) wait1Msec(5);
 	motor[ldt1] = motor[ldt2] = 0;
 	motor[rdt1] = motor[rdt2] = 0;
 }
@@ -99,10 +98,9 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	while(SensorValue[ldtEnc]>-encVal || SensorValue[rdtEnc]<encVal){
-		motor[ldt1] = motor[ldt2] = -C_motorPower;
-		motor[rdt1] = motor[rdt2] = C_motorPower;
-	}
+	motor[ldt1] = motor[ldt2] = -C_motorPower;
+	motor[rdt1] = motor[rdt2] = C_motorPower;
+	while(encVal>SensorValue[ldtEnc]) wait1Msec(5);
 	motor[ldt1] = motor[ldt2] = 0;
 	motor[rdt1] = motor[rdt2] = 0;
 }
@@ -139,10 +137,20 @@ void gyroTurn(float fTarget){
 	}
 }
 void turnRight(int degrees){//this turns the robot to the right *degrees* degrees
-	gyroTurn((float)degrees);
+	//gyroTurn((float)degrees);
+	motor[ldt1] = motor[ldt2] = C_motorPower;
+	motor[rdt1] = motor[rdt2] = C_motorPower;
+	wait1Msec((15*1000)/(7*degrees));
+	motor[ldt1] = motor[ldt2] = 0;
+	motor[rdt1] = motor[rdt2] = 0;
 }
 void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
-	gyroTurn((float)(-degrees));
+	//gyroTurn((float)(-degrees));
+	motor[ldt1] = motor[ldt2] = -C_motorPower;
+	motor[rdt1] = motor[rdt2] = -C_motorPower;
+	wait1Msec((15*1000)/(7*degrees));
+	motor[ldt1] = motor[ldt2] = 0;
+	motor[rdt1] = motor[rdt2] = 0;
 }
 void lowerMGM(){//lowers mgm
 	motor[mgml] = motor[mgmr] = C_motorPower;
@@ -154,18 +162,23 @@ void raiseMGM(){//raises mgm
 	wait1Msec(500);
 	motor[mgml] = motor[mgmr] = 0;
 }
-void rotateDr4bUpTo(int distance){//rotates double reverse fourbar up to *distance* height
+void rotateDr4bUpTo(float distance){//rotates double reverse fourbar up to *distance* height
 	int encVal = abs(distance*C_dr4bconstant);
-	while(SensorValue[ldr4bEnc]>-encVal || SensorValue[rdr4bEnc]<encVal){
+	SensorValue[rdr4bEnc]=0;
+	SensorValue[ldr4bEnc]=0;
+	while(SensorValue[ldr4bEnc]>-encVal && SensorValue[rdr4bEnc]<encVal){
 		motor[ldr4b] = -C_motorPower;
 		motor[rdr4b] = C_motorPower;
 		encVal = abs(distance*C_dr4bconstant);
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
-void rotateDr4bDownTo(int distance){//rotates double reverse fourbar down to *distance* height
+void rotateDr4bDownTo(float distance){//rotates double reverse fourbar down to *distance* height
+	SensorValue[rdr4bEnc]=0;
+	SensorValue[ldr4bEnc]=0;
+	
 	int encVal = abs(distance*C_dr4bconstant);
-	while(SensorValue[ldr4bEnc]<encVal || SensorValue[rdr4bEnc]>-encVal){
+	while(SensorValue[ldr4bEnc]<encVal && SensorValue[rdr4bEnc]>-encVal){
 		motor[ldr4b] = C_motorPower;
 		motor[rdr4b] = -C_motorPower;
 		encVal = abs(distance*C_dr4bconstant);
@@ -173,13 +186,13 @@ void rotateDr4bDownTo(int distance){//rotates double reverse fourbar down to *di
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
 void harvesterUp(){
-	motor[claw] = -C_motorPower;
+	motor[claw] = C_motorPower;
 	wait1Msec(500);
 	motor[claw] = 0;
 }
 void harvesterDown(){
-	motor[claw] = C_motorPower;
-	wait1Msec(500);
+	motor[claw] = -C_motorPower;
+	wait1Msec(1000);
 	motor[claw] = 0;
 }
 void rotateFourbarTo(int degrees){
@@ -199,8 +212,23 @@ void rotateFourbarTo(int degrees){
 	motor[fourbar] = 0;
 }
 void robotInit(){
-	motor[claw]=20;
+	motor[claw]=75;
 	rotateFourbarTo(33);
+}
+void returnToLowered(){
+	motor[ldr4b] = C_motorPower;
+	motor[rdr4b] = -C_motorPower;
+	wait1Msec(1000);
+	motor[ldr4b] = motor[rdr4b] = 0;
+	wait1Msec(200);
+	motor[fourbar] = -C_motorPower;
+	wait1Msec(1000);
+	motor[fourbar] = 0;
+	SensorValue[rdr4bEnc]=0;
+	SensorValue[ldr4bEnc]=0;
+	SensorValue[fourbarEnc]=0;
+	SensorValue[ldtEnc]=0;
+	SensorValue[rdtEnc]=0;
 }
 task auton(){//main task
 	getEncValForTurn(1);
@@ -259,49 +287,23 @@ task auton(){//main task
 			displayLCDString(0,0, thirdAutonString);
 			displayLCDString(1,0, "is running!");
 			robotInit();
-			rotateFourbarTo(85);
-			moveForwards(48);
-			lowerMGM();
-			moveForwards(20);
-			raiseMGM();
-			harvesterDown();
-			moveBackwards(36);
-			turnRight(45);
-			moveForwards(6);
-			turnLeft(45);
-			moveForwards(6);
-			rotateFourbarTo(33);
-			moveForwards(20);
-			harvesterUp();
-			rotateFourbarTo(85);
-			harvesterDown();
-			moveForwards(4);
-			rotateFourbarTo(33);
-			harvesterUp();
-			rotateDr4bUpTo(45);
-			rotateFourbarTo(85);
-			harvesterDown();
-			rotateFourbarTo(33);
-			rotateDr4bDownTo(1);
-			moveForwards(4);
-			harvesterUp();
-			rotateDr4bUpTo(45);
-			rotateFourbarTo(85);
-			harvesterDown();
-			turnLeft(180);
-			moveForwards(60);
-			turnRight(45);
-			moveForwards(20);
-			lowerMGM();
-			moveBackwards(5);
-			raiseMGM();
-			moveBackwards(15);
+			rotateDr4bUpTo(35);
+			rotateFourbarTo(75);
+			moveForwards(3);
+			rotateFourbarTo(50);
+			wait1Msec(500);
+			moveForwards(2.5);
+			wait1Msec(1000);
+			motor[ldr4b] = motor[rdr4b] = 0;
+			motor[claw] = -100;
+			wait1Msec(2000);
+			motor[claw] = 0;
+			moveBackwards(7);
+			returnToLowered();
 			break;
 		case 3:
 			displayLCDString(0,0, fourthAutonString);
 			displayLCDString(1,0, "is running!");
-			turnRight(90);
-			turnLeft(90);
 			break;
 		default:
 			break;
