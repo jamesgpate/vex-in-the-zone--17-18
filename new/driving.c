@@ -21,9 +21,9 @@ task drive(){
 		motor[ldt1] = motor[ldt2] = c3+(c4/2);
 		motor[rdt1] = motor[rdt2] = -c3+(c4/2);
 		//mobile goal
-		if(vexRT[Btn8U])motor[mgml] = motor[mgmr] = -127;
-		else if(vexRT[Btn8D])motor[mgml] = motor[mgmr] = 127;
-		else motor[mgml] = motor[mgmr] = 0;
+		if(vexRT[Btn8U])motor[mgm] = -127;
+		else if(vexRT[Btn8D])motor[mgm] = 127;
+		else motor[mgm] = 0;
 		//claw
 		switch(mode){
 			case 0:
