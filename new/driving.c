@@ -18,8 +18,10 @@ task drive(){
 		if(abs(vexRT[Ch1])>THRESHOLD) c1 = vexRT[Ch1];
 		else c1 = 0;
 		//send these values to the motor
-		motor[ldt1] = motor[ldt2] = c3+(c4/2);
-		motor[rdt1] = motor[rdt2] = -c3+(c4/2);
+		motor[ldt1] = TrueSpeed[c3]+(TrueSpeed[c4]/2);
+		motor[ldt2] = TrueSpeed[c3]-(TrueSpeed[c4]/2);
+		motor[rdt1] = -TrueSpeed[c3]+(TrueSpeed[c4]/2);
+		motor[rdt2] = -TrueSpeed[c3]-(TrueSpeed[c4]/2);
 		//mobile goal
 		if(vexRT[Btn8U])motor[mgm] = -127;
 		else if(vexRT[Btn8D])motor[mgm] = 127;
