@@ -1,4 +1,5 @@
 #include "auton.c"
+#include "Truespeed.h"
 //
 task drive(){
 	int dr4bEncAvg = (SensorValue[ldr4bEnc]+SensorValue[rdr4bEnc])/2;
@@ -9,7 +10,7 @@ task drive(){
 		//Drivetrain
 		//set threshold to 20 and make sure it is zero under it
 		const int THRESHOLD = 20;
-		if(abs(vexRT[Ch4])>THRESHOLD) c4 = -1*vexRT[Ch4];
+		if(abs(vexRT[Ch4])>THRESHOLD) c4 = vexRT[Ch4];
 		else c4 = 0;
 		if(abs(vexRT[Ch3])>THRESHOLD) c3 = vexRT[Ch3];
 		else c3 = 0;
@@ -18,16 +19,16 @@ task drive(){
 		if(abs(vexRT[Ch1])>THRESHOLD) c1 = vexRT[Ch1];
 		else c1 = 0;
 		//send these values to the motor
-		motor[ldt1] = TrueSpeed[c3]+(TrueSpeed[c4]/2);
-		motor[ldt2] = TrueSpeed[c3]-(TrueSpeed[c4]/2);
-		motor[rdt1] = -TrueSpeed[c3]+(TrueSpeed[c4]/2);
-		motor[rdt2] = -TrueSpeed[c3]-(TrueSpeed[c4]/2);
+		motor[ldt1] = c3+c4;
+		motor[ldt2] = c3+c4;
+		motor[rdt1] = -c3+c4;
+		motor[rdt2] = -c3+c4;
 		//mobile goal
 		if(vexRT[Btn8U])motor[mgm] = -127;
 		else if(vexRT[Btn8D])motor[mgm] = 127;
 		else motor[mgm] = 0;
 		//claw
-		switch(mode){
+		/*switch(mode){
 			case 0:
 				if((SensorValue[fourbarEnc]-0)>-60&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<30){
 						motor[claw]=127;
@@ -56,7 +57,7 @@ task drive(){
 					}
 				}
 				break;
-		}
+		}*/
 		//Positioning
 		while(vexRT[Btn7L]){
 			int error = 10-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Field Height
@@ -88,7 +89,7 @@ task drive(){
 		if(vexRT[Btn5U]){
 			SensorValue[rdr4bEnc]=0;
 			SensorValue[ldr4bEnc]=0;
-			SensorValue[fourbarEnc]=0;
+			//SensorValue[fourbarEnc]=0;
 			SensorValue[ldtEnc]=0;
 			SensorValue[rdtEnc]=0;
 		}
@@ -107,7 +108,7 @@ task drive(){
 			motor[rdr4b]=0;
 		}
 		//fourbar
-		if(SensorValue[fourbarEnc]>0){
+		/*if(SensorValue[fourbarEnc]>0){
 			if(c2>0){
 				motor[fourbar]=c2;
 			}
@@ -115,7 +116,7 @@ task drive(){
 		}
 		else{
 			motor[fourbar]=c2;
-		}
+		}*/
 		//displays current battery and backup battery voltage
 		clearLCDLine(0);
 		clearLCDLine(1);

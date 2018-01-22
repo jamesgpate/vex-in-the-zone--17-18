@@ -100,20 +100,7 @@ void harvesterDown(){
 	motor[claw] = 0;
 }
 void rotateFourbarTo(int degrees){
-	degrees = -degrees;
-	int fourbarDegValue = (SensorValue[fourbarEnc]%360)*360; //correct
-	if(degrees<fourbarDegValue){
-		while(degrees<fourbarDegValue){
-			motor[fourbar] = C_motorPower;
-			fourbarDegValue = (SensorValue[fourbarEnc]%360)*360;
-		}
-	}else if(degrees>fourbarDegValue){
-		while(degrees>fourbarDegValue){
-			motor[fourbar] = -C_motorPower;
-			fourbarDegValue = (SensorValue[fourbarEnc]%360)*360;
-		}
-	}
-	motor[fourbar] = 0;
+
 }
 void robotInit(){
 	motor[claw]=75;
@@ -130,7 +117,6 @@ void returnToLowered(){
 	motor[fourbar] = 0;
 	SensorValue[rdr4bEnc]=0;
 	SensorValue[ldr4bEnc]=0;
-	SensorValue[fourbarEnc]=0;
 	SensorValue[ldtEnc]=0;
 	SensorValue[rdtEnc]=0;
 }
