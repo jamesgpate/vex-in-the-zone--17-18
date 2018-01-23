@@ -20,17 +20,28 @@ task drive(){
 		else c1 = 0;
 		//send these values to the motor
 		motor[ldt1] = c3+c4;
-		motor[ldt2] = c3+c4;
-		motor[rdt1] = -c3+c4;
+		motor[ldt2] = -c3+c4;
+		motor[rdt1] = c3+c4;
 		motor[rdt2] = -c3+c4;
 		//mobile goal
 		if(vexRT[Btn8U])motor[mgm] = -127;
 		else if(vexRT[Btn8D])motor[mgm] = 127;
 		else motor[mgm] = 0;
 		//claw
-		/*switch(mode){
+		if(c2>20){
+			while(c2>20){
+				int fourbarError = 3000-SensorValue[fourbarPot];
+				motor[fourbar]=2*fourbarError;
+			}
+		}
+		else{
+				int fourbarError = 1600-SensorValue[fourbarPot];
+				motor[fourbar]=2*fourbarError;
+			}
+
+		switch(mode){
 			case 0:
-				if((SensorValue[fourbarEnc]-0)>-60&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<30){
+				if((SensorValue[fourbarPot])<1800&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<30){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -44,7 +55,7 @@ task drive(){
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarEnc]-0)>-130&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<50){
+				if((SensorValue[fourbarPot])<2500&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<50){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -57,7 +68,8 @@ task drive(){
 					}
 				}
 				break;
-		}*/
+		}
+
 		//Positioning
 		while(vexRT[Btn7L]){
 			int error = 10-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Field Height
