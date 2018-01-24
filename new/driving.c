@@ -56,7 +56,7 @@ task drive(){
 		//claw
 		switch(mode){
 			case 0:
-				if((SensorValue[fourbarPot])<1800&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<30){
+				if((SensorValue[fourbarPot])<1200 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<30){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -70,7 +70,7 @@ task drive(){
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarPot])<2500&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<50){
+				if((SensorValue[fourbarPot])<1500 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<50){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -137,12 +137,12 @@ task drive(){
 		//fourbar
 		/*if(c2>20){
 			while(c2>20){
-				int fourbarError = 3000-SensorValue[fourbarPot];
+				int fourbarError = 2000-SensorValue[fourbarPot];
 				motor[fourbar]=2*fourbarError;
 			}
 		}
 		else{
-				int fourbarError = 1600-SensorValue[fourbarPot];
+				int fourbarError = 1000-SensorValue[fourbarPot];
 				motor[fourbar]=2*fourbarError;
 			}*/
 
