@@ -6,6 +6,8 @@
 #pragma config(Sensor, dgtl5,  ldr4bEnc,       sensorQuadEncoder)
 #pragma config(Sensor, dgtl7,  rdr4bEnc,       sensorQuadEncoder)
 #pragma config(Sensor, dgtl9,  sound,          sensorSONAR_mm)
+#pragma config(Sensor, dgtl11, data,           sensorDigitalOut)
+#pragma config(Sensor, dgtl12, clock,          sensorDigitalOut)
 #pragma config(Motor,  port1,           mgm,           tmotorVex393_HBridge, openLoop)
 #pragma config(Motor,  port2,           ldt1,          tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port3,           ldr4b,         tmotorVex393_MC29, openLoop)
@@ -31,7 +33,7 @@
 #include "Vex_Competition_Includes.c"
 #include "driving.c"
 #include "auton.c"
-
+#include "lights.c"
 #include "Truespeed.h"
 
 const short leftButton = 1;

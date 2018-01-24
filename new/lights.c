@@ -1,5 +1,5 @@
-word sendRainbowDownStripButton = vexRT[Btn7D];
-word fadeColorsButton = vexRT[Btn7U];
+//word sendRainbowDownStripButton = vexRT[Btn7D];
+//word fadeColorsButton = vexRT[Btn7U];
 //Send 8 bits, most significant to least significant.
 void sendByte(int byte){
 	for(int i = 128; i >= 1; i = i / 2){
@@ -76,12 +76,12 @@ task fadeColors(){
 		b--;
 	}
 	endTransmission();
-	if(!fadeColorsButton){
+	/*if(!fadeColorsButton){
 		wait1Msec(100);
 		if(!fadeColorsButton){
 			startTask(fadeColors);
 		}
-	}
+	}*/
 }
 task sendRainbowDownStrip(){
 	setStripColor(120,31,255,255,255);
@@ -96,10 +96,10 @@ task sendRainbowDownStrip(){
 		sendLEDFrame(31,255,255,255);
 	}
 	endTransmission();
-	if(!sendRainbowDownStripButton){
+	/*if(!sendRainbowDownStripButton){
 		wait1Msec(100);
 		if(!sendRainbowDownStripButton){
 			startTask(sendRainbowDownStrip);
 		}
-	}
+	}*/
 }
