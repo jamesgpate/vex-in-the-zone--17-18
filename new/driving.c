@@ -20,6 +20,15 @@ task drive(){
 		else c2 = 0;
 		if(abs(vexRT[Ch1])>THRESHOLD) c1 = vexRT[Ch1];
 		else c1 = 0;
+		//truespeed
+		if(c1>0) c1 = TrueSpeed[c1];
+		else if(c1<0) c1 = -TrueSpeed[c1];
+		if(c2>0) c2 = TrueSpeed[c2];
+		else if(c2<0) c2 = -TrueSpeed[c2];
+		if(c3>0) c3 = TrueSpeed[c3];
+		else if(c3<0) c3 = -TrueSpeed[c3];
+		if(c4>0) c4 = TrueSpeed[c4];
+		else if(c4<0) c4 = -TrueSpeed[c4];
 		//send these values to the motor
 		motor[ldt1] = c3+c4;
 		motor[ldt2] = -c3+c4;

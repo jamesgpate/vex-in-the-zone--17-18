@@ -1,5 +1,5 @@
 #include "main.c"
-const string enterString = "<     Enter    >";
+const char enterString[] = [247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246];//this is "◄     Enter    ►" 😎
 const string firstAutonString = "Left Side MGM";
 const string secondAutonString = "Right Side MGM";
 const string thirdAutonString = "Stationary";
@@ -10,10 +10,12 @@ const int C_rOfRobot = 13;
 const float C_PI = 3.1415926;
 const int C_motorPower = 100;
 const float C_dr4bconstant = 2.5;
-//
-
-
-
+void displayEnterString(int line){
+	clearLCDLine(line);
+	for(int i = 0; i < 16; ++i){
+		displayLCDChar(line, i, enterString[i]);
+	}
+}
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
 	return (360*inches)/(C_rOfWheels*C_PI*2);
 }
@@ -21,7 +23,7 @@ int getEncValForTurn(int degrees){//this returns how many times an encoder on th
 	return degrees*C_rOfRobot/C_rOfWheels;
 }
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
-	int encVal = -1 * getEncValForDistance(distance);
+	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
 	motor[ldt1] = motor[ldt2] = C_motorPower;
