@@ -1,7 +1,10 @@
 #include "auton.c"
+#include "Truespeed.h"
+#include "lights.c"
 //
 task drive(){
-	int dr4bEncAvg = (SensorValue[ldr4bEnc]+SensorValue[rdr4bEnc])/2;
+	startTask(sendRainbowDownStrip);
+	int dr4bEncAvg = (SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2;
 	int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
 	int mode = 0;
 	while(true){
@@ -18,16 +21,42 @@ task drive(){
 		if(abs(vexRT[Ch1])>THRESHOLD) c1 = vexRT[Ch1];
 		else c1 = 0;
 		//send these values to the motor
-		motor[ldt1] = motor[ldt2] = c3+(c4/2);
-		motor[rdt1] = motor[rdt2] = -c3+(c4/2);
+		motor[ldt1] = c3+c4;
+		motor[ldt2] = -c3+c4;
+		motor[rdt1] = c3+c4;
+		motor[rdt2] = -c3+c4;
 		//mobile goal
-		if(vexRT[Btn8D])motor[mgml] = motor[mgmr] = -127;
-		else if(vexRT[Btn8U])motor[mgml] = motor[mgmr] = 127;
-		else motor[mgml] = motor[mgmr] = 0;
+		if(((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)>10){
+			if(vexRT[Btn8U])motor[mgm] = 127;
+			else if(vexRT[Btn8D])motor[mgm] = -127;
+			else motor[mgm] = 0;
+		}
+		if(((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<10){
+			if(vexRT[Btn8U]){
+				while(((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<10 && vexRT[Btn8U]){
+					int error = 10-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
+					motor[ldr4b]=-8*error;
+					motor[rdr4b]=8*error;
+				}
+				motor[mgm] = 127;
+			}
+			if(vexRT[Btn8D]){
+				while(((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<10 && vexRT[Btn8D]){
+					int error = 10-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
+					motor[ldr4b]=-8*error;
+					motor[rdr4b]=8*error;
+				}
+				motor[mgm] = -127;
+			}
+			else motor[mgm]=0;
+		}
+
+
+
 		//claw
 		switch(mode){
 			case 0:
-				if((SensorValue[fourbarEnc]-0)>-45&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<30){
+				if((SensorValue[fourbarPot])<1200 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<30){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -41,7 +70,7 @@ task drive(){
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarEnc]-0)>-80&&((abs(SensorValue[ldr4bEnc])+abs(SensorValue[rdr4bEnc]))/2)<70){
+				if((SensorValue[fourbarPot])<1500 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<50){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -55,38 +84,43 @@ task drive(){
 				}
 				break;
 		}
+
 		//Positioning
 		while(vexRT[Btn7L]){
-			int error = 12-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Field Height
-			motor[ldr4b]=-4*error;
-			motor[rdr4b]=4*error;
+			int error = 10-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Field Height
+			motor[ldr4b]=-8*error;
+			motor[rdr4b]=8*error;
 			mode=0;
 		}
 		while(vexRT[Btn7R]){
-			int error = 32-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Match Load Height
-			motor[ldr4b]=-4*error;
-			motor[rdr4b]=4*error;
+			int error = 27-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Match Load Height
+			motor[ldr4b]=-8*error;
+			motor[rdr4b]=8*error;
 			mode=1;
 		}
 		while(vexRT[Btn7D]){
 			int error = 1-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);//Minimum Height
-			motor[ldr4b]=-4*error;
-			motor[rdr4b]=4*error;
+			motor[ldr4b]=-8*error;
+			motor[rdr4b]=8*error;
 		}
 		while(vexRT[Btn7U]){
 			int error = 90-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Maximum Height
-			motor[ldr4b]=-4*error;
-			motor[rdr4b]=4*error;
+			motor[ldr4b]=-8*error;
+			motor[rdr4b]=8*error;
 		}
 		//Changing modes
 		if(vexRT[Btn8L]) mode = 0;
 		if(vexRT[Btn8R]) mode = 1;
 		//Reset the sensors for testing
+
 		if(vexRT[Btn5U]){
 			SensorValue[rdr4bEnc]=0;
 			SensorValue[ldr4bEnc]=0;
-			SensorValue[fourbarEnc]=0;
+			//SensorValue[fourbarEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
 		}
+
 		//dr4b - Non-PID version
 		if(vexRT[Btn6U]){
 			motor[ldr4b]=-127;
@@ -101,7 +135,18 @@ task drive(){
 			motor[rdr4b]=0;
 		}
 		//fourbar
-		motor[fourbar] = c2;
+		/*if(c2>20){
+			while(c2>20){
+				int fourbarError = 2000-SensorValue[fourbarPot];
+				motor[fourbar]=2*fourbarError;
+			}
+		}
+		else{
+				int fourbarError = 1000-SensorValue[fourbarPot];
+				motor[fourbar]=2*fourbarError;
+			}*/
+
+		motor[fourbar]=c2;
 		//displays current battery and backup battery voltage
 		clearLCDLine(0);
 		clearLCDLine(1);
