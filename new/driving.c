@@ -21,14 +21,14 @@ task drive(){
 		if(abs(vexRT[Ch1])>THRESHOLD) c1 = vexRT[Ch1];
 		else c1 = 0;
 		//truespeed
-		if(c1>0) c1 = TrueSpeed[c1];
-		else if(c1<0) c1 = -TrueSpeed[c1];
-		if(c2>0) c2 = TrueSpeed[c2];
-		else if(c2<0) c2 = -TrueSpeed[c2];
-		if(c3>0) c3 = TrueSpeed[c3];
-		else if(c3<0) c3 = -TrueSpeed[c3];
-		if(c4>0) c4 = TrueSpeed[c4];
-		else if(c4<0) c4 = -TrueSpeed[c4];
+		if(c1>0) c1 = TrueSpeed[abs(c1)];
+		else if(c1<0) c1 = -TrueSpeed[abs(c1)];
+		if(c2>0) c2 = TrueSpeed[abs(c2)];
+		else if(c2<0) c2 = -TrueSpeed[abs(c2)];
+		if(c3>0) c3 = TrueSpeed[abs(c3)];
+		else if(c3<0) c3 = -TrueSpeed[abs(c3)];
+		if(c4>0) c4 = TrueSpeed[abs(c4)];
+		else if(c4<0) c4 = -TrueSpeed[abs(c4)];
 		//send these values to the motor
 		motor[ldt1] = c3+c4;
 		motor[ldt2] = -c3+c4;
@@ -65,7 +65,7 @@ task drive(){
 		//claw
 		switch(mode){
 			case 0:
-				if((SensorValue[fourbarPot])<1200 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<30){
+				if((SensorValue[fourbarPot])>1800 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<30){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -79,7 +79,7 @@ task drive(){
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarPot])<1500 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<50){
+				if((SensorValue[fourbarPot])>1500 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<50){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -146,12 +146,19 @@ task drive(){
 		//fourbar
 		/*if(c2>20){
 			while(c2>20){
-				int fourbarError = 2000-SensorValue[fourbarPot];
+				int fourbarError = 500-SensorValue[fourbarPot];
 				motor[fourbar]=2*fourbarError;
 			}
 		}
+		if(c2<20){
+			while(c2>20){
+				int fourbarError = 2600-SensorValue[fourbarPot];
+				motor[fourbar]=2*fourbarError;
+				motor[claw]=127;
+			}
+		}
 		else{
-				int fourbarError = 1000-SensorValue[fourbarPot];
+				int fourbarError = 2000-SensorValue[fourbarPot];
 				motor[fourbar]=2*fourbarError;
 			}*/
 

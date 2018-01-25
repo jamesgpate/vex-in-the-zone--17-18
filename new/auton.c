@@ -1,5 +1,5 @@
 #include "main.c"
-const char enterString[] = [247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246];//this is "â—„     Enter    â–º"
+const char enterString[] = {247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246};//this is "â??     Enter    â?º"
 const string firstAutonString = "Left Side MGM";
 const string secondAutonString = "Right Side MGM";
 const string thirdAutonString = "Stationary";

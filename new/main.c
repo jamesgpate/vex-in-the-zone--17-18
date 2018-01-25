@@ -33,6 +33,7 @@
 #include "auton.c"
 #include "lights.c"
 #include "Truespeed.h"
+#include "gyroLib.c"
 const short leftButton = 1;
 const short centerButton = 2;
 const short rightButton = 4;
