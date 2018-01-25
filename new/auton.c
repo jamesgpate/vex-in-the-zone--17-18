@@ -1,5 +1,5 @@
 #include "main.c"
-const char enterString[] = [247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246];//this is "◄     Enter    ►" 😎
+const char enterString[] = [247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246];//this is "◄     Enter    ►"
 const string firstAutonString = "Left Side MGM";
 const string secondAutonString = "Right Side MGM";
 const string thirdAutonString = "Stationary";
@@ -10,7 +10,7 @@ const int C_rOfRobot = 13;
 const float C_PI = 3.1415926;
 const int C_motorPower = 100;
 const float C_dr4bconstant = 2.5;
-void displayEnterString(int line){
+void displayEnterString(int line){//this displays *enterString[]* to *line*
 	clearLCDLine(line);
 	for(int i = 0; i < 16; ++i){
 		displayLCDChar(line, i, enterString[i]);
