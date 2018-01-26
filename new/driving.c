@@ -75,24 +75,24 @@ task drive(){
 
 		//Positioning
 		while(vexRT[Btn7L]){
-			int error = 10-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Field Height
+			int error = 10-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2); //Field Height
 			motor[ldr4b]=-8*error;
 			motor[rdr4b]=8*error;
 			mode=0;
 		}
 		while(vexRT[Btn7R]){
-			int error = 27-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Match Load Height
+			int error = 27-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2); //Match Load Height
 			motor[ldr4b]=-8*error;
 			motor[rdr4b]=8*error;
 			mode=1;
 		}
 		while(vexRT[Btn7D]){
-			int error = 1-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);//Minimum Height
+			int error = 1-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2);//Minimum Height
 			motor[ldr4b]=-8*error;
 			motor[rdr4b]=8*error;
 		}
 		while(vexRT[Btn7U]){
-			int error = 90-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2); //Maximum Height
+			int error = 90-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2); //Maximum Height
 			motor[ldr4b]=-8*error;
 			motor[rdr4b]=8*error;
 		}
@@ -103,8 +103,8 @@ task drive(){
 
 		while(vexRT[Btn5U] && count==0){
 			while(SensorValue[sound]<200 && vexRT[Btn5U]){
-				motor[ldr4b]=-127;
-				motor[rdr4b]=127;
+				motor[ldr4b]=-90;
+				motor[rdr4b]=90;
 			}
 
 			motor[ldr4b]=0;
@@ -114,20 +114,34 @@ task drive(){
 				int fourbarError = 285-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 			}
-
-			wait1Msec(250);
+			motor[ldr4b]=127;
+			motor[rdr4b]=-127;
+			wait1Msec(750);
+			motor[ldr4b]=0;
+			motor[rdr4b]=0;
 			motor[claw]=-127;
-			count=1;
+			wait1Msec(250);
+			motor[claw]=-20;
+			wait1Msec(125);
+			motor[ldr4b]=-127;
+			motor[rdr4b]=127;
+			wait1Msec(250);
+			motor[ldr4b]=0;
+			motor[rdr4b]=0;
+			motor[claw]=0;
 
-			while(SensorValue[fourbarPot]<1850 && vexRT[Btn5U]){
-				int fourbarError = 1850-SensorValue[fourbarPot];
+			while(SensorValue[fourbarPot]<1750 && vexRT[Btn5U]){
+				int fourbarError = 1700-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 			}
-			while(((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2)>1 && vexRT[Btn5U]){
-				int error = 1-((SensorValue[rdr4bEnc]-SensorValue[ldr4bEnc])/2);
+			while(((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)>1 && vexRT[Btn5U]){
+				int error = 10-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2);
 				motor[ldr4b]=-8*error;
 				motor[rdr4b]=8*error;
+				motor[fourbar]=-20;
 			}
+			motor[fourbar]=0;
+			count=1;
 		}
 		count=0;
 
