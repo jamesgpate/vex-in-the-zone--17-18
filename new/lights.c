@@ -35,6 +35,29 @@ void setStripColor(int length, int brightness, int r, int g, int b){
 	}
 	endTransmission();
 }
+void slowChange(int length, int brightness, int r, int g, int b){
+	startTransmission();
+	for(int i = 0; i < length; i++){
+		sendLEDFrame(brightness, r, g, b);
+		wait1Msec(25);
+	}
+	endTransmission();
+}
+task slowFade(){
+	slowChange(120, 31, 255, 0, 0);
+	slowChange(120, 31, 255, 127, 0);
+	slowChange(120, 31, 255, 255, 0);
+	slowChange(120, 31, 127, 255, 0);
+	slowChange(120, 31, 0, 255, 0);
+	slowChange(120, 31, 0, 255, 127);
+	slowChange(120, 31, 0, 255, 255);
+	slowChange(120, 31, 0, 127, 255);
+	slowChange(120, 31, 0, 0, 255);
+	slowChange(120, 31, 127, 0, 255);
+	slowChange(120, 31, 255, 0, 255);
+	slowChange(120, 31, 255, 0, 127);
+	startTask(slowFade);
+}
 //Roy G Biv fade down strip
 task fadeColors(){
 	int r = 255;

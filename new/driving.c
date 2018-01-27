@@ -1,6 +1,8 @@
 #include "auton.c"
 #include "Truespeed.h"
 #include "lights.c"
+bool colors = false;
+int timed=0;
 //
 task drive(){
 	startTask(sendRainbowDownStrip);
@@ -44,7 +46,7 @@ task drive(){
 		//claw
 		switch(mode){
 			case 0:
-				if((SensorValue[fourbarPot])>1400 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<30){
+				if((SensorValue[fourbarPot])>1200 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<20){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -58,7 +60,7 @@ task drive(){
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarPot])>1200 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<50){
+				if((SensorValue[fourbarPot])>1000 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<35){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -74,25 +76,19 @@ task drive(){
 		}
 
 		//Positioning
-		while(vexRT[Btn7L]){
-			int error = 10-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2); //Field Height
-			motor[ldr4b]=-8*error;
-			motor[rdr4b]=8*error;
-			mode=0;
-		}
 		while(vexRT[Btn7R]){
 			int error = 27-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2); //Match Load Height
 			motor[ldr4b]=-8*error;
 			motor[rdr4b]=8*error;
 			mode=1;
 		}
-		while(vexRT[Btn7D]){
-			int error = 1-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2);//Minimum Height
+		while(vexRT[Btn7L]){
+			int error = 1-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2);//Minimum Height/Field Height
 			motor[ldr4b]=-8*error;
 			motor[rdr4b]=8*error;
 		}
 		while(vexRT[Btn7U]){
-			int error = 90-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2); //Maximum Height
+			int error = 100-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2); //Maximum Height
 			motor[ldr4b]=-8*error;
 			motor[rdr4b]=8*error;
 		}
@@ -102,7 +98,12 @@ task drive(){
 		//Reset the sensors for testing
 
 		while(vexRT[Btn5U] && count==0){
-			while(SensorValue[sound]<200 && vexRT[Btn5U] && count==0){
+
+			while(SensorValue[fourbarPot]>1600 && vexRT[Btn5U]){
+				int fourbarError = 1600-SensorValue[fourbarPot];
+				motor[fourbar]=-2*fourbarError;
+			}
+			while(SensorValue[sound]<270 && vexRT[Btn5U] && count==0){
 				motor[ldr4b]=-90;
 				motor[rdr4b]=90;
 			}
@@ -110,18 +111,18 @@ task drive(){
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
 
-			while(SensorValue[fourbarPot]>575 && vexRT[Btn5U] && count==0){
-				int fourbarError = 575-SensorValue[fourbarPot];
+			while(SensorValue[fourbarPot]>670 && vexRT[Btn5U] && count==0){
+				int fourbarError = 670-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 			}
 			motor[ldr4b]=127;
 			motor[rdr4b]=-127;
-			wait1Msec(600);
+			wait1Msec(400);
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
 			motor[claw]=-127;
 			wait1Msec(250);
-			motor[claw]=-20;
+			motor[claw]=-40;
 			wait1Msec(125);
 			motor[ldr4b]=-127;
 			motor[rdr4b]=127;
@@ -135,18 +136,19 @@ task drive(){
 				motor[fourbar]=-2*fourbarError;
 			}
 			while(((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)>1 && vexRT[Btn5U]){
-				int error = 10-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2);
+				int error = 1-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2);
 				motor[ldr4b]=-8*error;
 				motor[rdr4b]=8*error;
 				motor[fourbar]=-20;
 			}
 			motor[fourbar]=0;
-			while(SensorValue[fourbarPot]<2300 && vexRT[Btn5U]){
-				int fourbarError = 2300-SensorValue[fourbarPot];
+			while(SensorValue[fourbarPot]<2250 && vexRT[Btn5U]){
+				int fourbarError = 2150-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 			}
 			count=1;
-			while(vexRt[Btn5U])wait1Msec(1);
+			motor[claw]=127;
+			while(vexRT[Btn5U])wait1Msec(1);
 		}
 		count=0;
 
@@ -155,6 +157,18 @@ task drive(){
 			motor[ldr4b]=-127;
 			motor[rdr4b]=127;
 		}
+		/*if(vexRT[Btn6U] && SensorValue[sound]>250){
+			motor[ldr4b]=0;
+			motor[rdr4b]=0;
+		}*/
+		if(vexRT[Btn6U] && SensorValue[fourbarPot]<1400 && SensorValue[fourbarPot]>1600){
+			while(SensorValue[fourbarPot]<1525 && vexRT[Btn6U]){
+				int fourbarError = 1525-SensorValue[fourbarPot];
+				motor[fourbar]=-2*fourbarError;
+			}
+		}
+
+
 		if(vexRT[Btn6D]){
 			motor[ldr4b]=127;
 			motor[rdr4b]=-127;
@@ -163,31 +177,47 @@ task drive(){
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
 		}
-		if(SensorValue[sound]<200){
-			setStripColor(120, 31, 255, 255, 0)
+		if(((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])<5)&&vexRT[Btn6U]==0&&vexRT[Btn6D]==0){
+			motor[ldr4b]=15;
+			motor[rdr4b]=-15;
 		}
-		else{
-			setStripColor(120, 31, 127, 0, 255)
+		if(vexRT[Btn7D] && !colors && (nSysTime-timed)>3000){
+			startTask(slowFade);
+			colors = true;
+			timed = nSysTime;
 		}
+		if(vexRT[Btn7D] && colors && (nSysTime-timed)>3000){
+			stopTask(slowFade);
+			colors = false;
+			timed = nSysTime;
+		}
+
+
 
 		//fourbar
 		if(vexRT[Ch2]>20){
-			int lastFourbarError=SensorValue[fourbarPot];
-			while(vexRT[ch2]>20&&SensorValue[fourbarPot]>300){
-				int fourbarError = 525-SensorValue[fourbarPot];
-				motor[fourbar]=-2*fourbarError-1*(fourbarError-lastFourbarError);
-				lastFourbarError=fourbarError;
-			}
-		}
-		if(vexRT[ch2]<-20){
-			int lastFourbarError=SensorValue[fourbarPot];
-			while(vexRT[ch2]<-20){
-				int fourbarError = 2300-SensorValue[fourbarPot];
-				motor[fourbar]=-2*fourbarError-1*(fourbarError-lastFourbarError);
-				lastFourbarError=fourbarError;
+			while(vexRT[Ch2]>20&&SensorValue[fourbarPot]>670){
+				int fourbarError = 670-SensorValue[fourbarPot];
+				if(fourbarError>-20)fourbarError=0;
+				if(fourbarError>-40) fourbarError = fourbarError/10;
+				motor[fourbar]=-.5*fourbarError
 				motor[claw]=10;
 			}
 		}
+		if(vexRT[Ch2]<-20 && dr4bEncAvg<20){
+			while(vexRT[Ch2]<-20){
+				int fourbarError = 2300-SensorValue[fourbarPot];
+				motor[fourbar]=-2*fourbarError
+				motor[claw]=127;
+			}
+		}
+		if(vexRT[Ch2]<-20 && dr4bEncAvg>20){
+				while(vexRT[Ch2]<-20){
+				int fourbarError = 1500-SensorValue[fourbarPot];
+				motor[fourbar]=-2*fourbarError
+				motor[claw]=10;
+			}
+			}
 		else{
 					if(motor[rdr4b]>15){
 							motor[fourbar]= 30;
@@ -197,6 +227,7 @@ task drive(){
 					}
 					else motor[fourbar]=0;
 			}
+
 
 		//motor[fourbar]=c2;
 		//displays current battery and backup battery voltage
