@@ -44,7 +44,7 @@ task drive(){
 		//claw
 		switch(mode){
 			case 0:
-				if((SensorValue[fourbarPot])>1600 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<30){
+				if((SensorValue[fourbarPot])>1400 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<30){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -58,7 +58,7 @@ task drive(){
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarPot])>1400 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<50){
+				if((SensorValue[fourbarPot])>1200 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<50){
 						motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -102,7 +102,7 @@ task drive(){
 		//Reset the sensors for testing
 
 		while(vexRT[Btn5U] && count==0){
-			while(SensorValue[sound]<200 && vexRT[Btn5U]){
+			while(SensorValue[sound]<200 && vexRT[Btn5U] && count==0){
 				motor[ldr4b]=-90;
 				motor[rdr4b]=90;
 			}
@@ -110,13 +110,13 @@ task drive(){
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
 
-			while(SensorValue[fourbarPot]>285 && vexRT[Btn5U] && count==0){
-				int fourbarError = 285-SensorValue[fourbarPot];
+			while(SensorValue[fourbarPot]>575 && vexRT[Btn5U] && count==0){
+				int fourbarError = 575-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 			}
 			motor[ldr4b]=127;
 			motor[rdr4b]=-127;
-			wait1Msec(750);
+			wait1Msec(600);
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
 			motor[claw]=-127;
@@ -130,8 +130,8 @@ task drive(){
 			motor[rdr4b]=0;
 			motor[claw]=0;
 
-			while(SensorValue[fourbarPot]<1750 && vexRT[Btn5U]){
-				int fourbarError = 1700-SensorValue[fourbarPot];
+			while(SensorValue[fourbarPot]<1525 && vexRT[Btn5U]){
+				int fourbarError = 1525-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 			}
 			while(((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)>1 && vexRT[Btn5U]){
@@ -141,7 +141,12 @@ task drive(){
 				motor[fourbar]=-20;
 			}
 			motor[fourbar]=0;
+			while(SensorValue[fourbarPot]<2300 && vexRT[Btn5U]){
+				int fourbarError = 2300-SensorValue[fourbarPot];
+				motor[fourbar]=-2*fourbarError;
+			}
 			count=1;
+			while(vexRt[Btn5U])wait1Msec(1);
 		}
 		count=0;
 
@@ -158,11 +163,18 @@ task drive(){
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
 		}
+		if(SensorValue[sound]<200){
+			setStripColor(120, 31, 255, 255, 0)
+		}
+		else{
+			setStripColor(120, 31, 127, 0, 255)
+		}
+
 		//fourbar
 		if(vexRT[Ch2]>20){
 			int lastFourbarError=SensorValue[fourbarPot];
 			while(vexRT[ch2]>20&&SensorValue[fourbarPot]>300){
-				int fourbarError = 285-SensorValue[fourbarPot];
+				int fourbarError = 525-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError-1*(fourbarError-lastFourbarError);
 				lastFourbarError=fourbarError;
 			}
@@ -170,7 +182,7 @@ task drive(){
 		if(vexRT[ch2]<-20){
 			int lastFourbarError=SensorValue[fourbarPot];
 			while(vexRT[ch2]<-20){
-				int fourbarError = 2800-SensorValue[fourbarPot];
+				int fourbarError = 2300-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError-1*(fourbarError-lastFourbarError);
 				lastFourbarError=fourbarError;
 				motor[claw]=10;
