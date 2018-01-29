@@ -1,5 +1,4 @@
 
-
 #pragma config(Sensor, in1,    fourbarPot,     sensorPotentiometer)
 #pragma config(Sensor, in2,    gyro1,          sensorGyro)
 #pragma config(Sensor, in3,    gyro2,          sensorGyro)
@@ -53,6 +52,12 @@ void waitForPress()
 }
 void pre_auton(){//Selects auton program
 	bStopTasksBetweenModes = false;
+	SensorType[dgtl3] = sensorNone;
+	delay(100);
+	SensorType[dgtl3] = sensorQuadEncoder;
+	SensorType[dgtl4] = sensorNone;
+	delay(100);
+	SensorType[dgtl4] = sensorQuadEncoderSecondPort;
 	delay(1100);
 	GyroInit(in2);
 	clearLCDLine(0);
