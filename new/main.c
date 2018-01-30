@@ -1,14 +1,13 @@
-
 #pragma config(Sensor, in1,    fourbarPot,     sensorPotentiometer)
 #pragma config(Sensor, in2,    gyro1,          sensorGyro)
 #pragma config(Sensor, in3,    gyro2,          sensorGyro)
 #pragma config(Sensor, dgtl1,  ldtEnc,         sensorQuadEncoder)
-#pragma config(Sensor, dgtl3,  rdtEnc,         sensorQuadEncoder)
-#pragma config(Sensor, dgtl5,  ldr4bEnc,    sensorQuadEncoder)
+#pragma config(Sensor, dgtl3,  data,           sensorDigitalOut)
+#pragma config(Sensor, dgtl4,  clock,          sensorDigitalOut)
+#pragma config(Sensor, dgtl5,  ldr4bEnc,       sensorQuadEncoder)
 #pragma config(Sensor, dgtl7,  rdr4bEnc,       sensorQuadEncoder)
-#pragma config(Sensor, dgtl9,  sound,          sensorSONAR_mm)
-#pragma config(Sensor, dgtl11, data,           sensorDigitalOut)
-#pragma config(Sensor, dgtl12, clock,          sensorDigitalOut)
+#pragma config(Sensor, dgtl9,  rdtEnc,         sensorQuadEncoder)
+#pragma config(Sensor, dgtl11, sound,          sensorSONAR_mm)
 #pragma config(Motor,  port1,           mgm,           tmotorVex393_HBridge, openLoop)
 #pragma config(Motor,  port2,           ldt1,          tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port3,           ldr4b,         tmotorVex393_MC29, openLoop)
@@ -52,12 +51,6 @@ void waitForPress()
 }
 void pre_auton(){//Selects auton program
 	bStopTasksBetweenModes = false;
-	SensorType[dgtl3] = sensorNone;
-	delay(100);
-	SensorType[dgtl3] = sensorQuadEncoder;
-	SensorType[dgtl4] = sensorNone;
-	delay(100);
-	SensorType[dgtl4] = sensorQuadEncoderSecondPort;
 	delay(1100);
 	GyroInit(in2);
 	clearLCDLine(0);
