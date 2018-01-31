@@ -5,13 +5,14 @@ bool colors = false;
 int timed=0;
 //
 task drive(){
-	startTask(sendRainbowDownStrip);
 	int dr4bEncAvg = (SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2;
 	int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
 	int c4Partner = 0, c3Partner = 0, c2Partner = 0, c1Partner = 0;
 	int mode = 0;
 	int autoStackCount = 0;
 	int lcdPage = 0;
+	bool partnerToggle = false;
+	setStripColor(120,31,255,255,255);
 	while(true){
 		long sysTime = nSysTime;
 		//Drivetrain
@@ -51,15 +52,18 @@ task drive(){
 		if(c4Partner>0) c4Partner = TrueSpeed[abs(c4Partner)];
 		else if(c4Partner<0) c4Partner = -TrueSpeed[abs(c4Partner)];
 		//send these values to the motor
-		motor[ldt1] = c3+c4;
-		motor[ldt2] = -c3+c4;
-		motor[rdt1] = c3+c4;
-		motor[rdt2] = -c3+c4;
-		/*
-		motor[ldt1] = c3Partner;
-		motor[ldt2] = -c3Partner;
-		motor[rdt1] = c2Partner;
-		motor[rdt2] = -c2Partner;*/
+		if(!partnerToggle){
+			motor[ldt1] = c3+c4;
+			motor[ldt2] = -c3+c4;
+			motor[rdt1] = c3+c4;
+			motor[rdt2] = -c3+c4;
+		}
+		if(partnerToggle){
+			motor[ldt1] = c3Partner;
+			motor[ldt2] = -c3Partner;
+			motor[rdt1] = c2Partner;
+			motor[rdt2] = -c2Partner;
+		}
 		//mobile goal
 		if(vexRT[Btn8U])motor[mgm] = 127;
 		else if(vexRT[Btn8D])motor[mgm] = -127;
@@ -68,7 +72,7 @@ task drive(){
 		switch(mode){
 			case 0:
 				if((SensorValue[fourbarPot])>1300 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<20){
-						motor[claw]=127;
+					motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
 					}																				//If the claw is close enough to the ground, activate the claw
@@ -82,7 +86,7 @@ task drive(){
 				break;
 			case 1:
 				if((SensorValue[fourbarPot])>1100 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<35){
-						motor[claw]=127;
+					motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
 					}																			//Extends the range so that match loads can be easily grabbed
@@ -116,8 +120,7 @@ task drive(){
 		//Changing modes
 		if(vexRT[Btn8L]) mode = 0;
 		if(vexRT[Btn8R]) mode = 1;
-		//Reset the sensors for testing
-
+		//autostack
 		while(vexRT[Btn5U] && autoStackCount==0){
 			while(SensorValue[fourbarPot]>1525 && vexRT[Btn5U]){
 				int fourbarError = 1525-SensorValue[fourbarPot];
@@ -127,10 +130,8 @@ task drive(){
 				motor[ldr4b]=-90;
 				motor[rdr4b]=90;
 			}
-
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
-
 			while(SensorValue[fourbarPot]>460 && vexRT[Btn5U] && autoStackCount==0){
 				int fourbarError = 460-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
@@ -150,7 +151,6 @@ task drive(){
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
 			motor[claw]=0;
-
 			while(SensorValue[fourbarPot]<1525 && vexRT[Btn5U]){
 				int fourbarError = 1525-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
@@ -171,7 +171,6 @@ task drive(){
 			while(vexRT[Btn5U])wait1Msec(1);
 		}
 		autoStackCount=0;
-
 		//dr4b - Non-PID version
 		if(vexRT[Btn6U]){
 			motor[ldr4b]=-127;
@@ -187,8 +186,6 @@ task drive(){
 				motor[fourbar]=-2*fourbarError;
 			}
 		}
-
-
 		if(vexRT[Btn6D]){
 			motor[ldr4b]=127;
 			motor[rdr4b]=-127;
@@ -211,9 +208,6 @@ task drive(){
 			colors = false;
 			timed = nSysTime;
 		}
-
-
-
 		//fourbar
 		if(vexRT[Ch2]>20 && SensorValue[sound]>250){
 			while(vexRT[Ch2]>20&&SensorValue[fourbarPot]>460 && SensorValue[sound]>250){
@@ -296,7 +290,21 @@ task drive(){
 				displayLCDString(1,0,"4bar Pot: ");
 				displayLCDNumber(1,10, SensorValue[fourbarPot]);
 		}
-		if(nLCDButtons)
+		if(nLCDButtons == leftButton){
+			if(lcdPage == 0)
+				lcdPage = 3;
+			else
+				lcdPage--;
+		}
+		if(nLCDButtons == rightButton){
+			if(lcdPage == 3)
+				lcdPage = 0;
+			else
+				lcdPage++;
+		}
+		if(nLCDButtons == centerButton){
+			partnerToggle = !partnerToggle;
+		}
 		//keep the loop timing consistently 20 ms
 		int timeDiff = nSysTime - sysTime;
 		wait1Msec(20-timeDiff);
