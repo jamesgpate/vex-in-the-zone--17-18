@@ -11,6 +11,7 @@ task drive(){
 	int c4Partner = 0, c3Partner = 0, c2Partner = 0, c1Partner = 0;
 	int mode = 0;
 	int autoStackCount = 0;
+	int lcdPage = 0;
 	while(true){
 		long sysTime = nSysTime;
 		//Drivetrain
@@ -118,8 +119,8 @@ task drive(){
 		//Reset the sensors for testing
 
 		while(vexRT[Btn5U] && autoStackCount==0){
-			while(SensorValue[fourbarPot]>1400 && vexRT[Btn5U]){
-				int fourbarError = 1400-SensorValue[fourbarPot];
+			while(SensorValue[fourbarPot]>1525 && vexRT[Btn5U]){
+				int fourbarError = 1525-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 			}
 			while(SensorValue[sound]<230 && vexRT[Btn5U] && autoStackCount==0){
@@ -130,8 +131,8 @@ task drive(){
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
 
-			while(SensorValue[fourbarPot]>410 && vexRT[Btn5U] && autoStackCount==0){
-				int fourbarError = 410-SensorValue[fourbarPot];
+			while(SensorValue[fourbarPot]>460 && vexRT[Btn5U] && autoStackCount==0){
+				int fourbarError = 460-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 			}
 			motor[ldr4b]=127;
@@ -150,8 +151,8 @@ task drive(){
 			motor[rdr4b]=0;
 			motor[claw]=0;
 
-			while(SensorValue[fourbarPot]<1400 && vexRT[Btn5U]){
-				int fourbarError = 1400-SensorValue[fourbarPot];
+			while(SensorValue[fourbarPot]<1525 && vexRT[Btn5U]){
+				int fourbarError = 1525-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 			}
 			while(((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)>1 && vexRT[Btn5U]){
@@ -161,8 +162,8 @@ task drive(){
 				motor[fourbar]=-20;
 			}
 			motor[fourbar]=0;
-			while(SensorValue[fourbarPot]<1750 && vexRT[Btn5U]){
-				int fourbarError = 1750-SensorValue[fourbarPot];
+			while(SensorValue[fourbarPot]<1800 && vexRT[Btn5U]){
+				int fourbarError = 1800-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 			}
 			autoStackCount=1;
@@ -182,7 +183,7 @@ task drive(){
 		}*/
 		if(vexRT[Btn6U] && SensorValue[fourbarPot]<1250 && SensorValue[fourbarPot]>1500){
 			while(SensorValue[fourbarPot]<1400 && vexRT[Btn6U]){
-				int fourbarError = 1525-SensorValue[fourbarPot];
+				int fourbarError = 1400-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 			}
 		}
@@ -214,51 +215,88 @@ task drive(){
 
 
 		//fourbar
-		if(vexRT[Ch2]>20){
-			while(vexRT[Ch2]>20&&SensorValue[fourbarPot]>410){
-				int fourbarError = 410-SensorValue[fourbarPot];
+		if(vexRT[Ch2]>20 && SensorValue[sound]>250){
+			while(vexRT[Ch2]>20&&SensorValue[fourbarPot]>460 && SensorValue[sound]>250){
+				int fourbarError = 460-SensorValue[fourbarPot];
 				if(fourbarError>-20)fourbarError=0;
 				if(fourbarError>-40) fourbarError = fourbarError/10;
 				motor[fourbar]=-.5*fourbarError;
 				motor[claw]=10;
 				if(vexRT[Btn5D]) motor[claw]=-127;
+				
+			}
+		}
+		if(vexRT[Ch2]>20 && SensorValue[sound]<230 && dr4bEncAvg>20){
+			while(vexRT[Ch2]>20&&SensorValue[fourbarPot]>1525 && SensorValue[sound]<250){
+				int fourbarError = 1525-SensorValue[fourbarPot];
+				if(fourbarError>-20)fourbarError=0;
+				if(fourbarError>-40) fourbarError = fourbarError/10;
+				motor[fourbar]=-.5*fourbarError;
+				motor[claw]=10;
+				if(vexRT[Btn5D]) motor[claw]=-127;
+				
 			}
 		}
 		if(vexRT[Ch2]<-20 && dr4bEncAvg<20){
 			while(vexRT[Ch2]<-20){
-				int fourbarError = 1750-SensorValue[fourbarPot];
+				int fourbarError = 1800-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 				motor[claw]=127;
 			}
 		}
 		if(vexRT[Ch2]<-20 && dr4bEncAvg>20){
 				while(vexRT[Ch2]<-20){
-				int fourbarError = 1400-SensorValue[fourbarPot];
+				int fourbarError = 1525-SensorValue[fourbarPot];
 				motor[fourbar]=-2*fourbarError;
 				motor[claw]=10;
 			}
-			}
+		}
 		else{
-					if(motor[rdr4b]>15){
-							motor[fourbar]= 30;
-					}
-					if(motor[rdr4b]<-15){
-							motor[fourbar]= -20;
-					}
-					else motor[fourbar]=0;
+			if(motor[rdr4b]>15){
+					motor[fourbar]= 30;
 			}
-
-
+			if(motor[rdr4b]<-15){
+					motor[fourbar]= -20;
+			}
+			else motor[fourbar]=0;
+		}
 		//motor[fourbar]=c2;
 		//displays current battery and backup battery voltage
-		clearLCDLine(0);
-		clearLCDLine(1);
-		displayLCDString(0,0,"Battery: ");
-		displayLCDNumber(0,9, nAvgBatteryLevel);
-		displayLCDString(0,13, " mV");
-		displayLCDString(1,0,"Backup: ");
-		displayLCDNumber(1,9,BackupBatteryLevel);
-		displayLCDString(1,13, " mV");
+		switch(lcdPage){
+			case 0:
+				clearLCDLine(0);
+				clearLCDLine(1); 
+				displayLCDString(0,0,"Battery: ");
+				displayLCDNumber(0,9, nAvgBatteryLevel);
+				displayLCDString(0,13, " mV");
+				displayLCDString(1,0,"Backup: ");
+				displayLCDNumber(1,9, BackupBatteryLevel);
+				displayLCDString(1,13, " mV");
+				break;
+			case 1:
+				clearLCDLine(0);
+				clearLCDLine(1); 
+				displayLCDString(0,0,"Left DT: ");
+				displayLCDNumber(0,10, SensorValue[ldtEnc]);
+				displayLCDString(1,0,"Right DT: ");
+				displayLCDNumber(1,10, SensorValue[rdtEnc]);
+				break;
+			case 2:
+				clearLCDLine(0);
+				clearLCDLine(1); 
+				displayLCDString(0,0,"Left DR4B: ");
+				displayLCDNumber(0,10, SensorValue[ldr4bEnc]);
+				displayLCDString(1,0,"Right DR4B: ");
+				displayLCDNumber(1,10, SensorValue[rdr4bEnc]);
+			case 3:
+				clearLCDLine(0);
+				clearLCDLine(1); 
+				displayLCDString(0,0,"Sonar: ");
+				displayLCDNumber(0,10, SensorValue[sound]);
+				displayLCDString(1,0,"4bar Pot: ");
+				displayLCDNumber(1,10, SensorValue[fourbarPot]);
+		}
+		if(nLCDButtons)
 		//keep the loop timing consistently 20 ms
 		int timeDiff = nSysTime - sysTime;
 		wait1Msec(20-timeDiff);
