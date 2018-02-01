@@ -1,3 +1,4 @@
+
 #pragma config(Sensor, in1,    fourbarPot,     sensorPotentiometer)
 #pragma config(Sensor, in2,    gyro1,          sensorGyro)
 #pragma config(Sensor, in3,    gyro2,          sensorGyro)
@@ -34,7 +35,7 @@
 #include "driving.c"
 #include "auton.c"
 #include "lights.c"
-#include "Truespeed.h"
+//#include "Truespeed.h"
 #include "gyroLib.c"
 const short leftButton = 1;
 const short centerButton = 2;
@@ -158,5 +159,6 @@ task autonomous(){
 	startTask(auton);
 }
 task usercontrol(){
+	startTask(fadeColors);
 	startTask(drive);
 }
