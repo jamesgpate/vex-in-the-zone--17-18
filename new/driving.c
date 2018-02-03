@@ -35,7 +35,7 @@ task drive(){
 	int clawMode = 0;
 	int autoStackCount = 0;
 	int lcdPage = 0;
-	bool partnerControl = false;
+	bool partnerControl = true;
 	while(true){
 		long sysTime = nSysTime;
 		//Drivetrain
@@ -298,7 +298,10 @@ task drive(){
 			if(lcdPage == 3) lcdPage = 0;
 			else lcdPage++;
 		}
-		if(nLCDButtons == centerButton) partnerControl = !partnerControl;
+		if(nLCDButtons == centerButton) {
+			wait1Msec(50);
+			partnerControl = !partnerControl;
+		}
 		//keep the loop timing consistently 20 ms
 		int timeDiff = nSysTime - sysTime;
 		wait1Msec(20-timeDiff);
