@@ -35,7 +35,7 @@ task drive(){
 	int clawMode = 0;
 	int autoStackCount = 0;
 	int lcdPage = 0;
-	bool partnerControl = true;
+	bool partnerControl = false;
 	while(true){
 		long sysTime = nSysTime;
 		//Drivetrain
@@ -60,20 +60,27 @@ task drive(){
 		//send these values to the motor
 		if(!partnerControl){
 			motor[ldt1] = c3+c4;
-			motor[ldt2] = -c3+c4;
-			motor[rdt1] = c3+c4;
+			motor[ldt2] = c3+c4;
+			motor[rdt1] = -c3+c4;
 			motor[rdt2] = -c3+c4;
 		}
 		if(partnerControl){
 			motor[ldt1] = c3Partner;
-			motor[ldt2] = -c3Partner;
-			motor[rdt1] = c2Partner;
+			motor[ldt2] = c3Partner;
+			motor[rdt1] = -c2Partner;
 			motor[rdt2] = -c2Partner;
 		}
 		//mobile goal
+		if(partnerControl){
+		if(vexRT[Btn7DXmtr2])motor[mgm] = 127;
+		else if(vexRT[Btn7UXmtr2])motor[mgm] = -127;
+		else motor[mgm] = 0;
+		}
+		if(!partnerControl){
 		if(vexRT[Btn8U])motor[mgm] = 127;
 		else if(vexRT[Btn8D])motor[mgm] = -127;
 		else motor[mgm] = 0;
+		}
 
 		//claw
 		switch(clawMode){
@@ -115,11 +122,6 @@ task drive(){
 		}
 		while(vexRT[Btn7L]){
 			int error = 1-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2);//Minimum Height/Field Height
-			motor[ldr4b]=-8*error;
-			motor[rdr4b]=8*error;
-		}
-		while(vexRT[Btn7U]){
-			int error = 100-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2); //Maximum Height
 			motor[ldr4b]=-8*error;
 			motor[rdr4b]=8*error;
 		}
@@ -181,7 +183,7 @@ task drive(){
 				motor[fourbar]=-2*fourbarError;
 				motor[ldr4b]=15;
 				motor[rdr4b]=-15;
-			
+
 			}
 			autoStackCount=1;
 			motor[claw]=127;
@@ -192,7 +194,7 @@ task drive(){
 		autoStackCount=0;
 
 		//dr4b - Non-PID version
-		if(vexRT[Btn6U]){ 
+		if(vexRT[Btn6U]){
 			motor[ldr4b]=-127;
 			motor[rdr4b]=127;
 		}
@@ -209,12 +211,12 @@ task drive(){
 			motor[rdr4b]=-15;
 		}
 		//LEDS
-		if(vexRT[Btn7D] && !colors && (nSysTime-timed)>3000){
+		if(vexRT[Btn7D] && !colors && (nSysTime-timed)>3000 && !partnerControl){
 			startTask(slowFade);
 			colors = true;
 			timed = nSysTime;
 		}
-		if(vexRT[Btn7D] && colors && (nSysTime-timed)>3000){
+		if(vexRT[Btn7D] && colors && (nSysTime-timed)>3000 && !partnerControl){
 			stopTask(slowFade);
 			colors = false;
 			timed = nSysTime;
