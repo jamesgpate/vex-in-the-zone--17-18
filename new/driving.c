@@ -2,7 +2,8 @@
 #include "lights.c"
 
 bool colors = false;
-int timed=0;
+int timed = 0;
+int toggle = 0;
 
 const int fourbarTop = 460;
 const int fourbarParallel = 1525;
@@ -37,6 +38,7 @@ task drive(){
 	int lcdPage = 0;
 	bool partnerControl = false;
 	while(true){
+		dr4bEncAvg = (SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2;
 		long sysTime = nSysTime;
 		//Drivetrain
 		//set threshold to 20 and make sure it is zero under it
@@ -141,7 +143,7 @@ task drive(){
 				motor[ldr4b]=-90;
 				motor[rdr4b]=90;
 			}
-
+			wait1Msec(250);
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
 
@@ -195,18 +197,24 @@ task drive(){
 
 		//dr4b - Non-PID version
 		if(vexRT[Btn6U]){
+			while(vexRT[Btn6U] && dr4bEncAvg<90 && SensorValue[fourbarPot]>1525){
+			int fourbarError = fourbarParallel-SensorValue[fourbarPot];
+			motor[fourbar]=-0.5*fourbarError;
 			motor[ldr4b]=-127;
 			motor[rdr4b]=127;
-		}
-		if(vexRT[Btn6D]){
+			}
+		}else if(vexRT[Btn6D]){
+			while(vexRT[Btn6D] && dr4bEncAvg>5 && SensorValue[fourbarPot]<1525){
+			int fourbarError = fourbarParallel-SensorValue[fourbarPot];
+			motor[fourbar]=-0.5*fourbarError;
 			motor[ldr4b]=127;
 			motor[rdr4b]=-127;
-		}
-		if(!vexRT[Btn6U] && !vexRT[Btn6D]){
+			}
+		}else if(!vexRT[Btn6U] && !vexRT[Btn6D]){
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
 		}
-		if(((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])<5)&&vexRT[Btn6U]==0&&vexRT[Btn6D]==0){
+		if((dr4bEncAvg<5)&&vexRT[Btn6U]==0&&vexRT[Btn6D]==0){
 			motor[ldr4b]=15;
 			motor[rdr4b]=-15;
 		}
@@ -300,9 +308,10 @@ task drive(){
 			if(lcdPage == 3) lcdPage = 0;
 			else lcdPage++;
 		}
-		if(nLCDButtons == centerButton) {
+		if(nLCDButtons == centerButton && toggle>3000) {
 			wait1Msec(50);
 			partnerControl = !partnerControl;
+			toggle = nSysTime;
 		}
 		//keep the loop timing consistently 20 ms
 		int timeDiff = nSysTime - sysTime;

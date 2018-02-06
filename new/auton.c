@@ -1,8 +1,8 @@
 #include "main.c"
 const int enterString[] = {247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246};//this is "�??     Enter    �?�"
-const string firstAutonString = "Left Side MGM";
-const string secondAutonString = "Right Side MGM";
-const string thirdAutonString = "Stationary";
+const string firstAutonString = "Forward+Backward";
+const string secondAutonString = "Left+Right";
+const string thirdAutonString = "Stationary Goal";
 const string fourthAutonString = "Nothing";
 int lcdCount = 0;
 const int C_rOfWheels = 2;
@@ -10,6 +10,8 @@ const int C_rOfRobot = 13;
 const float C_PI = 3.1415926;
 const int C_motorPower = 100;
 const float C_dr4bconstant = 2.5;
+//for left encoder, forwards is pos, backwards is neg
+//for right encoder, forwards is neg, backwards is pos
 void displayEnterString(int line){//this displays *enterString[]* to *line*
 	clearLCDLine(line);
 	for(int i = 0; i < 16; ++i){
@@ -20,7 +22,7 @@ int getEncValForDistance(int inches){//this returns the encoder value for drivet
 	return (360*inches)/(C_rOfWheels*C_PI*2);
 }
 int getEncValForTurn(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
-	return degrees*C_rOfRobot/C_rOfWheels;
+	return degrees*((float)C_rOfRobot/(float)C_rOfWheels);
 }
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
 	int encVal = getEncValForDistance(distance);
@@ -128,52 +130,14 @@ task auton(){//main task
 		case 0://first auton
 			displayLCDString(0,0, firstAutonString);
 			displayLCDString(1,0, "is running!");
-			robotInit();
-			moveForwards(40);
-			harvesterUp();
-			rotateDr4bUpTo(30);
-			lowerMGM();
-			moveForwards(8);
-			harvesterDown();
-			raiseMGM();
-			moveBackwards(8);
-			turnRight(180);
-			moveForwards(36);
-			turnLeft(90);
-			moveForwards(18);
-			turnRight(90);
-			moveForwards(16);
-			turnRight(45);
-			moveForwards(36);
-			lowerMGM();
-			moveBackwards(8);
-			raiseMGM();
-			moveBackwards(8);
+			moveForwards(20);
+			moveBackwards(20);
 			break;
 		case 1:
 			displayLCDString(0,0, secondAutonString);
 			displayLCDString(1,0, "is running!");
-			robotInit();
-			moveForwards(40);
-			harvesterUp();
-			rotateDr4bUpTo(30);
-			lowerMGM();
-			moveForwards(8);
-			harvesterDown();
-			raiseMGM();
-			moveBackwards(8);
-			turnLeft(180);
-			moveForwards(36);
-			turnRight(90);
-			moveForwards(18);
-			turnLeft(90);
-			moveForwards(16);
-			turnLeft(45);
-			moveForwards(36);
-			lowerMGM();
-			moveBackwards(8);
-			raiseMGM();
-			moveBackwards(8);
+			turnLeft(20);
+			turnRight(20);
 			break;
 		case 2:
 			displayLCDString(0,0, thirdAutonString);
