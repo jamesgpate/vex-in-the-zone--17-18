@@ -15,6 +15,13 @@ const short leftButton = 1;
 const short centerButton = 2;
 const short rightButton = 4;
 //
+int dr4bEncAvg = (SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2;
+int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
+int c4Partner = 0, c3Partner = 0, c2Partner = 0, c1Partner = 0;
+int clawMode = 0;
+int autoStackCount = 0;
+int lcdPage = 0;
+bool lcdPartnerControl = false;
 int autoStack(int stackCount){
 	//start at parallel dr4b and parallel 4b
 	//pid vars
@@ -29,61 +36,60 @@ int autoStack(int stackCount){
 	//down to match load height
 	return stackCount++;
 }
-task drive(){
-	int dr4bEncAvg = (SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2;
-	int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
-	int c4Partner = 0, c3Partner = 0, c2Partner = 0, c1Partner = 0;
-	int clawMode = 0;
-	int autoStackCount = 0;
-	int lcdPage = 0;
-	bool partnerControl = false;
-	while(true){
-		dr4bEncAvg = (SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2;
-		long sysTime = nSysTime;
-		//Drivetrain
-		//set threshold to 20 and make sure it is zero under it
-		const int THRESHOLD = 20;
-		if(abs(vexRT[Ch4])>THRESHOLD) c4 = vexRT[Ch4];
-		else c4 = 0;
-		if(abs(vexRT[Ch3])>THRESHOLD) c3 = vexRT[Ch3];
-		else c3 = 0;
-		if(abs(vexRT[Ch2])>THRESHOLD) c2 = vexRT[Ch2];
-		else c2 = 0;
-		if(abs(vexRT[Ch1])>THRESHOLD) c1 = vexRT[Ch1];
-		else c1 = 0;
-		if(abs(vexRT[Ch4Xmtr2])>THRESHOLD) c4Partner = vexRT[Ch4Xmtr2];
-		else c4Partner = 0;
-		if(abs(vexRT[Ch3Xmtr2])>THRESHOLD) c3Partner = vexRT[Ch3Xmtr2];
-		else c3Partner = 0;
-		if(abs(vexRT[Ch2Xmtr2])>THRESHOLD) c2Partner = vexRT[Ch2Xmtr2];
-		else c2Partner = 0;
-		if(abs(vexRT[Ch1Xmtr2])>THRESHOLD) c1Partner = vexRT[Ch1Xmtr2];
-		else c1Partner = 0;
-		//send these values to the motor
-		if(!partnerControl){
-			motor[ldt1] = c3+c4;
-			motor[ldt2] = c3+c4;
-			motor[rdt1] = -c3+c4;
-			motor[rdt2] = -c3+c4;
-		}
-		if(partnerControl){
-			motor[ldt1] = c3Partner;
-			motor[ldt2] = c3Partner;
-			motor[rdt1] = -c2Partner;
-			motor[rdt2] = -c2Partner;
-		}
-		//mobile goal
-		if(partnerControl){
+void drivetrain(bool partnerControl){
+	//Drivetrain
+	//set threshold to 20 and make sure it is zero under it
+	const int THRESHOLD = 20;
+	if(abs(vexRT[Ch4])>THRESHOLD) c4 = vexRT[Ch4];
+	else c4 = 0;
+	if(abs(vexRT[Ch3])>THRESHOLD) c3 = vexRT[Ch3];
+	else c3 = 0;
+	if(abs(vexRT[Ch2])>THRESHOLD) c2 = vexRT[Ch2];
+	else c2 = 0;
+	if(abs(vexRT[Ch1])>THRESHOLD) c1 = vexRT[Ch1];
+	else c1 = 0;
+	if(abs(vexRT[Ch4Xmtr2])>THRESHOLD) c4Partner = vexRT[Ch4Xmtr2];
+	else c4Partner = 0;
+	if(abs(vexRT[Ch3Xmtr2])>THRESHOLD) c3Partner = vexRT[Ch3Xmtr2];
+	else c3Partner = 0;
+	if(abs(vexRT[Ch2Xmtr2])>THRESHOLD) c2Partner = vexRT[Ch2Xmtr2];
+	else c2Partner = 0;
+	if(abs(vexRT[Ch1Xmtr2])>THRESHOLD) c1Partner = vexRT[Ch1Xmtr2];
+	else c1Partner = 0;
+	//send these values to the motor
+	if(!partnerControl){
+		motor[ldt1] = c3+c4;
+		motor[ldt2] = c3+c4;
+		motor[rdt1] = -c3+c4;
+		motor[rdt2] = -c3+c4;
+	}
+	if(partnerControl){
+		motor[ldt1] = c3Partner;
+		motor[ldt2] = c3Partner;
+		motor[rdt1] = -c2Partner;
+		motor[rdt2] = -c2Partner;
+	}
+}
+void mobileGoal(bool partnerControl){
+	if(partnerControl){
 		if(vexRT[Btn7DXmtr2])motor[mgm] = 127;
 		else if(vexRT[Btn7UXmtr2])motor[mgm] = -127;
 		else motor[mgm] = 0;
-		}
-		if(!partnerControl){
+	}
+	if(!partnerControl){
 		if(vexRT[Btn8U])motor[mgm] = 127;
 		else if(vexRT[Btn8D])motor[mgm] = -127;
 		else motor[mgm] = 0;
-		}
-
+	}
+}
+task drive(){
+	while(true){
+		dr4bEncAvg = (SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2;
+		long sysTime = nSysTime;
+		//call drivetrain
+		drivetrain(lcdPartnerControl);
+		//mobile goal
+		mobileGoal(lcdPartnerControl);
 		//claw
 		switch(clawMode){
 			case 0:
