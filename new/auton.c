@@ -1,15 +1,21 @@
 #include "main.c"
+#include "driving.c"
+
 const int enterString[] = {247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246};//this is "�??     Enter    �?�"
+
 const string firstAutonString = "Forward+Backward";
 const string secondAutonString = "Left+Right";
 const string thirdAutonString = "Stationary Goal";
 const string fourthAutonString = "Nothing";
+
 int lcdCount = 0;
+
 const int C_rOfWheels = 2;
 const int C_rOfRobot = 13;
 const float C_PI = 3.1415926;
 const int C_motorPower = 100;
 const float C_dr4bconstant = 2.5;
+
 //for left encoder, forwards is pos, backwards is neg
 //for right encoder, forwards is neg, backwards is pos
 void displayEnterString(int line){//this displays *enterString[]* to *line*
@@ -84,7 +90,6 @@ void rotateDr4bUpTo(float distance){//rotates double reverse fourbar up to *dist
 void rotateDr4bDownTo(float distance){//rotates double reverse fourbar down to *distance* height
 	SensorValue[rdr4bEnc]=0;
 	SensorValue[ldr4bEnc]=0;
-
 	int encVal = abs(distance*C_dr4bconstant);
 	while(SensorValue[ldr4bEnc]<encVal && SensorValue[rdr4bEnc]>-encVal){
 		motor[ldr4b] = C_motorPower;
@@ -93,41 +98,31 @@ void rotateDr4bDownTo(float distance){//rotates double reverse fourbar down to *
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
-void harvesterUp(){
+void harvesterUp(){//intakes the cone
 	motor[claw] = C_motorPower;
 	wait1Msec(500);
 	motor[claw] = 0;
 }
-void harvesterDown(){
+void harvesterDown(){ //shoots out the code
 	motor[claw] = -C_motorPower;
 	wait1Msec(1000);
 	motor[claw] = 0;
 }
-void rotateFourbarTo(int degrees){
-
-}
-void robotInit(){
-	motor[claw]=75;
-	rotateFourbarTo(33);
-}
-void returnToLowered(){
-	motor[ldr4b] = C_motorPower;
-	motor[rdr4b] = -C_motorPower;
-	wait1Msec(1000);
-	motor[ldr4b] = motor[rdr4b] = 0;
-	wait1Msec(200);
-	motor[fourbar] = -C_motorPower;
-	wait1Msec(1000);
-	motor[fourbar] = 0;
-	SensorValue[rdr4bEnc]=0;
-	SensorValue[ldr4bEnc]=0;
-	SensorValue[ldtEnc]=0;
-	SensorValue[rdtEnc]=0;
+void rotateFourbarTo(int position){
+	if(SensorValue[fourbarPot]<position){//if the current position is less than desired
+		motor[fourbar] = C_motorPower;
+		while(SensorValue[fourbarPot]<position) wait1Msec(5);
+		motor[fourbar] = 0;
+	}else if(SensorValue[fourbarPot]>position){//if the current position is greater than desired
+		motor[fourbar] = -C_motorPower;
+		while(SensorValue[fourbarPot]>position) wait1Msec(5);
+		motor[fourbar] = 0;
+	}
 }
 task auton(){//main task
 	getEncValForTurn(1);
 	switch(lcdCount){
-		case 0://first auton
+		case 0:
 			displayLCDString(0,0, firstAutonString);
 			displayLCDString(1,0, "is running!");
 			moveForwards(20);
@@ -142,7 +137,6 @@ task auton(){//main task
 		case 2:
 			displayLCDString(0,0, thirdAutonString);
 			displayLCDString(1,0, "is running!");
-			robotInit();
 			rotateDr4bUpTo(35);
 			rotateFourbarTo(75);
 			moveForwards(3);
@@ -155,7 +149,6 @@ task auton(){//main task
 			wait1Msec(2000);
 			motor[claw] = 0;
 			moveBackwards(7);
-			returnToLowered();
 			break;
 		case 3:
 			displayLCDString(0,0, fourthAutonString);

@@ -5,9 +5,11 @@ bool colors = false;
 int timed = 0;
 int toggle = 0;
 
-const int fourbarTop = 460;
-const int fourbarParallel = 1525;
-const int fourbarBottom = 2000;
+bool precise = false;
+
+const int fourbarTop = 850;
+const int fourbarParallel = 2225;
+const int fourbarBottom = 2910;
 
 const int coneDistance = 230;
 
@@ -15,7 +17,7 @@ const short leftButton = 1;
 const short centerButton = 2;
 const short rightButton = 4;
 //
-int dr4bEncAvg = (SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2;
+int dr4bEncAvg = (abs(SensorValue[ldr4bEnc])-abs(SensorValue[rdr4bEnc]))/2;
 int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
 int c4Partner = 0, c3Partner = 0, c2Partner = 0, c1Partner = 0;
 int clawMode = 0;
@@ -64,16 +66,25 @@ void drivetrain(bool partnerControl){
 		motor[rdt2] = -c3+c4;
 	}
 	if(partnerControl){
-		motor[ldt1] = c3Partner;
-		motor[ldt2] = c3Partner;
-		motor[rdt1] = -c2Partner;
-		motor[rdt2] = -c2Partner;
+		if(!precise){
+			motor[ldt1] = c3Partner;
+			motor[ldt2] = c3Partner;
+			motor[rdt1] = -c2Partner;
+			motor[rdt2] = -c2Partner;
+		}
+		if(precise){
+			motor[ldt1] = c3Partner/2;
+			motor[ldt2] = c3Partner/2;
+			motor[rdt1] = -c2Partner/2;
+			motor[rdt2] = -c2Partner/2;
+		}
+
 	}
 }
 void mobileGoal(bool partnerControl){
 	if(partnerControl){
-		if(vexRT[Btn7DXmtr2])motor[mgm] = 127;
-		else if(vexRT[Btn7UXmtr2])motor[mgm] = -127;
+		if(vexRT[Btn6DXmtr2])motor[mgm] = 127;
+		else if(vexRT[Btn6UXmtr2])motor[mgm] = -127;
 		else motor[mgm] = 0;
 	}
 	if(!partnerControl){
@@ -82,9 +93,28 @@ void mobileGoal(bool partnerControl){
 		else motor[mgm] = 0;
 	}
 }
+void dr4b(){
+	float kP = 10;
+	float setpoint = 0;
+	float error = dr4bEncAvg - setpoint;
+	if(vexRT[Btn6U]){
+		motor[ldr4b]=-127;
+		motor[rdr4b]=127;
+		//setpoint++;
+	}else if(vexRT[Btn6D]){
+		motor[ldr4b]=127;
+		motor[rdr4b]=-127;
+		//setpoint--;
+	}
+	if((dr4bEncAvg<5)&&vexRT[Btn6U]==0&&vexRT[Btn6D]==0){
+		setpoint += .01;
+	}
+	//motor[rdr4b] = kP*error;
+}
 task drive(){
+	startTask(slowFade);
 	while(true){
-		dr4bEncAvg = (SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2;
+		dr4bEncAvg = (abs(SensorValue[ldr4bEnc])-abs(SensorValue[rdr4bEnc]))/2;
 		long sysTime = nSysTime;
 		//call drivetrain
 		drivetrain(lcdPartnerControl);
@@ -136,6 +166,9 @@ task drive(){
 		//Changing clawModes
 		if(vexRT[Btn8L]) clawMode = 0;
 		if(vexRT[Btn8R]) clawMode = 1;
+		//Changing driveModes
+		if(vexRT[Btn5UXmtr2]) precise = true;
+		if(vexRT[Btn5DXmtr2]) precise = false;
 
 		//Auto Stacking
 		while(vexRT[Btn5U] && autoStackCount==0){
@@ -202,35 +235,14 @@ task drive(){
 		autoStackCount=0;
 
 		//dr4b - Non-PID version
-		if(vexRT[Btn6U]){
-			while(vexRT[Btn6U] && dr4bEncAvg<90 && SensorValue[fourbarPot]>1525){
-			int fourbarError = fourbarParallel-SensorValue[fourbarPot];
-			motor[fourbar]=-0.5*fourbarError;
-			motor[ldr4b]=-127;
-			motor[rdr4b]=127;
-			}
-		}else if(vexRT[Btn6D]){
-			while(vexRT[Btn6D] && dr4bEncAvg>5 && SensorValue[fourbarPot]<1525){
-			int fourbarError = fourbarParallel-SensorValue[fourbarPot];
-			motor[fourbar]=-0.5*fourbarError;
-			motor[ldr4b]=127;
-			motor[rdr4b]=-127;
-			}
-		}else if(!vexRT[Btn6U] && !vexRT[Btn6D]){
-			motor[ldr4b]=0;
-			motor[rdr4b]=0;
-		}
-		if((dr4bEncAvg<5)&&vexRT[Btn6U]==0&&vexRT[Btn6D]==0){
-			motor[ldr4b]=15;
-			motor[rdr4b]=-15;
-		}
+		dr4b();
 		//LEDS
-		if(vexRT[Btn7D] && !colors && (nSysTime-timed)>3000 && !partnerControl){
+		if(vexRT[Btn7D] && !colors && (nSysTime-timed)>3000 && !lcdPartnerControl){
 			startTask(slowFade);
 			colors = true;
 			timed = nSysTime;
 		}
-		if(vexRT[Btn7D] && colors && (nSysTime-timed)>3000 && !partnerControl){
+		if(vexRT[Btn7D] && colors && (nSysTime-timed)>3000 && !lcdPartnerControl){
 			stopTask(slowFade);
 			colors = false;
 			timed = nSysTime;
@@ -275,6 +287,13 @@ task drive(){
 			case 0:
 				clearLCDLine(0);
 				clearLCDLine(1);
+				displayLCDString(0,0,"Partner Control");
+				if(lcdPartnerControl)displayLCDString(1,0,"True");
+				else if(!lcdPartnerControl)displayLCDString(1,0,"False");
+				break;
+			case 1:
+				clearLCDLine(0);
+				clearLCDLine(1);
 				displayLCDString(0,0,"Battery: ");
 				displayLCDNumber(0,9, nAvgBatteryLevel);
 				displayLCDString(0,13, " mV");
@@ -282,7 +301,7 @@ task drive(){
 				displayLCDNumber(1,9, BackupBatteryLevel);
 				displayLCDString(1,13, " mV");
 				break;
-			case 1:
+			case 2:
 				clearLCDLine(0);
 				clearLCDLine(1);
 				displayLCDString(0,0,"Left DT: ");
@@ -290,33 +309,35 @@ task drive(){
 				displayLCDString(1,0,"Right DT: ");
 				displayLCDNumber(1,10, SensorValue[rdtEnc]);
 				break;
-			case 2:
+			case 3:
 				clearLCDLine(0);
 				clearLCDLine(1);
 				displayLCDString(0,0,"Left DR4B: ");
 				displayLCDNumber(0,10, SensorValue[ldr4bEnc]);
 				displayLCDString(1,0,"Right DR4B: ");
 				displayLCDNumber(1,10, SensorValue[rdr4bEnc]);
-			case 3:
+				break;
+			case 4:
 				clearLCDLine(0);
 				clearLCDLine(1);
 				displayLCDString(0,0,"Sonar: ");
 				displayLCDNumber(0,10, SensorValue[sound]);
 				displayLCDString(1,0,"4bar Pot: ");
 				displayLCDNumber(1,10, SensorValue[fourbarPot]);
+				break;
 		}
 		if(nLCDButtons == leftButton){
 			wait1Msec(50);
-			if(lcdPage == 0) lcdPage = 3;
+			if(lcdPage == 0) lcdPage = 4;
 			else lcdPage--;
 		}else if(nLCDButtons == rightButton){
 			wait1Msec(50);
-			if(lcdPage == 3) lcdPage = 0;
+			if(lcdPage == 4) lcdPage = 0;
 			else lcdPage++;
 		}
-		if(nLCDButtons == centerButton && toggle>3000) {
+		if(nLCDButtons == centerButton && (nSysTime-toggle)>3000) {
 			wait1Msec(50);
-			partnerControl = !partnerControl;
+			lcdPartnerControl = !lcdPartnerControl;
 			toggle = nSysTime;
 		}
 		//keep the loop timing consistently 20 ms
