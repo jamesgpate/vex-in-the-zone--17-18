@@ -7,9 +7,9 @@ int toggle = 0;
 
 bool precise = false;
 
-const int fourbarTop = 850;
-const int fourbarParallel = 2225;
-const int fourbarBottom = 2910;
+const int fourbarTop = 630;
+const int fourbarParallel = 1600;
+const int fourbarBottom = 2435;
 
 const int coneDistance = 230;
 
@@ -101,6 +101,9 @@ void dr4b(){
 	}else if(vexRT[Btn6D]){
 		lPower=-80;
 		rPower=-80;
+	}else if(dr4bEncAvg < 5){
+		lPower = -15;
+		rPower = -15;
 	}
 	motor[rdr4b] = rPower;
 	motor[ldr4b] = lPower;
@@ -156,6 +159,7 @@ task drive(){
 			int error = 1-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2);//Minimum Height/Field Height
 			motor[ldr4b]=-8*error;
 			motor[rdr4b]=8*error;
+			clawMode=0;
 		}
 		//Changing clawModes
 		if(vexRT[Btn8L]) clawMode = 0;
