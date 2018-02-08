@@ -105,7 +105,7 @@ void dr4b(){
 		lPower = -15;
 		rPower = -15;
 	}
-	motor[rdr4b] = rPower;
+	motor[rdr4b] = -rPower;
 	motor[ldr4b] = lPower;
 }
 task drive(){
