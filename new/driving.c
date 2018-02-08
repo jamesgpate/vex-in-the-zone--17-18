@@ -94,22 +94,16 @@ void mobileGoal(bool partnerControl){
 	}
 }
 void dr4b(){
-	float kP = 10;
-	float setpoint = 0;
-	float error = dr4bEncAvg - setpoint;
+	float lPower, rPower;
 	if(vexRT[Btn6U]){
-		motor[ldr4b]=-127;
-		motor[rdr4b]=127;
-		//setpoint++;
+		lPower=80;
+		rPower=80;
 	}else if(vexRT[Btn6D]){
-		motor[ldr4b]=127;
-		motor[rdr4b]=-127;
-		//setpoint--;
+		lPower=-80;
+		rPower=-80;
 	}
-	if((dr4bEncAvg<5)&&vexRT[Btn6U]==0&&vexRT[Btn6D]==0){
-		setpoint += .01;
-	}
-	//motor[rdr4b] = kP*error;
+	motor[rdr4b] = rPower;
+	motor[ldr4b] = lPower;
 }
 task drive(){
 	startTask(slowFade);
