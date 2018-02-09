@@ -335,7 +335,7 @@ task drive(){
 			if(lcdPage == 4) lcdPage = 0;
 			else lcdPage++;
 		}
-		if(nLCDButtons == centerButton && (nSysTime-toggle)>3000) {
+		if(nLCDButtons == centerButton && (nSysTime-toggle)>500) {
 			wait1Msec(50);
 			lcdPartnerControl = !lcdPartnerControl;
 			toggle = nSysTime;
