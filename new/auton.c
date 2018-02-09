@@ -30,28 +30,56 @@ int getEncValForDistance(int inches){//this returns the encoder value for drivet
 int getEncValForTurn(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
 	return degrees*((float)C_rOfRobot/(float)C_rOfWheels);
 }
+void gyroTurn( int degrees){
+	//plz setup
+}
+
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	motor[ldt1] = motor[ldt2] = C_motorPower;
-	motor[rdt1] = motor[rdt2] = -C_motorPower;
-	while(encVal<SensorValue[ldtEnc]) wait1Msec(5);
-	motor[ldt1] = motor[ldt2] = 0;
-	motor[rdt1] = motor[rdt2] = 0;
+	motor[ldt1] = motor[ldt2] = -C_motorPower;		//JOSEPH!
+	motor[rdt1] = motor[rdt2] = C_motorPower;
+	int lastError = encVal-SensorValue[ldtEnc];
+	int totalError = 0;
+	while(encVal>SensorValue[ldtEnc]){
+		int error = encVal-SensorValue[ldtEnc];
+		if(totalError<50)totalError += error;
+		else totalError=0;
+		int power = ((0.25*error)+(0.00*totalError)+(0.00*(error-lastError)));
+		if(power>90){
+			motor[ldt1]=motor[ldt2]=90;
+			motor[rdt1]=motor[rdt2]=-90;
+		}
+		if(power<10){
+			motor[ldt1]=motor[ldt2]=0;
+			motor[rdt1]=motor[rdt2]=0;
+		}
+		else{
+		motor[ldt1]=motor[ldt2]=power;
+		motor[rdt1]=motor[rdt2]=-power;
+		}
+		displayLCDNumber(0,0,error);
+		wait1Msec(25);
+	}
 }
 void moveBackwards(int distance){//this moves the robot backwards *distance* inches
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	motor[ldt1] = motor[ldt2] = -C_motorPower;
-	motor[rdt1] = motor[rdt2] = C_motorPower;
-	while(encVal>SensorValue[ldtEnc]) wait1Msec(5);
-	motor[ldt1] = motor[ldt2] = 0;
-	motor[rdt1] = motor[rdt2] = 0;
+	int lastError = encVal-SensorValue[ldtEnc];
+	int totalError = 0;
+	while(-encVal<SensorValue[ldtEnc]){
+		int error = encVal-SensorValue[ldtEnc];
+		totalError += error;
+		motor[ldt1]=motor[ldt2]=-((4*error)+(0.00*totalError)+(0*(error-lastError)));
+		motor[rdt1]=motor[rdt2]=((4*error)+(0.00*totalError)+(0*(error-lastError)));
+	}
+
+
 }
 void turnRight(int degrees){//this turns the robot to the right *degrees* degrees
-	//gyroTurn((float)degrees);
+	gyroTurn((float)degrees);
 	motor[ldt1] = motor[ldt2] = C_motorPower;
 	motor[rdt1] = motor[rdt2] = C_motorPower;
 	wait1Msec((15*1000)/(7*degrees));
@@ -59,7 +87,7 @@ void turnRight(int degrees){//this turns the robot to the right *degrees* degree
 	motor[rdt1] = motor[rdt2] = 0;
 }
 void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
-	//gyroTurn((float)(-degrees));
+	gyroTurn((float)(-degrees));
 	motor[ldt1] = motor[ldt2] = -C_motorPower;
 	motor[rdt1] = motor[rdt2] = -C_motorPower;
 	wait1Msec((15*1000)/(7*degrees));
@@ -125,8 +153,8 @@ task auton(){//main task
 		case 0:
 			displayLCDString(0,0, firstAutonString);
 			displayLCDString(1,0, "is running!");
-			moveForwards(20);
-			moveBackwards(20);
+			moveForwards(10);
+			moveBackwards(10);
 			break;
 		case 1:
 			displayLCDString(0,0, secondAutonString);
