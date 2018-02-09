@@ -183,8 +183,8 @@ task drive(){
 			clawMode=0;
 		}
 		//Changing clawModes
-		if(vexRT[Btn8L]) clawMode = 0;
-		if(vexRT[Btn8R]) clawMode = 1;
+		if(vexRT[Btn8L])	moveForwards(12); //clawMode = 0;
+		if(vexRT[Btn8R])	moveBackwards(12); //clawMode = 1;
 		//Changing driveModes
 		if(vexRT[Btn5UXmtr2]) precise = true;
 		if(vexRT[Btn5DXmtr2]) precise = false;
@@ -260,13 +260,11 @@ task drive(){
 		//LEDS
 		if(vexRT[Btn7D] && !colors && (nSysTime-timed)>3000 && !lcdPartnerControl){
 			startTask(slowFade);
-			moveForwards(10);
 			colors = true;
 			timed = nSysTime;
 		}
 		if(vexRT[Btn7D] && colors && (nSysTime-timed)>3000 && !lcdPartnerControl){
 			stopTask(slowFade);
-			moveBackwards(10);
 			colors = false;
 			timed = nSysTime;
 		}
@@ -310,7 +308,7 @@ task drive(){
 			case 0:
 				clearLCDLine(0);
 				clearLCDLine(1);
-				//displayLCDString(0,0,"Partner Control");
+				displayLCDString(0,0,"Partner Control");
 				if(lcdPartnerControl)displayLCDString(1,0,"True");
 				else if(!lcdPartnerControl)displayLCDString(1,0,"False");
 				break;
@@ -358,11 +356,7 @@ task drive(){
 			if(lcdPage == 4) lcdPage = 0;
 			else lcdPage++;
 		}
-<<<<<<< HEAD
-		if(nLCDButtons == centerButton && (nSysTime-toggle)>500) {
-=======
-		if(nLCDButtons == centerButton && (nSysTime-partner)>3000) {
->>>>>>> 0f7bcee2d6aa456b3feb8063e5b768db5c60b8ae
+		if(nLCDButtons == centerButton && (nSysTime-partner)>1000) {
 			wait1Msec(50);
 			lcdPartnerControl = !lcdPartnerControl;
 			partner = nSysTime;

@@ -10,6 +10,10 @@ const string fourthAutonString = "Nothing";
 
 int lcdCount = 0;
 
+const float drivingKP = 1.2;
+const float drivingKI = 0.0;
+const float drivingKD = 0.7;
+
 const int C_rOfWheels = 2;
 const int C_rOfRobot = 13;
 const float C_PI = 3.1415926;
@@ -38,45 +42,59 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	motor[ldt1] = motor[ldt2] = -C_motorPower;		//JOSEPH!
-	motor[rdt1] = motor[rdt2] = C_motorPower;
-	int lastError = encVal-SensorValue[ldtEnc];
+	int lastError = encVal;
 	int totalError = 0;
-	while(encVal>SensorValue[ldtEnc]){
-		int error = encVal-SensorValue[ldtEnc];
+	while(true){//-encVal<SensorValue[rdtEnc]){
+		int error = encVal+SensorValue[rdtEnc];
 		if(totalError<50)totalError += error;
 		else totalError=0;
-		int power = ((0.25*error)+(0.00*totalError)+(0.00*(error-lastError)));
+		int power = ((drivingKP*error)+(drivingKI*totalError)+(drivingKD*(error-lastError)));
 		if(power>90){
 			motor[ldt1]=motor[ldt2]=90;
 			motor[rdt1]=motor[rdt2]=-90;
+		}
+		else if(power<10&&power<-10){
+			motor[ldt1]=motor[ldt2]=0;
+			motor[rdt1]=motor[rdt2]=0;
+		}else{
+			motor[ldt1]=motor[ldt2]=power;
+			motor[rdt1]=motor[rdt2]=-power;
+		}
+		string err = "";
+		err = err + error;
+		writeDebugStreamLine(err);
+		wait1Msec(25);
+	}
+	motor[ldt1]=motor[ldt2]=0;
+	motor[rdt1]=motor[rdt2]=0;
+}
+void moveBackwards(int distance){//this moves the robot backwards *distance* inches
+	int encVal = getEncValForDistance(distance);
+	SensorValue[ldtEnc] = 0;
+	SensorValue[rdtEnc] = 0;
+	int lastError = encVal;
+	int totalError = 0;
+	while(encVal>SensorValue[rdtEnc]){
+		int error = encVal+SensorValue[rdtEnc];
+		if(totalError<50)totalError += error;
+		else totalError=0;
+		int power = ((drivingKP*error)+(drivingKI*totalError)+(drivingKD*(error-lastError)));
+		if(power>90){
+			motor[ldt1]=motor[ldt2]=-90;
+			motor[rdt1]=motor[rdt2]=90;
 		}
 		if(power<10){
 			motor[ldt1]=motor[ldt2]=0;
 			motor[rdt1]=motor[rdt2]=0;
 		}
 		else{
-		motor[ldt1]=motor[ldt2]=power;
-		motor[rdt1]=motor[rdt2]=-power;
+		motor[ldt1]=motor[ldt2]=-power;
+		motor[rdt1]=motor[rdt2]=power;
 		}
-		displayLCDNumber(0,0,error);
 		wait1Msec(25);
 	}
-}
-void moveBackwards(int distance){//this moves the robot backwards *distance* inches
-	int encVal = getEncValForDistance(distance);
-	SensorValue[ldtEnc] = 0;
-	SensorValue[rdtEnc] = 0;
-	int lastError = encVal-SensorValue[ldtEnc];
-	int totalError = 0;
-	while(-encVal<SensorValue[ldtEnc]){
-		int error = encVal-SensorValue[ldtEnc];
-		totalError += error;
-		motor[ldt1]=motor[ldt2]=-((4*error)+(0.00*totalError)+(0*(error-lastError)));
-		motor[rdt1]=motor[rdt2]=((4*error)+(0.00*totalError)+(0*(error-lastError)));
-	}
-
-
+	motor[ldt1]=motor[ldt2]=0;
+	motor[rdt1]=motor[rdt2]=0;
 }
 void turnRight(int degrees){//this turns the robot to the right *degrees* degrees
 	gyroTurn((float)degrees);
