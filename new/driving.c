@@ -183,7 +183,7 @@ task drive(){
 			clawMode=0;
 		}
 		//Changing clawModes
-		if(vexRT[Btn8L])	moveForwards(12); //clawMode = 0;
+		if(vexRT[Btn8L])	moveForwards(32); //clawMode = 0;
 		if(vexRT[Btn8R])	moveBackwards(12); //clawMode = 1;
 		//Changing driveModes
 		if(vexRT[Btn5UXmtr2]) precise = true;
@@ -269,7 +269,7 @@ task drive(){
 			timed = nSysTime;
 		}
 		//fourbar
-		if(vexRT[Ch2]>20){
+		/*if(vexRT[Ch2]>20){
 			while(vexRT[Ch2]>20&&SensorValue[fourbarPot]>fourbarTop){
 				int fourbarError = fourbarTop-SensorValue[fourbarPot];
 				if(fourbarError>-20)fourbarError=0;
@@ -296,13 +296,14 @@ task drive(){
 		}
 		else{
 			if(motor[rdr4b]>15){
-				motor[fourbar]= -20;
-			}
-			if(motor[rdr4b]<-15){
 				motor[fourbar]= 30;
 			}
+			if(motor[rdr4b]<-15){
+				motor[fourbar]= -20;
+			}
 			else motor[fourbar]=0;
-		}
+		}*/
+		motor[fourbar]=vexRT[Ch2];
 		//displays current battery and backup battery voltage
 		switch(lcdPage){
 			case 0:
