@@ -10,10 +10,6 @@ const string fourthAutonString = "Nothing";
 
 int lcdCount = 0;
 
-const float drivingKP = 0.3;
-const float drivingKI = 0.0;
-const float drivingKD = 0.0;
-
 const int C_rOfWheels = 2;
 const int C_rOfRobot = 13;
 const float C_PI = 3.1415926;
@@ -39,79 +35,24 @@ void gyroTurn( int degrees){
 }
 
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
-	distance = 0.921278810118277*(distance)-0.227827752504;
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	int lastError = encVal;
-	int totalError = 0;
-	//clearDebugStream();
 	while(!(SensorValue[rdtEnc]<(-encVal+10) && SensorValue[rdtEnc]>(-encVal-10))){
-		int error = encVal+SensorValue[rdtEnc];
-		//if(SensorValue[rdtEnc]<(-encVal+10) && SensorValue[rdtEnc]>(-encVal-10)) error=0;
-		if(totalError<50)totalError += error;
-		else totalError=0;
-		int power = ((drivingKP*error)+(drivingKI*totalError)+(drivingKD*(error-lastError)));
-		if(power>90){
-			motor[ldt1]=motor[ldt2]=90;
-			motor[rdt1]=motor[rdt2]=-90;
-		}
-		else if(power<15&&power>-15){
-			motor[ldt1]=motor[ldt2]=0;
-			motor[rdt1]=motor[rdt2]=0;
-		}else{
-			motor[ldt1]=motor[ldt2]=power;
-			motor[rdt1]=motor[rdt2]=-power;
-		}
-		/*string err = "";
-		string kp = "KP=";
-		string ki = "KI=";
-		string kd = "KD=";
+		motor[ldt1]=motor[ldt2]=90;
+		motor[rdt1]=motor[rdt2]=-90;
 
-		int kPower = (drivingKP*error);
-		int kIower = (drivingKI*totalError);
-		int kDower = (drivingKD*(error-lastError));
-
-		err = err + error;
-		kp = kp + kPower;
-		ki = ki + kIower;
-		kd = kd + kDower;
-
-		writeDebugStreamLine(err);
-		writeDebugStreamLine(kp);
-		writeDebugStreamLine(ki);
-		writeDebugStreamLine(kd);*/
-		lastError=error;
-		wait1Msec(25);
 	}
 	motor[ldt1]=motor[ldt2]=0;
 	motor[rdt1]=motor[rdt2]=0;
 }
 void moveBackwards(int distance){//this moves the robot backwards *distance* inches
-	distance = 0.921278810118277*(distance)-0.227827752504;
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-	int lastError = encVal;
-	int totalError = 0;
 	while(!(SensorValue[rdtEnc]<(encVal+10) && SensorValue[rdtEnc]>(encVal-10))){
-		int error = encVal+SensorValue[rdtEnc];
-		if(totalError<50)totalError += error;
-		else totalError=0;
-		int power = ((drivingKP*error)+(drivingKI*totalError)+(drivingKD*(error-lastError)));
-		if(power>90){
 			motor[ldt1]=motor[ldt2]=-90;
 			motor[rdt1]=motor[rdt2]=90;
-		}
-		if(power<10){
-			motor[ldt1]=motor[ldt2]=0;
-			motor[rdt1]=motor[rdt2]=0;
-		}
-		else{
-		motor[ldt1]=motor[ldt2]=-power;
-		motor[rdt1]=motor[rdt2]=power;
-		}
-		wait1Msec(25);
 	}
 	motor[ldt1]=motor[ldt2]=0;
 	motor[rdt1]=motor[rdt2]=0;
@@ -185,79 +126,83 @@ void rotateFourbarTo(int position){
 		motor[fourbar] = 0;
 	}
 }
+void runDR4BUpFor(int time, int power){
+	motor[ldr4b]=power;
+	motor[rdr4b]=-power;
+	wait1Msec(time);
+	motor[ldr4b]=0;
+	motor[rdr4b]=0;
+}
+
+void runDR4BDownFor(int time, int power){
+	motor[ldr4b]=-power;
+	motor[rdr4b]=power;
+	wait1Msec(time);
+	motor[ldr4b]=0;
+	motor[rdr4b]=0;
+}
+void run4BUpFor(int time, int power){
+	motor[fourbar]=power;
+	wait1Msec(time);
+	motor[rdr4b]=0;
+}
+
+void run4BDownFor(int time, int power){
+	motor[fourbar]=-power;
+	wait1Msec(time);
+	motor[rdr4b]=0;
+}
 task auton(){//main task
 	getEncValForTurn(1);
 	switch(lcdCount){
 		case 0:
 			displayLCDString(0,0, firstAutonString);
 			displayLCDString(1,0, "is running!");
-		motor[claw]=50;
-		motor[fourbar]=127;
-		wait1Msec(750);
-		motor[fourbar]=0;
-		moveForwards(36);
-			motor[ldr4b]= 127;
-			motor[rdr4b]=-127;
-			wait1Msec(100);
-			motor[ldr4b]=0;
-			motor[rdr4b]=0;
+			motor[claw]=50;
+			run4BUpFor(750, 127);
+			moveForwards(28);
+			runDR4BUpFor(100, 127);
 			lowerMGM();
-			moveForwards(16);
+			moveForwards(10);
 			raiseMGM();
 			motor[ldr4b]=-127; //drop dr4b
 			motor[rdr4b]=127;
 			wait1Msec(75);
-			motor[ldr4b]=0;
-			motor[rdr4b]=0;
+			motor[ldr4b]=-30;
+			motor[rdr4b]=30;
 			wait1Msec(200);
 			motor[claw]=-127; //outtake preload
 			wait1Msec(300);
-			motor[claw]=90; //intake
+			motor[claw]=127; //intake
 			wait1Msec(0);
 			motor[fourbar]=-127; //drop 4b
-		  wait1Msec(600);
-		  motor[fourbar]=0;
-		  motor[ldt1]=motor[ldt2]=50; //drive forward
-		  motor[rdt1]=motor[rdt2]=-50;
-		  wait1Msec(300);
-		  motor[ldt1]=motor[ldt2]=0; //stop driving forward
-		  motor[rdt1]=motor[rdt2]=0;
-		  wait1Msec(600);
-		  motor[fourbar]=127;//lift 4b
+			wait1Msec(600);
+			motor[fourbar]=-10;
+			moveForwards(1);
+			motor[fourbar]=127;//lift 4b
 			wait1Msec(750);
 			motor[fourbar]=0; //stop lifting 4b
 			motor[claw]=-127; //outtake cone 2
 			wait1Msec(300);
 			motor[claw]=127; //intake
 			motor[fourbar]=-127; //drop 4b
-		  wait1Msec(100);
-		  motor[fourbar]=0; //stop dropping 4b
-		  motor[ldt1]=motor[ldt2]=50; //drive forward
-		  motor[rdt1]=motor[rdt2]=-50;
-		  wait1Msec(500);
-		  motor[ldt1]=motor[ldt2]=0; //stop driving forward
-		  motor[rdt1]=motor[rdt2]=0;
-		  motor[fourbar]=-127;//drop 4b
+			wait1Msec(100);
+			motor[fourbar]=0; //stop dropping 4b
+			motor[ldt1]=motor[ldt2]=50; //drive forward
+			motor[rdt1]=motor[rdt2]=-50;
+			wait1Msec(500);
+			motor[ldt1]=motor[ldt2]=0; //stop driving forward
+			motor[rdt1]=motor[rdt2]=0;
+			motor[fourbar]=-127;//drop 4b
 			wait1Msec(400);
 			motor[fourbar]=127;//lift 4b
 			wait1Msec(500);
-			//motor[ldr4b]= 20;//lift dr4b
-		  //motor[rdr4b]=-20;
-			//wait1Msec(30);
-		  //motor[fourbar]=127; //lift 4 bar
-			//wait1Msec(400);
 			motor[fourbar]=0; //stop lifting 4b
-			wait1Msec(750);
-			//motor[ldr4b]=-80; //drop dr4b
-			//motor[rdr4b]=80;
-			//wait1Msec(300);
+			wait1Msec(400);
 			motor[claw]=-127; //outtake cone 3
 			wait1Msec(300);
-			//motor[ldr4b]= 15;//lift dr4b
-		  //motor[rdr4b]=-15;
-		  //wait1Msec(100);
 			motor[fourbar]=-127; //drop 4b to parallel
-		  wait1Msec(300);
+		  	wait1Msec(300);
 			motor[ldr4b]=-127;//drop dr4b
 			motor[rdr4b]=127;
 			wait1Msec(100);
@@ -265,27 +210,8 @@ task auton(){//main task
 			motor[rdr4b]=0;
 			motor[claw]=127;
 			motor[fourbar]=-127;
-		  wait1Msec(400);
-		  motor[fourbar]=0;
-		 /* moveForwards(6);
-		  motor[ldr4b]= 127;
-			motor[rdr4b]=-127;
-			wait1Msec(200);
-			motor[ldr4b]=0;
-			motor[rdr4b]=0;
-		  motor[fourbar]=127;
-			wait1Msec(750);
-			motor[fourbar]=0;
-			motor[claw]=-127;
-			wait1Msec(200);
-			motor[ldr4b]= -127;
-			motor[rdr4b]=127;
-			wait1Msec(200);
-			motor[ldr4b]=0;
-			motor[rdr4b]=0; */
-
-
-			//moveBackwards(20);
+			wait1Msec(400);
+		  	motor[fourbar]=0;
 			break;
 		case 1:
 			displayLCDString(0,0, secondAutonString);
