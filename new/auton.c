@@ -18,18 +18,21 @@ const float C_dr4bconstant = 2.5;
 
 //for left encoder, forwards is pos, backwards is neg
 //for right encoder, forwards is neg, backwards is pos
+
 void displayEnterString(int line){//this displays *enterString[]* to *line*
 	clearLCDLine(line);
 	for(int i = 0; i < 16; ++i){
 		displayLCDChar(line, i, enterString[i]);
 	}
 }
+
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
 	return (360*inches)/(C_rOfWheels*C_PI*2);
 }
 int getEncValForTurn(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
 	return degrees*((float)C_rOfRobot/(float)C_rOfWheels);
 }
+
 void gyroTurn( int degrees){
 	//plz setup
 }
@@ -47,7 +50,7 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	motor[rdt1]=motor[rdt2]=0;
 }
 
-void mgmForwards(int distance){//this moves the robot forwards *distance* inches
+void mgmForwards(int distance){//this moves the robot forwards *distance* inches while lowering the mgm
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
@@ -93,8 +96,8 @@ void lowerMGM(){//lowers mgm
 	motor[mgm] = 20;
 }
 void raiseMGM(){//raises mgm
-	motor[mgm] = -C_motorPower;
-	wait1Msec(1000);
+	motor[mgm] = -127;
+	wait1Msec(1050);
 	motor[mgm] = 0;
 }
 void rotateDr4bUpTo(float distance){//rotates double reverse fourbar up to *distance* height
@@ -119,14 +122,12 @@ void rotateDr4bDownTo(float distance){//rotates double reverse fourbar down to *
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
-void harvesterUp(){//intakes the cone
-	motor[claw] = C_motorPower;
-	wait1Msec(500);
-	motor[claw] = 0;
+void intake(){//intakes the cone
+	motor[claw] = 127;
 }
-void harvesterDown(){ //shoots out the code
-	motor[claw] = -C_motorPower;
-	wait1Msec(1000);
+void outtake(int time){ //shoots out the code
+	motor[claw] = -127;
+	wait1Msec(time);
 	motor[claw] = 0;
 }
 void rotateFourbarTo(int position){
@@ -166,62 +167,50 @@ void run4BDownFor(int time, int power){
 	wait1Msec(time);
 	motor[rdr4b]=0;
 }
+void robotInit(){
+	motor[claw]=50;
+	run4BUpFor(700, 127);
+	runDR4BUpFor(100, 20);
+	motor[ldt1] = motor[ldt2] = 50;
+	motor[rdt1] = motor[rdt2] = -50;
+}
 task auton(){//main task
 	getEncValForTurn(1);
 	switch(lcdCount){
 		case 0:
 			displayLCDString(0,0, firstAutonString);
 			displayLCDString(1,0, "is running!");
-			motor[claw]=50;
-			run4BUpFor(750, 127);
-			mgmForwards(46);
-			runDR4BUpFor(100, 127);
+			robotInit();
+			//Cone 1
+			mgmForwards(48);
 			raiseMGM();
-			motor[ldr4b]=-127; //drop dr4b
-			motor[rdr4b]=127;
-			wait1Msec(50);
+			wait1Msec(150);
+			outtake(300); //Cone 1/Preload
+			//Cone 2
+			motor[claw]=127; //intake
+			runDR4BDownFor(300, 100);
 			motor[ldr4b]=-30;
 			motor[rdr4b]=30;
-			wait1Msec(50);
-			motor[claw]=-127; //outtake preload
-			wait1Msec(300);
+			run4BDownFor(500, 127);
+			moveForwards(2.5);
+			run4BUpFor(750, 127);
+			outtake(300);
+			//Cone 3
 			motor[claw]=127; //intake
-			wait1Msec(0);
-			motor[fourbar]=-127; //drop 4b
-			wait1Msec(600);
-			motor[fourbar]=-10;
-			motor[fourbar]=127;//lift 4b
-			wait1Msec(750);
-			motor[fourbar]=0; //stop lifting 4b
-			motor[claw]=-127; //outtake cone 2
-			wait1Msec(300);
-			motor[claw]=127; //intake
-			motor[fourbar]=-127; //drop 4b
-			wait1Msec(75);
-			motor[fourbar]=0; //stop dropping 4b
-		  moveForwards(4);
-			motor[ldt1]=motor[ldt2]=0; //stop driving forward
-			motor[rdt1]=motor[rdt2]=0;
+			run4BDownFor(75, 127);
+			moveForwards(2);
 			motor[fourbar]=-127;//drop 4b
 			wait1Msec(700);
 			run4BUpFor(100, 65);
-			motor[fourbar]=127;//lift 4b
-			wait1Msec(650);
-			motor[fourbar]=0; //stop lifting 4b
+			run4BUpFor(300, 90);
+			runDR4BUpFor(100, 127);
+			run4BUpFor(300, 127);
 			wait1Msec(200);
-			motor[claw]=-127; //outtake cone 3
-			wait1Msec(300);
-			motor[fourbar]=-127; //drop 4b to parallel
-		  wait1Msec(200);
-			motor[ldr4b]=-127;//drop dr4b
-			motor[rdr4b]=127;
-			wait1Msec(100);
-			motor[ldr4b]=0;
-			motor[rdr4b]=0;
+			outtake(300);
+			
+			run4BDownFor(300, 127);
 			motor[claw]=127;
-			motor[fourbar]=-127;
-			wait1Msec(400);
-		  	motor[fourbar]=0;
+			run4BDownFor(400, 127);
 			break;
 		case 1:
 			displayLCDString(0,0, secondAutonString);
