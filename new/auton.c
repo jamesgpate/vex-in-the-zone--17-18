@@ -46,6 +46,20 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	motor[ldt1]=motor[ldt2]=0;
 	motor[rdt1]=motor[rdt2]=0;
 }
+
+void mgmForwards(int distance){//this moves the robot forwards *distance* inches
+	int encVal = getEncValForDistance(distance);
+	SensorValue[ldtEnc] = 0;
+	SensorValue[rdtEnc] = 0;
+	while(!(SensorValue[rdtEnc]<(-encVal+10) && SensorValue[rdtEnc]>(-encVal-10))){
+		motor[ldt1]=motor[ldt2]=90;
+		motor[rdt1]=motor[rdt2]=-90;
+		motor[mgm]=127;
+	}
+	motor[ldt1]=motor[ldt2]=0;
+	motor[rdt1]=motor[rdt2]=0;
+	motor[mgm]=0;
+}
 void moveBackwards(int distance){//this moves the robot backwards *distance* inches
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
@@ -160,17 +174,15 @@ task auton(){//main task
 			displayLCDString(1,0, "is running!");
 			motor[claw]=50;
 			run4BUpFor(750, 127);
-			moveForwards(28);
+			mgmForwards(46);
 			runDR4BUpFor(100, 127);
-			lowerMGM();
-			moveForwards(10);
 			raiseMGM();
 			motor[ldr4b]=-127; //drop dr4b
 			motor[rdr4b]=127;
-			wait1Msec(75);
+			wait1Msec(50);
 			motor[ldr4b]=-30;
 			motor[rdr4b]=30;
-			wait1Msec(200);
+			wait1Msec(50);
 			motor[claw]=-127; //outtake preload
 			wait1Msec(300);
 			motor[claw]=127; //intake
@@ -178,7 +190,6 @@ task auton(){//main task
 			motor[fourbar]=-127; //drop 4b
 			wait1Msec(600);
 			motor[fourbar]=-10;
-			moveForwards(1);
 			motor[fourbar]=127;//lift 4b
 			wait1Msec(750);
 			motor[fourbar]=0; //stop lifting 4b
@@ -186,23 +197,22 @@ task auton(){//main task
 			wait1Msec(300);
 			motor[claw]=127; //intake
 			motor[fourbar]=-127; //drop 4b
-			wait1Msec(100);
+			wait1Msec(75);
 			motor[fourbar]=0; //stop dropping 4b
-			motor[ldt1]=motor[ldt2]=50; //drive forward
-			motor[rdt1]=motor[rdt2]=-50;
-			wait1Msec(500);
+		  moveForwards(4);
 			motor[ldt1]=motor[ldt2]=0; //stop driving forward
 			motor[rdt1]=motor[rdt2]=0;
 			motor[fourbar]=-127;//drop 4b
-			wait1Msec(400);
+			wait1Msec(700);
+			run4BUpFor(100, 65);
 			motor[fourbar]=127;//lift 4b
-			wait1Msec(500);
+			wait1Msec(650);
 			motor[fourbar]=0; //stop lifting 4b
-			wait1Msec(400);
+			wait1Msec(200);
 			motor[claw]=-127; //outtake cone 3
 			wait1Msec(300);
 			motor[fourbar]=-127; //drop 4b to parallel
-		  	wait1Msec(300);
+		  wait1Msec(200);
 			motor[ldr4b]=-127;//drop dr4b
 			motor[rdr4b]=127;
 			wait1Msec(100);
