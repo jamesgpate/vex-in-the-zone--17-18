@@ -1,5 +1,6 @@
 #include "main.c"
 #include "driving.c"
+#include "lights.c"
 
 const int enterString[] = {247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246};//this is "�??     Enter    �?�"
 
@@ -75,7 +76,9 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 	motor[rdt1]=motor[rdt2]=0;
 }
 void turnRight(int degrees){//this turns the robot to the right *degrees* degrees
-	gyroTurn((float)degrees);
+	SensorValue[ldtEnc] = 0;
+	SensorValue[rdtEnc] = 0;
+
 	motor[ldt1] = motor[ldt2] = C_motorPower;
 	motor[rdt1] = motor[rdt2] = C_motorPower;
 	wait1Msec((15*1000)/(7*degrees));
@@ -186,13 +189,18 @@ task auton(){//main task
 			raiseMGM();
 			wait1Msec(150);
 			outtake(300); //Cone 1/Preload
+			motor[ldt1] = motor[ldt2] = 30;
+			motor[rdt1] = motor[rdt2] = 30;
+			wait1Msec(100);
+			motor[ldt1] = motor[ldt2] = 0;
+			motor[rdt1] = motor[rdt2] = 0;
 			//Cone 2
 			motor[claw]=127; //intake
-			runDR4BDownFor(300, 100);
+			moveForwards(2.5);
+			runDR4BDownFor(400, 100);
 			motor[ldr4b]=-30;
 			motor[rdr4b]=30;
 			run4BDownFor(500, 127);
-			moveForwards(2.5);
 			run4BUpFor(750, 127);
 			outtake(300);
 			//Cone 3
@@ -207,10 +215,24 @@ task auton(){//main task
 			run4BUpFor(300, 127);
 			wait1Msec(200);
 			outtake(300);
-			
-			run4BDownFor(300, 127);
-			motor[claw]=127;
-			run4BDownFor(400, 127);
+			//place mgm
+			motor[claw]=-127;
+			moveBackwards(52);
+			motor[ldt1] = motor[ldt2] = C_motorPower;
+			motor[rdt1] = motor[rdt2] = C_motorPower;
+			wait1Msec(750);
+			motor[ldt1] = motor[ldt2] = 0;
+			motor[rdt1] = motor[rdt2] = 0;
+			moveForwards(14);
+			motor[ldt1] = motor[ldt2] = C_motorPower;
+			motor[rdt1] = motor[rdt2] = C_motorPower;
+			wait1Msec(500);
+			motor[ldt1] = motor[ldt2] = 0;
+			motor[rdt1] = motor[rdt2] = 0;
+			run4BUpFor(200, 90);
+			moveForwards(35);
+			moveBackwards(15);
+
 			break;
 		case 1:
 			displayLCDString(0,0, secondAutonString);
