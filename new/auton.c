@@ -4,8 +4,8 @@
 
 const int enterString[] = {247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246};//this is "�??     Enter    �?�"
 
-const string firstAutonString = "Forward+Backward";
-const string secondAutonString = "Left+Right";
+const string firstAutonString = "Left Mgm";
+const string secondAutonString = "Right Mgm";
 const string thirdAutonString = "Stationary Goal";
 const string fourthAutonString = "Nothing";
 
@@ -183,6 +183,8 @@ task auton(){//main task
 	getEncValForTurn(1);
 	switch(lcdCount){
 		case 0:
+			clearLCDLine(0);
+			clearLCDLine(1);
 			displayLCDString(0,0, firstAutonString);
 			displayLCDString(1,0, "is running!");
 			robotInit();
@@ -225,10 +227,10 @@ task auton(){//main task
 			wait1Msec(800);
 			motor[ldt1] = motor[ldt2] = 0;
 			motor[rdt1] = motor[rdt2] = 0;
-			moveForwards(14);
+			moveForwards(15);
 			motor[ldt1] = motor[ldt2] = C_motorPower;
 			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(420);
+			wait1Msec(300);
 			motor[ldt1] = motor[ldt2] = 0;
 			motor[rdt1] = motor[rdt2] = 0;
 			run4BUpFor(100, 90);
@@ -237,12 +239,64 @@ task auton(){//main task
 
 			break;
 		case 1:
+			clearLCDLine(0);
+			clearLCDLine(1);
 			displayLCDString(0,0, secondAutonString);
 			displayLCDString(1,0, "is running!");
-			turnLeft(20);
-			turnRight(20);
+			robotInit();
+			//Cone 1
+			mgmForwards(48);
+			raiseMGM();
+			wait1Msec(150);
+			outtake(300); //Cone 1/Preload
+			motor[ldt1] = motor[ldt2] = 40;
+			motor[rdt1] = motor[rdt2] = 40;
+			wait1Msec(120);
+			motor[ldt1] = motor[ldt2] = 0;
+			motor[rdt1] = motor[rdt2] = 0;
+			//Cone 2
+			motor[claw]=127; //intake
+			runDR4BDownFor(200, 100);
+			motor[ldr4b]=-30;
+			motor[rdr4b]=30;
+			run4BDownFor(550, 127);
+			wait1Msec(100);
+			run4BUpFor(750, 127);
+			outtake(300);
+			//Cone 3
+			motor[claw]=127; //intake
+			run4BDownFor(150, 127);
+			moveForwards(5);
+			runDR4BDownFor(100,50);
+			run4BDownFor(500, 127);
+			wait1Msec(100);
+			run4BUpFor(100, 90);
+			runDR4BUpFor(100, 127);
+			run4BUpFor(500, 127);
+			wait1Msec(300);
+			outtake(300);
+			//place mgm
+			motor[claw]=-127;
+			moveBackwards(52);
+			motor[ldt1] = motor[ldt2] = -C_motorPower;
+			motor[rdt1] = motor[rdt2] = -C_motorPower;
+			wait1Msec(800);
+			motor[ldt1] = motor[ldt2] = 0;
+			motor[rdt1] = motor[rdt2] = 0;
+			moveForwards(15);
+			motor[ldt1] = motor[ldt2] = -C_motorPower;
+			motor[rdt1] = motor[rdt2] = -C_motorPower;
+			wait1Msec(300);
+			motor[ldt1] = motor[ldt2] = 0;
+			motor[rdt1] = motor[rdt2] = 0;
+			run4BUpFor(100, 90);
+			moveForwards(32);
+			moveBackwards(15);
+
 			break;
 		case 2: //stationary
+			clearLCDLine(0);
+			clearLCDLine(1);
 			displayLCDString(0,0, thirdAutonString);
 			displayLCDString(1,0, "is running!");
 			motor[claw]=50;
@@ -251,21 +305,19 @@ task auton(){//main task
 			wait1Msec(300);
 			motor[ldr4b]=10;
 			motor[rdr4b]=-10;
-			moveForwards(7);
+			moveForwards(4);
 			wait1Msec(300);
-			run4BDownFor(100,20);
+			run4BDownFor(150,60);
 			wait1Msec(400);
 			outtake(300);
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
-			/*wait1Msec(1000);
-			motor[ldr4b] = motor[rdr4b] = 0;
-			motor[claw] = -100;
-			wait1Msec(2000);
-			motor[claw] = 0;
-			moveBackwards(7);
-			break;*/
+			run4BUpFor(150, 70);
+			moveBackwards(2);
+			break;
 		case 3:
+		clearLCDLine(0);
+		clearLCDLine(1);
 			displayLCDString(0,0, fourthAutonString);
 			displayLCDString(1,0, "is running!");
 			break;
