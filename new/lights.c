@@ -35,6 +35,29 @@ void setStripColor(int length, int brightness, int r, int g, int b){
 	}
 	endTransmission();
 }
+void slowChange(int length, int brightness, int r, int g, int b){
+	startTransmission();
+	for(int i = 0; i < length; i++){
+		sendLEDFrame(brightness, r, g, b);
+		wait1Msec(25);
+	}
+	endTransmission();
+}
+task slowFade(){
+	slowChange(120, 31, 255, 0, 0);
+	slowChange(120, 31, 255, 127, 0);
+	slowChange(120, 31, 255, 255, 0);
+	slowChange(120, 31, 127, 255, 0);
+	slowChange(120, 31, 0, 255, 0);
+	slowChange(120, 31, 0, 255, 127);
+	slowChange(120, 31, 0, 255, 255);
+	slowChange(120, 31, 0, 127, 255);
+	slowChange(120, 31, 0, 0, 255);
+	slowChange(120, 31, 127, 0, 255);
+	slowChange(120, 31, 255, 0, 255);
+	slowChange(120, 31, 255, 0, 127);
+	startTask(slowFade);
+}
 //Roy G Biv fade down strip
 task fadeColors(){
 	int r = 255;
@@ -86,27 +109,18 @@ task fadeColors(){
 task sendRainbowDownStrip(){
 	setStripColor(120,31,255,255,255);
 	startTransmission();
-	int loopNum = 0;
-	while(loopNum < 114){
+	sendLEDFrame(31,255,0,0);
+	sendLEDFrame(31,255,128,0);
+	sendLEDFrame(31,255,255,0);
+	sendLEDFrame(31,0,255,0);
+	sendLEDFrame(31,0,0,255);
+	sendLEDFrame(31,255,0,255);
+	endTransmission();
+	for(int i = 0; i < 114; ++i){
 		startTransmission();
-		for(int i = loopNum; i < 114; i++){
-			sendLEDFrame(31,255,255,255);
-		}
-		wait1Msec(5);
-		sendLEDFrame(31,255,0,0);
-		sendLEDFrame(31,255,128,0);
-		sendLEDFrame(31,255,255,0);
-		sendLEDFrame(31,0,255,0);
-		sendLEDFrame(31,0,0,255);
-		sendLEDFrame(31,255,0,255);
-		wait1Msec(5);
-		for(int i = 114 - loopNum; i >= 0; i++){
-			sendLEDFrame(31,255,255,255);
-		}
-		loopNum++;
+		sendLEDFrame(31,255,255,255);
 		endTransmission();
 	}
-	endTransmission();
 	/*if(!sendRainbowDownStripButton){
 		wait1Msec(100);
 		if(!sendRainbowDownStripButton){
