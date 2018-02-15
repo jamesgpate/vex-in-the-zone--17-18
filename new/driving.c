@@ -131,6 +131,7 @@ void dr4b(){
 }
 task drive(){
 	startTask(slowFade);
+	stopTask(auton);
 	while(true){
 		dr4bEncAvg = (SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2;
 		long sysTime = nSysTime;

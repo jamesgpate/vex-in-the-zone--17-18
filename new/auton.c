@@ -185,7 +185,7 @@ task auton(){//main task
 		case 0:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, firstAutonString);
+			displayLCDString(0,0, firstAutonString); //Left Mgm
 			displayLCDString(1,0, "is running!");
 			robotInit();
 			//Cone 1
@@ -236,16 +236,15 @@ task auton(){//main task
 			run4BUpFor(100, 90);
 			moveForwards(32);
 			moveBackwards(15);
-
 			break;
 		case 1:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, secondAutonString);
+			displayLCDString(0,0, secondAutonString);//Right Mgm
 			displayLCDString(1,0, "is running!");
 			robotInit();
 			//Cone 1
-			mgmForwards(48);
+			mgmForwards(46.5);
 			raiseMGM();
 			wait1Msec(150);
 			outtake(300); //Cone 1/Preload
@@ -255,6 +254,7 @@ task auton(){//main task
 			motor[ldt1] = motor[ldt2] = 0;
 			motor[rdt1] = motor[rdt2] = 0;
 			//Cone 2
+			moveForwards(1);
 			motor[claw]=127; //intake
 			runDR4BDownFor(200, 100);
 			motor[ldr4b]=-30;
@@ -266,7 +266,7 @@ task auton(){//main task
 			//Cone 3
 			motor[claw]=127; //intake
 			run4BDownFor(150, 127);
-			moveForwards(5);
+			moveForwards(3);
 			runDR4BDownFor(100,50);
 			run4BDownFor(500, 127);
 			wait1Msec(100);
@@ -276,23 +276,21 @@ task auton(){//main task
 			wait1Msec(300);
 			outtake(300);
 			//place mgm
-			motor[claw]=-127;
-			moveBackwards(52);
-			motor[ldt1] = motor[ldt2] = -C_motorPower;
-			motor[rdt1] = motor[rdt2] = -C_motorPower;
-			wait1Msec(800);
+			moveBackwards(64);
+			motor[ldt1] = motor[ldt2] = C_motorPower;
+			motor[rdt1] = motor[rdt2] = C_motorPower;
+			wait1Msec(300);
 			motor[ldt1] = motor[ldt2] = 0;
 			motor[rdt1] = motor[rdt2] = 0;
-			moveForwards(15);
-			motor[ldt1] = motor[ldt2] = -C_motorPower;
-			motor[rdt1] = motor[rdt2] = -C_motorPower;
+			moveBackwards(12.5);
+			motor[ldt1] = motor[ldt2] = C_motorPower;
+			motor[rdt1] = motor[rdt2] = C_motorPower;
 			wait1Msec(300);
 			motor[ldt1] = motor[ldt2] = 0;
 			motor[rdt1] = motor[rdt2] = 0;
 			run4BUpFor(100, 90);
 			moveForwards(32);
 			moveBackwards(15);
-
 			break;
 		case 2: //stationary
 			clearLCDLine(0);
@@ -316,8 +314,8 @@ task auton(){//main task
 			moveBackwards(2);
 			break;
 		case 3:
-		clearLCDLine(0);
-		clearLCDLine(1);
+			clearLCDLine(0);
+			clearLCDLine(1);
 			displayLCDString(0,0, fourthAutonString);
 			displayLCDString(1,0, "is running!");
 			break;
