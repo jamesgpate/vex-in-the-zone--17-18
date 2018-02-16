@@ -15,7 +15,7 @@
 #pragma config(Motor,  port5,           rdt1,          tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port6,           ldt2,          tmotorVex393_MC29, openLoop)
 #pragma config(Motor,  port7,           claw,          tmotorVex393_MC29, openLoop)
-#pragma config(Motor,  port8,           rdr4b,         tmotorVex393_MC29, openLoop, encoderPort, dgtl7)
+#pragma config(Motor,  port8,           rdr4b,         tmotorVex393_MC29, PIDControl, encoderPort, dgtl7)
 #pragma config(Motor,  port9,           rdt2,          tmotorVex393_MC29, openLoop)
 #pragma config(MotorPidSetting,  port3,  25, 100, 1000, 2, 10,   100, 0, 40)
 #pragma config(MotorPidSetting,  port8,  25, 100, 1000, 2, 10,   100, 0, 40)

@@ -103,25 +103,13 @@ void mobileGoal(bool partnerControl){
 void dr4b(){
 	float lPower, rPower;
 	if(vexRT[Btn6U]){
-		/*while(SensorValue[fourbarPot]>1850 || SensorValue[fourbarPot]<1400 && breaker ==0){
-			int fourbarError = fourbarParallel-SensorValue[fourbarPot];
-			motor[fourbar]=-0.2*fourbarError;
-			motor[claw]=10;
-			if(!vexRT[Btn6U]) breaker=1;
-			}*/
 		lPower=80;
 		rPower=-80;
-		breaker = 0;
+		motor[fourbar]=-20;
 	}else if(vexRT[Btn6D]){
-				/*	while(SensorValue[fourbarPot]>1850 || SensorValue[fourbarPot]<1400 && breaker ==0){
-						int fourbarError = fourbarParallel-SensorValue[fourbarPot];
-						motor[fourbar]=-0.2*fourbarError;
-						motor[claw]=10;
-						if(!vexRT[Btn6D]) breaker=1;
-					}*/
 		lPower=-80;
 		rPower=80;
-		breaker=0;
+		motor[fourbar]=20;
 	}else if(dr4bEncAvg < 5){
 		lPower = -15;
 		rPower = 15;
@@ -156,7 +144,7 @@ task drive(){
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarPot])>1100 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<35){
+				if((SensorValue[fourbarPot])>1000 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<35){
 					motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -172,15 +160,15 @@ task drive(){
 		}
 		//Positioning
 		while(vexRT[Btn7R]){
-			int error = 27-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2); //Match Load Height
-			motor[ldr4b]=6*error;
-			motor[rdr4b]=-6*error;
+			int error = 15-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2); //Match Load Height
+			motor[ldr4b]=4*error;
+			motor[rdr4b]=-4*error;
 			clawMode=1;
 		}
 		while(vexRT[Btn7L]){
 			int error = 1-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2);//Field Height
-			motor[ldr4b]=6*error;
-			motor[rdr4b]=-6*error;
+			motor[ldr4b]=4*error;
+			motor[rdr4b]=-4*error;
 			clawMode=0;
 		}
 		//Changing clawModes
