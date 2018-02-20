@@ -78,7 +78,6 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 void turnRight(int degrees){//this turns the robot to the right *degrees* degrees
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
-
 	motor[ldt1] = motor[ldt2] = C_motorPower;
 	motor[rdt1] = motor[rdt2] = C_motorPower;
 	wait1Msec((15*1000)/(7*degrees));
@@ -86,10 +85,21 @@ void turnRight(int degrees){//this turns the robot to the right *degrees* degree
 	motor[rdt1] = motor[rdt2] = 0;
 }
 void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
-	gyroTurn((float)(-degrees));
 	motor[ldt1] = motor[ldt2] = -C_motorPower;
 	motor[rdt1] = motor[rdt2] = -C_motorPower;
 	wait1Msec((15*1000)/(7*degrees));
+	motor[ldt1] = motor[ldt2] = 0;
+	motor[rdt1] = motor[rdt2] = 0;
+}
+void gyroTurn(int degrees){
+	if(degrees>0){//if turn is clockwise
+		motor[ldt1] = motor[ldt2] = C_motorPower;//motors positive
+		motor[rdt1] = motor[rdt2] = C_motorPower;
+	}else if(degrees<0){//if turn is counterclockwise
+		motor[ldt1] = motor[ldt2] = -C_motorPower;//motors negative
+		motor[rdt1] = motor[rdt2] = -C_motorPower;
+	}
+	if(GyroAngleAbsGet() < abs(degrees) && GyroValidGet()) wait1Msec(5);
 	motor[ldt1] = motor[ldt2] = 0;
 	motor[rdt1] = motor[rdt2] = 0;
 }
@@ -181,6 +191,7 @@ void robotInit(){
 }
 task auton(){//main task
 	getEncValForTurn(1);
+	GyroInit(in2);
 	switch(lcdCount){
 		case 0:
 			clearLCDLine(0);

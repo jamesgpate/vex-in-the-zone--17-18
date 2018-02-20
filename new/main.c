@@ -1,6 +1,5 @@
 #pragma config(Sensor, in1,    fourbarPot,     sensorPotentiometer)
 #pragma config(Sensor, in2,    gyro1,          sensorGyro)
-#pragma config(Sensor, in3,    gyro2,          sensorGyro)
 #pragma config(Sensor, dgtl1,  ldtEnc,         sensorQuadEncoder)
 #pragma config(Sensor, dgtl3,  data,           sensorDigitalOut)
 #pragma config(Sensor, dgtl4,  clock,          sensorDigitalOut)
