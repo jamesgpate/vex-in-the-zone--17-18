@@ -75,6 +75,33 @@ void moveBackwards(int distance){//this moves the robot backwards *distance* inc
 	motor[ldt1]=motor[ldt2]=0;
 	motor[rdt1]=motor[rdt2]=0;
 }
+void mgmLeftForwards(int distance){//this moves the robot forwards *distance* inches while lowering the mgm
+	int encVal = getEncValForDistance(distance);
+	SensorValue[ldtEnc] = 0;
+	SensorValue[rdtEnc] = 0;
+	while(!(SensorValue[rdtEnc]<(-encVal+10) && SensorValue[rdtEnc]>(-encVal-10))){
+		motor[ldt1]=motor[ldt2]=80;
+		motor[rdt1]=motor[rdt2]=-127;
+		motor[mgm]=127;
+	}
+	motor[ldt1]=motor[ldt2]=0;
+	motor[rdt1]=motor[rdt2]=0;
+	motor[mgm]=0;
+}
+
+void mgmRightForwards(int distance){//this moves the robot forwards *distance* inches while lowering the mgm
+	int encVal = getEncValForDistance(distance);
+	SensorValue[ldtEnc] = 0;
+	SensorValue[rdtEnc] = 0;
+	while(!(SensorValue[rdtEnc]<(-encVal+10) && SensorValue[rdtEnc]>(-encVal-10))){
+		motor[ldt1]=motor[ldt2]=127;
+		motor[rdt1]=motor[rdt2]=-80;
+		motor[mgm]=127;
+	}
+	motor[ldt1]=motor[ldt2]=0;
+	motor[rdt1]=motor[rdt2]=0;
+	motor[mgm]=0;
+}
 void turnRight(int degrees){//this turns the robot to the right *degrees* degrees
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
@@ -99,9 +126,9 @@ void gyroTurn(int degrees){
 		motor[ldt1] = motor[ldt2] = -C_motorPower;//motors negative
 		motor[rdt1] = motor[rdt2] = -C_motorPower;
 	}
-	if(GyroAngleAbsGet() < abs(degrees) && GyroValidGet()) wait1Msec(5);
+	/*if(GyroAngleAbsGet() < abs(degrees) && GyroValidGet()) wait1Msec(5);
 	motor[ldt1] = motor[ldt2] = 0;
-	motor[rdt1] = motor[rdt2] = 0;
+	motor[rdt1] = motor[rdt2] = 0;*/
 }
 void lowerMGM(){//lowers mgm
 	motor[mgm] = 127;
@@ -191,26 +218,30 @@ void robotInit(){
 }
 task auton(){//main task
 	getEncValForTurn(1);
-	GyroInit(in2);
+	//GyroInit(in2);
 	switch(lcdCount){
 		case 0:
 			clearLCDLine(0);
 			clearLCDLine(1);
 			displayLCDString(0,0, firstAutonString); //Left Mgm
-			displayLCDString(1,0, "is running!");
+			displayLCDString(1,0, "is lit fam");
 			robotInit();
+			setStripColor(120, 31, 255, 0, 0);
 			//Cone 1
-			mgmForwards(48);
+			mgmLeftForwards(49);
 			raiseMGM();
+			setStripColor(120, 31, 255, 255, 0);
 			wait1Msec(150);
 			outtake(300); //Cone 1/Preload
-			motor[ldt1] = motor[ldt2] = 40;
-			motor[rdt1] = motor[rdt2] = 40;
-			wait1Msec(120);
+			motor[ldt1] = motor[ldt2] = 50;
+			motor[rdt1] = motor[rdt2] = 50;
+			wait1Msec(150);
 			motor[ldt1] = motor[ldt2] = 0;
 			motor[rdt1] = motor[rdt2] = 0;
+			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
+			moveForwards(3);
 			runDR4BDownFor(200, 100);
 			motor[ldr4b]=-30;
 			motor[rdr4b]=30;
@@ -218,11 +249,13 @@ task auton(){//main task
 			wait1Msec(100);
 			run4BUpFor(750, 127);
 			outtake(300);
+			setStripColor(120, 31, 0, 255, 255);
 			//Cone 3
 			motor[claw]=127; //intake
 			run4BDownFor(150, 127);
 			moveForwards(5);
-			runDR4BDownFor(100,50);
+			motor[ldr4b]=-30;
+			motor[rdr4b]=30;
 			run4BDownFor(500, 127);
 			wait1Msec(100);
 			run4BUpFor(100, 90);
@@ -230,6 +263,7 @@ task auton(){//main task
 			run4BUpFor(500, 127);
 			wait1Msec(300);
 			outtake(300);
+			setStripColor(120, 31, 0, 0, 255);
 			//place mgm
 			motor[claw]=-127;
 			moveBackwards(52);
@@ -239,6 +273,7 @@ task auton(){//main task
 			motor[ldt1] = motor[ldt2] = 0;
 			motor[rdt1] = motor[rdt2] = 0;
 			moveForwards(15);
+			setStripColor(120, 31, 0, 0, 255);
 			motor[ldt1] = motor[ldt2] = C_motorPower;
 			motor[rdt1] = motor[rdt2] = C_motorPower;
 			wait1Msec(300);
@@ -247,6 +282,7 @@ task auton(){//main task
 			run4BUpFor(100, 90);
 			moveForwards(32);
 			moveBackwards(15);
+				setStripColor(120, 31, 255, 0, 0);
 			break;
 		case 1:
 			clearLCDLine(0);
@@ -255,7 +291,7 @@ task auton(){//main task
 			displayLCDString(1,0, "is running!");
 			robotInit();
 			//Cone 1
-			mgmForwards(46.5);
+			mgmRightForwards(46.5);
 			raiseMGM();
 			wait1Msec(150);
 			outtake(300); //Cone 1/Preload
@@ -293,7 +329,7 @@ task auton(){//main task
 			wait1Msec(300);
 			motor[ldt1] = motor[ldt2] = 0;
 			motor[rdt1] = motor[rdt2] = 0;
-			moveBackwards(12.5);
+			moveBackwards(11);
 			motor[ldt1] = motor[ldt2] = C_motorPower;
 			motor[rdt1] = motor[rdt2] = C_motorPower;
 			wait1Msec(300);
