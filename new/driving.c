@@ -105,11 +105,11 @@ void dr4b(){
 	if(vexRT[Btn6U]){
 		lPower=80;
 		rPower=-80;
-		motor[fourbar]=-20;
+		//motor[fourbar]=-20;
 	}else if(vexRT[Btn6D]){
 		lPower=-80;
 		rPower=80;
-		motor[fourbar]=20;
+		//motor[fourbar]=20;
 	}else if(dr4bEncAvg < 5){
 		lPower = -15;
 		rPower = 15;
@@ -177,73 +177,6 @@ task drive(){
 		//Changing driveModes
 		if(vexRT[Btn5UXmtr2]) precise = true;
 		if(vexRT[Btn5DXmtr2]) precise = false;
-
-		//Auto Stacking
-		while(vexRT[Btn5U] && autoStackCount==0){
-
-			while(SensorValue[fourbarPot]>fourbarParallel && vexRT[Btn5U]){
-				int fourbarError = fourbarParallel-SensorValue[fourbarPot];
-				motor[fourbar]=-2*fourbarError;
-			}
-
-			while(SensorValue[sound]<coneDistance && vexRT[Btn5U] && autoStackCount==0){
-				motor[ldr4b]=90;
-				motor[rdr4b]=-90;
-			}
-			wait1Msec(250);
-			motor[ldr4b]=0;
-			motor[rdr4b]=0;
-			int i =0;
-			while(SensorValue[fourbarPot]>fourbarTop && vexRT[Btn5U] && autoStackCount==0){
-				int fourbarError = fourbarTop-SensorValue[fourbarPot];
-				motor[fourbar]=-2*fourbarError;
-				if(i>15){
-					motor[ldr4b]=-127;
-					motor[rdr4b]=127;
-				}
-				i++;
-			}
-			wait1Msec(000);
-			motor[ldr4b]=0;
-			motor[rdr4b]=0;
-			motor[claw]=-127;
-			wait1Msec(250);
-			motor[claw]=-80;
-			wait1Msec(125);
-			motor[ldr4b]=127;
-			motor[rdr4b]=-127;
-			wait1Msec(150);
-			motor[ldr4b]=0;
-			motor[rdr4b]=0;
-			motor[claw]=0;
-
-			while(SensorValue[fourbarPot]<fourbarParallel && vexRT[Btn5U]){
-				int fourbarError = fourbarParallel-SensorValue[fourbarPot];
-				motor[fourbar]=-2*fourbarError;
-			}
-
-			while(((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)>1 && vexRT[Btn5U]){
-				int error = 1+(clawMode*19)-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2);
-				motor[ldr4b]=8*error;
-				motor[rdr4b]=-8*error;
-				motor[fourbar]=20;
-			}
-			motor[fourbar]=0;
-			while(SensorValue[fourbarPot]<fourbarBottom && vexRT[Btn5U]){
-				int fourbarError = fourbarBottom-SensorValue[fourbarPot];
-				motor[fourbar]=-2*fourbarError;
-				motor[ldr4b]=-15;
-				motor[rdr4b]=15;
-
-			}
-			autoStackCount=1;
-			motor[claw]=127;
-			motor[ldr4b]=0;
-			motor[rdr4b]=0;
-			while(vexRT[Btn5U])wait1Msec(1);
-		}
-		autoStackCount=0;
-
 		//dr4b - Non-PID version
 		dr4b();
 		//LEDS
@@ -257,41 +190,6 @@ task drive(){
 			colors = false;
 			timed = nSysTime;
 		}
-		//fourbar
-		/*if(vexRT[Ch2]>20){
-			while(vexRT[Ch2]>20&&SensorValue[fourbarPot]>fourbarTop){
-				int fourbarError = fourbarTop-SensorValue[fourbarPot];
-				if(fourbarError>-20)fourbarError=0;
-				if(fourbarError>-40) fourbarError = fourbarError/10;
-				motor[fourbar]=-.5*fourbarError;
-				motor[claw]=10;
-				if(vexRT[Btn5D]) motor[claw]=-127;
-
-			}
-		}
-		if(vexRT[Ch2]<-20 && dr4bEncAvg<10){
-			while(vexRT[Ch2]<-20){
-				int fourbarError = fourbarBottom-SensorValue[fourbarPot];
-				motor[fourbar]=-1.5*fourbarError;
-				motor[claw]=127;
-			}
-		}
-		if(vexRT[Ch2]<-20 && dr4bEncAvg>10){
-				while(vexRT[Ch2]<-20){
-				int fourbarError = fourbarParallel-SensorValue[fourbarPot];
-				motor[fourbar]=-1.5*fourbarError;
-				motor[claw]=10;
-			}
-		}
-		else{
-			if(motor[rdr4b]>15){
-				motor[fourbar]= 30;
-			}
-			if(motor[rdr4b]<-15){
-				motor[fourbar]= -20;
-			}
-			else motor[fourbar]=0;
-		}*/
 		motor[fourbar]=vexRT[Ch2];
 		//displays current battery and backup battery voltage
 		switch(lcdPage){
