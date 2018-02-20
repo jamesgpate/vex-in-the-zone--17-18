@@ -105,15 +105,18 @@ void dr4b(){
 	if(vexRT[Btn6U]){
 		lPower=80;
 		rPower=-80;
-		//motor[fourbar]=-20;
 	}else if(vexRT[Btn6D]){
 		lPower=-80;
 		rPower=80;
-		//motor[fourbar]=20;
 	}else if(dr4bEncAvg < 5){
 		lPower = -15;
 		rPower = 15;
 	}
+	else{
+		lPower = 0;
+		rPower = 0;
+	}
+
 	motor[ldr4b] = lPower;
 	motor[rdr4b] = rPower;
 }
@@ -190,7 +193,7 @@ task drive(){
 			colors = false;
 			timed = nSysTime;
 		}
-		motor[fourbar]=vexRT[Ch2];
+		motor[fourbar]=c2
 		//displays current battery and backup battery voltage
 		switch(lcdPage){
 			case 0:
