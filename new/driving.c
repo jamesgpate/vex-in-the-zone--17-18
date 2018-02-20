@@ -109,6 +109,11 @@ void dr4b(){
 		lPower=-80;
 		rPower=80;
 	}
+	else{
+		lPower = 0;
+		rPower = 0;
+	}
+
 	motor[ldr4b] = lPower;
 	motor[rdr4b] = rPower;
 }
