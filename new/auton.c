@@ -1,7 +1,7 @@
 #include "main.c"
 #include "driving.c"
 #include "lights.c"
-
+#include "gyroLib.c"
 const int enterString[] = {247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246};//this is "�??     Enter    �?�"
 
 const string firstAutonString = "Left Mgm";
@@ -33,11 +33,6 @@ int getEncValForDistance(int inches){//this returns the encoder value for drivet
 int getEncValForTurn(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
 	return degrees*((float)C_rOfRobot/(float)C_rOfWheels);
 }
-
-void gyroTurn( int degrees){
-	//plz setup
-}
-
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
@@ -126,9 +121,9 @@ void gyroTurn(int degrees){
 		motor[ldt1] = motor[ldt2] = -C_motorPower;//motors negative
 		motor[rdt1] = motor[rdt2] = -C_motorPower;
 	}
-	/*if(GyroAngleAbsGet() < abs(degrees) && GyroValidGet()) wait1Msec(5);
+	if(GyroAngleAbsGet() < abs(degrees) && GyroValidGet()) wait1Msec(5);
 	motor[ldt1] = motor[ldt2] = 0;
-	motor[rdt1] = motor[rdt2] = 0;*/
+	motor[rdt1] = motor[rdt2] = 0;
 }
 void lowerMGM(){//lowers mgm
 	motor[mgm] = 127;
@@ -218,7 +213,7 @@ void robotInit(){
 }
 task auton(){//main task
 	getEncValForTurn(1);
-	//GyroInit(in2);
+	GyroInit(in2);
 	switch(lcdCount){
 		case 0:
 			clearLCDLine(0);
