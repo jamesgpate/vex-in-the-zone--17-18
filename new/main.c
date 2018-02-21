@@ -64,7 +64,7 @@ void pre_auton(){//Selects auton program
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
-				lcdCount = 3;
+				lcdCount = 7;
 			}
 			else if(nLCDButtons == rightButton){
 				waitForRelease();
@@ -125,20 +125,97 @@ void pre_auton(){//Selects auton program
 			else if(nLCDButtons == rightButton)
 			{
 				waitForRelease();
-				lcdCount = 0;
+				lcdCount++;
 			}
 			SensorValue[rdr4bEnc]=0;
 			SensorValue[ldr4bEnc]=0;
 			SensorValue[ldtEnc]=0;
 			SensorValue[rdtEnc]=0;
 			break;
-		default:
-			lcdCount = 3;
+		case 4:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, fifthAutonString);
+			displayEnterString(1);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
 			SensorValue[rdr4bEnc]=0;
 			SensorValue[ldr4bEnc]=0;
 			SensorValue[ldtEnc]=0;
 			SensorValue[rdtEnc]=0;
 			break;
+		case 5:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, sixthAutonString);
+			displayEnterString(1);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 6:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, seventhAutonString);
+			displayEnterString(1);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 7:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, eightAutonString);
+			displayEnterString(1);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount=0;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+			default:
+			lcdCount = 2;
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+
 		}
 		SensorValue[ldtEnc]=0;
 		SensorValue[rdtEnc]=0;

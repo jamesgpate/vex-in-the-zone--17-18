@@ -103,15 +103,20 @@ void mobileGoal(bool partnerControl){
 void dr4b(){
 	float lPower, rPower;
 	if(vexRT[Btn6U]){
-		lPower=80;
-		rPower=-80;
-	}else if(vexRT[Btn6D]){
-		lPower=-80;
-		rPower=80;
-	}
+ 		lPower=80;
+ 		rPower=-80;
+		//motor[fourbar]=-20;
+ 	}else if(vexRT[Btn6D]){
+ 		lPower=-80;
+ 		rPower=80;
+		//motor[fourbar]=20;
+ 	}else if(dr4bEncAvg < 5){
+ 		lPower = -15;
+ 		rPower = 15;
+ 	}
 	else{
-		lPower = 0;
-		rPower = 0;
+	lPower = 0;
+	rPower = 0;
 	}
 
 	motor[ldr4b] = lPower;
@@ -144,14 +149,14 @@ task drive(){
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarPot])>1000 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<35){
+				if((SensorValue[fourbarPot])>900 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<40){
 					motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
 					}																			//Extends the range so that match loads can be easily grabbed
 				}
 				else{
-					motor[claw]=15;
+					motor[claw]=20;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
 					}
@@ -161,8 +166,8 @@ task drive(){
 		//Positioning
 		while(vexRT[Btn7R]){
 			int error = 15-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2); //Match Load Height
-			motor[ldr4b]=4*error;
-			motor[rdr4b]=-4*error;
+			motor[ldr4b]=3*error;
+			motor[rdr4b]=-3*error;
 			clawMode=1;
 		}
 		while(vexRT[Btn7L]){
