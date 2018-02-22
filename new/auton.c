@@ -80,7 +80,7 @@ void mgmLeftForwards(int distance){//this moves the robot forwards *distance* in
 	SensorValue[rdtEnc] = 0;
 	while(!(SensorValue[rdtEnc]<(-encVal+10) && SensorValue[rdtEnc]>(-encVal-10))){
 		motor[ldt1]=motor[ldt2]=80;
-		motor[rdt1]=motor[rdt2]=-127;
+		motor[rdt1]=motor[rdt2]=-120;
 		motor[mgm]=127;
 	}
 	motor[ldt1]=motor[ldt2]=0;
@@ -214,6 +214,21 @@ void robotInit(){
 	wait1Msec(100);
 	motor[mgm]=50;
 }
+void rightAlign(int time, int power){
+			motor[ldt1] = motor[ldt2] = power;
+			motor[rdt1] = motor[rdt2] = power;
+			wait1Msec(time);
+			motor[ldt1] = motor[ldt2] = 0;
+			motor[rdt1] = motor[rdt2] = 0;
+		}
+void leftAlign(int time, int power){
+		motor[ldt1] = motor[ldt2] = -power;
+		motor[rdt1] = motor[rdt2] = -power;
+		wait1Msec(time);
+		motor[ldt1] = motor[ldt2] = 0;
+		motor[rdt1] = motor[rdt2] = 0;
+	}
+
 task auton(){//main task
 	getEncValForTurn(1);
 	//GyroInit(in2);
@@ -229,13 +244,9 @@ task auton(){//main task
 			mgmLeftForwards(50);
 			raiseMGM();
 			setStripColor(120, 31, 255, 255, 0);
-			wait1Msec(150);
+			wait1Msec(200);
 			outtake(300); //Cone 1/Preload
-			motor[ldt1] = motor[ldt2] = 50;
-			motor[rdt1] = motor[rdt2] = 50;
-			wait1Msec(150);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
+			rightAlign(150, 50);
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
@@ -246,7 +257,7 @@ task auton(){//main task
 			run4BDownFor(500, 127);
 			wait1Msec(200);
 			run4BUpFor(700, 90);
-			wait1Msec(200);
+			wait1Msec(250);
 			outtake(300);
 			setStripColor(120, 31, 0, 255, 255);
 			//Cone 3
@@ -266,18 +277,10 @@ task auton(){//main task
 			//place mgm
 			motor[claw]=-127;
 			moveBackwards(54);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(850);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
-			moveForwards(14);
+			rightAlign(850, 100);
+			moveForwards(16);
 			setStripColor(120, 31, 0, 0, 255);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(550);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
+			rightAlign(450, 100);
 			//run4BUpFor(100, 90);
 			moveForwards(33);
 			moveBackwards(15);
@@ -292,7 +295,7 @@ task auton(){//main task
 			//Cone 1
 			mgmRightForwards(46.5);
 			raiseMGM();
-			wait1Msec(150);
+			wait1Msec(200);
 			outtake(300); //Cone 1/Preload
 			motor[ldt1] = motor[ldt2] = 40;
 			motor[rdt1] = motor[rdt2] = 40;
@@ -308,7 +311,7 @@ task auton(){//main task
 			run4BDownFor(550, 127);
 			wait1Msec(100);
 			run4BUpFor(750, 127);
-			wait1Msec(100);
+			wait1Msec(150);
 			outtake(300);
 			//Cone 3
 			motor[claw]=127; //intake
@@ -369,14 +372,13 @@ task auton(){//main task
 			displayLCDString(0,0, fourthAutonString); //preload in the 20 pt zone
 			displayLCDString(1,0, "is  running!");
 			robotInit();
-
 			//Cone 1
 			motor[ldt1] = motor[ldt2] = -30;//realign
 			motor[rdt1] = motor[rdt2] = -30;
 			wait1Msec(80);
 			mgmForwards(46.5);
 			raiseMGM();
-			wait1Msec(150);
+			wait1Msec(200);
 			outtake(300); //Cone 1/Preload
 			/*motor[ldt1] = motor[ldt2] = 40;//realign
 			motor[rdt1] = motor[rdt2] = 40;
@@ -415,7 +417,7 @@ task auton(){//main task
 			mgmLeftForwards(50);
 			raiseMGM();
 			setStripColor(120, 31, 255, 255, 0);
-			wait1Msec(150);
+			wait1Msec(200);
 			outtake(300); //Cone 1/Preload
 			motor[ldt1] = motor[ldt2] = 50;
 			motor[rdt1] = motor[rdt2] = 50;
@@ -432,7 +434,7 @@ task auton(){//main task
 			run4BDownFor(500, 127);
 			wait1Msec(200);
 			run4BUpFor(700, 90);
-			wait1Msec(200);
+			wait1Msec(250);
 			outtake(300);
 			setStripColor(120, 31, 0, 255, 255);
 			//Cone 3
@@ -457,11 +459,11 @@ task auton(){//main task
 			wait1Msec(800);
 			motor[ldt1] = motor[ldt2] = 0;
 			motor[rdt1] = motor[rdt2] = 0;
-			moveForwards(4);
+			moveForwards(14);
 			setStripColor(120, 31, 0, 0, 255);
 			motor[ldt1] = motor[ldt2] = C_motorPower;
 			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(500);
+			wait1Msec(400);
 			motor[ldt1] = motor[ldt2] = 0;
 			motor[rdt1] = motor[rdt2] = 0;
 			setStripColor(120, 31, 255, 0, 0);
