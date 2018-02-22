@@ -90,7 +90,15 @@ void drivetrain(bool partnerControl){
 }
 void mobileGoal(bool partnerControl){
 	if(partnerControl){
-		if(vexRT[Btn6DXmtr2])motor[mgm] = 127;
+		if(vexRT[Btn6DXmtr2]){
+			while(dr4bEncAvg<10){
+				motor[ldr4b]=30;
+				motor[rdr4b]=-30;
+			}
+			motor[ldr4b]=0;
+			motor[rdr4b]=0;
+			motor[mgm] = 127;
+		}
 		else if(vexRT[Btn6UXmtr2])motor[mgm] = -127;
 		else motor[mgm] = 0;
 	}
@@ -163,38 +171,39 @@ task drive(){
 				}
 				break;
 		}
-		//Positioning
-		while(vexRT[Btn7R]){
-			int error = 15-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2); //Match Load Height
-			motor[ldr4b]=3*error;
-			motor[rdr4b]=-3*error;
-			clawMode=1;
+			//Changing clawModes
+		if(vexRT[Btn7R])clawMode=1;
+		while(vexRT[Btn7L])clawMode=0;
+		//Changing LEDs
+		if(vexRT[Btn8L] && !colors && (nSysTime-timed)>3000){
+			stopTask(purpleWave);
+			startTask(slowFade);
+			colors = true;
+			timed = nSysTime;
 		}
-		while(vexRT[Btn7L]){
-			int error = 1-((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2);//Field Height
-			motor[ldr4b]=4*error;
-			motor[rdr4b]=-4*error;
-			clawMode=0;
+		if(vexRT[Btn8L] && colors && (nSysTime-timed)>3000){
+			stopTask(purpleWave);
+			stopTask(slowFade);
+			colors = false;
+			timed = nSysTime;
 		}
-		//Changing clawModes
-		if(vexRT[Btn8L])	moveForwards(32); //clawMode = 0;
-		if(vexRT[Btn8R])	moveBackwards(12); //clawMode = 1;
+		if(vexRT[Btn8R] && !colors && (nSysTime-timed)>3000){
+			stopTask(slowFade);
+			startTask(purpleWave);
+			colors = true;
+			timed = nSysTime;
+		}
+		if(vexRT[Btn8R] && colors && (nSysTime-timed)>3000){
+			stopTask(slowFade);
+			stopTask(purpleWave);
+			colors = false;
+			timed = nSysTime;
+		}
 		//Changing driveModes
 		if(vexRT[Btn5UXmtr2]) precise = true;
 		if(vexRT[Btn5DXmtr2]) precise = false;
 		//dr4b - Non-PID version
 		dr4b();
-		//LEDS
-		if(vexRT[Btn7D] && !colors && (nSysTime-timed)>3000 && !lcdPartnerControl){
-			startTask(slowFade);
-			colors = true;
-			timed = nSysTime;
-		}
-		if(vexRT[Btn7D] && colors && (nSysTime-timed)>3000 && !lcdPartnerControl){
-			stopTask(slowFade);
-			colors = false;
-			timed = nSysTime;
-		}
 		motor[fourbar]=c2;
 		//displays current battery and backup battery voltage
 		switch(lcdPage){
@@ -219,32 +228,32 @@ task drive(){
 				clearLCDLine(0);
 				clearLCDLine(1);
 				displayLCDString(0,0,"Left DT: ");
-				displayLCDNumber(0,10, SensorValue[ldtEnc]);
+				displayLCDNumber(0,12, SensorValue[ldtEnc]);
 				displayLCDString(1,0,"Right DT: ");
-				displayLCDNumber(1,10, SensorValue[rdtEnc]);
+				displayLCDNumber(1,12, SensorValue[rdtEnc]);
 				break;
 			case 3:
 				clearLCDLine(0);
 				clearLCDLine(1);
 				displayLCDString(0,0,"Left DR4B: ");
-				displayLCDNumber(0,10, SensorValue[ldr4bEnc]);
+				displayLCDNumber(0,12, SensorValue[ldr4bEnc]);
 				displayLCDString(1,0,"Right DR4B: ");
-				displayLCDNumber(1,10, SensorValue[rdr4bEnc]);
+				displayLCDNumber(1,12, SensorValue[rdr4bEnc]);
 				break;
 			case 4:
 				clearLCDLine(0);
 				clearLCDLine(1);
 				displayLCDString(0,0,"Sonar: ");
-				displayLCDNumber(0,10, SensorValue[sound]);
+				displayLCDNumber(0,12, SensorValue[sound]);
 				displayLCDString(1,0,"4bar Pot: ");
-				displayLCDNumber(1,10, SensorValue[fourbarPot]);
+				displayLCDNumber(1,12, SensorValue[fourbarPot]);
 				break;
 		}
-		if(nLCDButtons == leftButton){
+		if(nLCDButtons == leftButton && (nSysTime-partner)>1000){
 			wait1Msec(50);
 			if(lcdPage == 0) lcdPage = 4;
 			else lcdPage--;
-		}else if(nLCDButtons == rightButton){
+		}else if(nLCDButtons == rightButton && (nSysTime-partner)>1000){
 			wait1Msec(50);
 			if(lcdPage == 4) lcdPage = 0;
 			else lcdPage++;

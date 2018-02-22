@@ -1,7 +1,7 @@
 #include "main.c"
 #include "driving.c"
 #include "lights.c"
-
+#include "gyroLib.c"
 const int enterString[] = {247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246};//this is "�??     Enter    �?�"
 
 const string firstAutonString = "Left 3 20";
@@ -37,11 +37,6 @@ int getEncValForDistance(int inches){//this returns the encoder value for drivet
 int getEncValForTurn(int degrees){//this returns how many times an encoder on the drivetrain needs to turn in relation to how far the robot needs to turn
 	return degrees*((float)C_rOfRobot/(float)C_rOfWheels);
 }
-
-void gyroTurn( int degrees){
-	//plz setup
-}
-
 void moveForwards(int distance){//this moves the robot forwards *distance* inches
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;
@@ -54,7 +49,18 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	motor[ldt1]=motor[ldt2]=0;
 	motor[rdt1]=motor[rdt2]=0;
 }
-
+void gyroTurn(int degrees){
+	if(degrees>0){//if turn is clockwise
+		motor[ldt1] = motor[ldt2] = C_motorPower;//motors positive
+		motor[rdt1] = motor[rdt2] = C_motorPower;
+	}else if(degrees<0){//if turn is counterclockwise
+		motor[ldt1] = motor[ldt2] = -C_motorPower;//motors negative
+		motor[rdt1] = motor[rdt2] = -C_motorPower;
+	}
+	if(GyroAngleAbsGet() < abs(degrees) && GyroValidGet()) wait1Msec(5);
+		motor[ldt1] = motor[ldt2] = 0;
+		motor[rdt1] = motor[rdt2] = 0;
+}
 void mgmForwards(int distance){//this moves the robot forwards *distance* inches while lowering the mgm
 	int encVal = getEncValForDistance(distance);
 	SensorValue[ldtEnc] = 0;

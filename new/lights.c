@@ -58,6 +58,16 @@ task slowFade(){
 	slowChange(120, 31, 255, 0, 127);
 	startTask(slowFade);
 }
+task purpleWave(){
+	while(true){
+		int x = 0;
+		int brightness=31*sinDegrees(x);
+		setStripColor(120, brightness,148, 0, 211);
+		x++;
+		wait1Msec(25);
+	}
+}
+
 //Roy G Biv fade down strip
 task fadeColors(){
 	int r = 255;

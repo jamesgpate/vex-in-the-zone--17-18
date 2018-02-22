@@ -54,6 +54,7 @@ void pre_auton(){//Selects auton program
 	playTone(440,10);
 	wait1Msec(100);
 	playTone(660,10);
+	setStripColor(120,31,255,255,255);
 	while(nLCDButtons != centerButton){
 		switch(lcdCount){
 		case 0:
@@ -61,6 +62,7 @@ void pre_auton(){//Selects auton program
 			clearLCDLine(1);
 			displayLCDString(0,0, firstAutonString);
 			displayEnterString(1);
+			setStripColor(120,31,255,0,0);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -78,6 +80,7 @@ void pre_auton(){//Selects auton program
 			clearLCDLine(1);
 			displayLCDString(0,0, secondAutonString);
 			displayEnterString(1);
+			setStripColor(120,31,255,127,0);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -97,6 +100,7 @@ void pre_auton(){//Selects auton program
 			clearLCDLine(1);
 			displayLCDString(0,0, thirdAutonString);
 			displayEnterString(1);
+			setStripColor(120,31,255,255,0);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -116,6 +120,7 @@ void pre_auton(){//Selects auton program
 			clearLCDLine(1);
 			displayLCDString(0,0, fourthAutonString);
 			displayEnterString(1);
+			setStripColor(120,31,0,255,0);
 			waitForPress();
 			if(nLCDButtons == leftButton)
 			{
@@ -156,6 +161,7 @@ void pre_auton(){//Selects auton program
 			clearLCDLine(1);
 			displayLCDString(0,0, sixthAutonString);
 			displayEnterString(1);
+			setStripColor(120,31,0,0,255);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -175,6 +181,7 @@ void pre_auton(){//Selects auton program
 			clearLCDLine(1);
 			displayLCDString(0,0, seventhAutonString);
 			displayEnterString(1);
+			setStripColor(120,31,127,0,255);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -194,6 +201,7 @@ void pre_auton(){//Selects auton program
 			clearLCDLine(1);
 			displayLCDString(0,0, eightAutonString);
 			displayEnterString(1);
+			setStripColor(120,31,255,0,255);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -208,7 +216,7 @@ void pre_auton(){//Selects auton program
 			SensorValue[ldtEnc]=0;
 			SensorValue[rdtEnc]=0;
 			break;
-			default:
+		default:
 			lcdCount = 2;
 			SensorValue[rdr4bEnc]=0;
 			SensorValue[ldr4bEnc]=0;
