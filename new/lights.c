@@ -59,11 +59,11 @@ task slowFade(){
 	startTask(slowFade);
 }
 task purpleWave(){
+	float x = 0;
 	while(true){
-		float x = 0;
 		int brightness = (int)(31*sinDegrees(x));
 		setStripColor(120, brightness,148, 0, 211);
-		x++;
+		x=x+1;
 		wait1Msec(100);
 		if(x==1000000000)x=0;
 	}

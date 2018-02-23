@@ -9,16 +9,16 @@ const string secondAutonString = "Right 3 20";
 const string thirdAutonString = "Stationary Goal";
 const string fourthAutonString = "Left 1 20";
 const string fifthAutonString = "Left 3 10";
-const string sixthAutonString = "Left 1 20";
+const string sixthAutonString = "Right 1 20";
 const string seventhAutonString = "Left 2 20";
-const string eightAutonString = "Left 3 5";
+const string eightAutonString = "Nothing";
 
 int lcdCount = 0;
 
 const int C_rOfWheels = 2;
 const int C_rOfRobot = 13;
 const float C_PI = 3.1415926;
-const int C_motorPower = 127;
+const int C_motorPower = 120;
 const float C_dr4bconstant = 2.5;
 
 //for left encoder, forwards is pos, backwards is neg
@@ -128,6 +128,21 @@ void turnLeft(int degrees){//this turns the robot to the left *degrees* degrees
 	motor[ldt1] = motor[ldt2] = 0;
 	motor[rdt1] = motor[rdt2] = 0;
 }
+void rightAlign(int time, int power){
+		motor[ldt1] = motor[ldt2] = power;
+		motor[rdt1] = motor[rdt2] = power;
+		wait1Msec(time);
+		motor[ldt1] = motor[ldt2] = 0;
+		motor[rdt1] = motor[rdt2] = 0;
+}
+void leftAlign(int time, int power){
+		motor[ldt1] = motor[ldt2] = -power;
+		motor[rdt1] = motor[rdt2] = -power;
+		wait1Msec(time);
+		motor[ldt1] = motor[ldt2] = 0;
+		motor[rdt1] = motor[rdt2] = 0;
+}
+
 void lowerMGM(){//lowers mgm
 	motor[mgm] = 127;
 	wait1Msec(1200);
@@ -138,6 +153,7 @@ void raiseMGM(){//raises mgm
 	wait1Msec(800);
 	motor[mgm] = 0;
 }
+
 void rotateDr4bUpTo(float distance){//rotates double reverse fourbar up to *distance* height
 	int encVal = abs(distance*C_dr4bconstant);
 	SensorValue[rdr4bEnc]=0;
@@ -160,25 +176,6 @@ void rotateDr4bDownTo(float distance){//rotates double reverse fourbar down to *
 	}
 	motor[ldr4b] = motor[rdr4b] = 0;
 }
-void intake(){//intakes the cone
-	motor[claw] = 127;
-}
-void outtake(int time){ //shoots out the code
-	motor[claw] = -127;
-	wait1Msec(time);
-	motor[claw] = 0;
-}
-void rotateFourbarTo(int position){
-	if(SensorValue[fourbarPot]<position){//if the current position is less than desired
-		motor[fourbar] = -C_motorPower;
-		while(SensorValue[fourbarPot]<position) wait1Msec(5);
-		motor[fourbar] = 0;
-	}else if(SensorValue[fourbarPot]>position){//if the current position is greater than desired
-		motor[fourbar] = C_motorPower;
-		while(SensorValue[fourbarPot]>position) wait1Msec(5);
-		motor[fourbar] = 0;
-	}
-}
 void runDR4BUpFor(int time, int power){
 	motor[ldr4b]=power;
 	motor[rdr4b]=-power;
@@ -194,6 +191,38 @@ void runDR4BDownFor(int time, int power){
 	motor[ldr4b]=0;
 	motor[rdr4b]=0;
 }
+
+void intake(){//intakes the cone
+	motor[claw] = 127;
+}
+void outtake(int time){ //shoots out the code
+	motor[claw] = -127;
+	wait1Msec(time);
+	motor[claw] = 0;
+}
+
+void rotateFourbarTo(int position){
+	if(SensorValue[fourbarPot]<position){//if the current position is less than desired
+		motor[fourbar] = -C_motorPower;
+		while(SensorValue[fourbarPot]<position) wait1Msec(5);
+		motor[fourbar] = 0;
+	}else if(SensorValue[fourbarPot]>position){//if the current position is greater than desired
+		motor[fourbar] = C_motorPower;
+		while(SensorValue[fourbarPot]>position) wait1Msec(5);
+		motor[fourbar] = 0;
+	}
+}
+void rotateFourbarTo(int position, int power){
+	if(SensorValue[fourbarPot]<position){//if the current position is less than desired
+		motor[fourbar] = -power;
+		while(SensorValue[fourbarPot]<position) wait1Msec(5);
+		motor[fourbar] = 0;
+	}else if(SensorValue[fourbarPot]>position){//if the current position is greater than desired
+		motor[fourbar] = power;
+		while(SensorValue[fourbarPot]>position) wait1Msec(5);
+		motor[fourbar] = 0;
+	}
+}
 void run4BUpFor(int time, int power){
 	motor[fourbar]=power;
 	wait1Msec(time);
@@ -205,7 +234,13 @@ void run4BDownFor(int time, int power){
 	wait1Msec(time);
 	motor[rdr4b]=0;
 }
-void robotInit(){
+
+void robotInit(const string Auton){
+	clearLCDLine(0);
+	clearLCDLine(1);
+	displayLCDString(0,0, Auton); //Left Mgm
+	displayLCDString(1,0, "is running!");
+
 	motor[claw]=50;
 	run4BUpFor(700, 127);
 	runDR4BUpFor(100, 20);
@@ -214,39 +249,21 @@ void robotInit(){
 	wait1Msec(100);
 	motor[mgm]=50;
 }
-void rightAlign(int time, int power){
-			motor[ldt1] = motor[ldt2] = power;
-			motor[rdt1] = motor[rdt2] = power;
-			wait1Msec(time);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
-		}
-void leftAlign(int time, int power){
-		motor[ldt1] = motor[ldt2] = -power;
-		motor[rdt1] = motor[rdt2] = -power;
-		wait1Msec(time);
-		motor[ldt1] = motor[ldt2] = 0;
-		motor[rdt1] = motor[rdt2] = 0;
-	}
 
 task auton(){//main task
 	getEncValForTurn(1);
 	//GyroInit(in2);
 	switch(lcdCount){
 		case 0:
-			clearLCDLine(0);
-			clearLCDLine(1);
-			displayLCDString(0,0, firstAutonString); //Left Mgm
-			displayLCDString(1,0, "is running!");
-			robotInit();
+			robotInit(firstAutonString);
 			setStripColor(120, 31, 255, 0, 0);
 			//Cone 1
-			mgmLeftForwards(50);
+			mgmLeftForwards(47);
 			raiseMGM();
 			setStripColor(120, 31, 255, 255, 0);
 			wait1Msec(200);
-			outtake(300); //Cone 1/Preload
-			rightAlign(150, 50);
+			outtake(300);
+			rightAlign(175, 50);
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
@@ -277,78 +294,69 @@ task auton(){//main task
 			//place mgm
 			motor[claw]=-127;
 			moveBackwards(54);
-			rightAlign(850, 100);
+			rightAlign(850, C_motorPower);
 			moveForwards(16);
 			setStripColor(120, 31, 0, 0, 255);
-			rightAlign(450, 100);
+			rightAlign(450, C_motorPower);
 			//run4BUpFor(100, 90);
-			moveForwards(33);
+			mgmForwards(25);
 			moveBackwards(15);
 			setStripColor(120, 31, 255, 0, 0);
 			break;
 		case 1:
-			clearLCDLine(0);
-			clearLCDLine(1);
-			displayLCDString(0,0, secondAutonString);//Right Mgm
-			displayLCDString(1,0, "is running!");
-			robotInit();
+			robotInit(secondAutonString);
+			setStripColor(120, 31, 255, 0, 0);
 			//Cone 1
-			mgmRightForwards(46.5);
+			mgmForwards(46);
 			raiseMGM();
+			setStripColor(120, 31, 255, 255, 0);
 			wait1Msec(200);
 			outtake(300); //Cone 1/Preload
-			motor[ldt1] = motor[ldt2] = 40;
-			motor[rdt1] = motor[rdt2] = 40;
-			wait1Msec(120);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
+			setStripColor(120, 31, 0, 255, 0);
+			//rightAlign(175, 50);
 			//Cone 2
-			moveForwards(1);
 			motor[claw]=127; //intake
-			runDR4BDownFor(200, 100);
-			motor[ldr4b]=-30;
-			motor[rdr4b]=30;
-			run4BDownFor(550, 127);
-			wait1Msec(100);
-			run4BUpFor(750, 127);
-			wait1Msec(150);
+			moveForwards(1);
+			//runDR4BDownFor(200, 100);
+			motor[ldr4b]=-20;
+			motor[rdr4b]=20;
+			run4BDownFor(500, 127);
+			wait1Msec(200);
+			run4BUpFor(700, 90);
+			wait1Msec(250);
 			outtake(300);
+			setStripColor(120, 31, 0, 255, 255);
 			//Cone 3
 			motor[claw]=127; //intake
 			run4BDownFor(150, 127);
-			moveForwards(3);
-			runDR4BDownFor(100,50);
+			moveForwards(4);
+			motor[ldr4b]=-30;
+			motor[rdr4b]=30;
 			run4BDownFor(500, 127);
-			wait1Msec(200);
+			wait1Msec(100);
 			run4BUpFor(100, 90);
 			runDR4BUpFor(100, 127);
 			run4BUpFor(500, 127);
 			wait1Msec(300);
 			outtake(300);
+			setStripColor(120, 31, 0, 0, 255);
 			//place mgm
-			moveBackwards(62);
-			wait1Msec(200);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(300);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
-			moveBackwards(8);
-			wait1Msec(200);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(350);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
-			motor[claw] = 0;
-			run4BUpFor(50, 90);
-			moveForwards(32);
+			motor[claw]=0;
+			moveBackwards(65);
+			leftAlign(800, C_motorPower);
+			moveForwards(9.5);
+			setStripColor(120, 31, 0, 0, 255);
+			leftAlign(450,C_motorPower);
+			//run4BUpFor(100, 90);
+			moveForwards(10);
+			mgmForwards(20);
 			moveBackwards(15);
+			setStripColor(120, 31, 255, 0, 0);
 			break;
-		case 2: //stationary
+		case 2:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, thirdAutonString);
+			displayLCDString(0,0, thirdAutonString);//stationary
 			displayLCDString(1,0, "is running!");
 			motor[claw]=50;
 			run4BUpFor(700, 127);
@@ -367,11 +375,7 @@ task auton(){//main task
 			moveBackwards(2);
 			break;
 		case 3:
-			clearLCDLine(0);
-			clearLCDLine(1);
-			displayLCDString(0,0, fourthAutonString); //preload in the 20 pt zone
-			displayLCDString(1,0, "is  running!");
-			robotInit();
+			robotInit(fourthAutonString);
 			//Cone 1
 			motor[ldt1] = motor[ldt2] = -30;//realign
 			motor[rdt1] = motor[rdt2] = -30;
@@ -380,26 +384,13 @@ task auton(){//main task
 			raiseMGM();
 			wait1Msec(200);
 			outtake(300); //Cone 1/Preload
-			/*motor[ldt1] = motor[ldt2] = 40;//realign
-			motor[rdt1] = motor[rdt2] = 40;
-			wait1Msec(120);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;*/
 			//place mgm
 			moveBackwards(44);
 			wait1Msec(200);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(800);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
+			rightAlign(800, C_motorPower);
 			wait1Msec(200);
 			moveForwards(11);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(420);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
+			rightAlign(420, C_motorPower);
 			motor[claw] = 0;
 			wait1Msec(200);
 			//run4BUpFor(50, 90);
@@ -407,23 +398,15 @@ task auton(){//main task
 			moveBackwards(15);
 			break;
 		case 4:
-			clearLCDLine(0);
-			clearLCDLine(1);
-			displayLCDString(0,0, fifthAutonString); //Left Mgm 3 cones in the 10 pt zone
-			displayLCDString(1,0, "is  running!");
-			robotInit();
+			robotInit(fifthAutonString);
 			setStripColor(120, 31, 255, 0, 0);
 			//Cone 1
-			mgmLeftForwards(50);
+			mgmLeftForwards(46);
 			raiseMGM();
 			setStripColor(120, 31, 255, 255, 0);
 			wait1Msec(200);
 			outtake(300); //Cone 1/Preload
-			motor[ldt1] = motor[ldt2] = 50;
-			motor[rdt1] = motor[rdt2] = 50;
-			wait1Msec(150);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
+			rightAlign(170, 49);
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
@@ -451,21 +434,13 @@ task auton(){//main task
 			wait1Msec(300);
 			outtake(300);
 			setStripColor(120, 31, 0, 0, 255);
+			motor[claw] = 0;
 			//place mgm in 10 pt zone
-			motor[claw]=-127;
 			moveBackwards(54);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(800);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
-			moveForwards(14);
+			rightAlign(800, C_motorPower);
+			moveForwards(10);
 			setStripColor(120, 31, 0, 0, 255);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(400);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
+			rightAlign(400, C_motorPower);
 			setStripColor(120, 31, 255, 0, 0);
 			run4BUpFor(100, 90);
 			mgmForwards(7.5);
@@ -476,70 +451,39 @@ task auton(){//main task
 			raiseMGM();
 			break;
 		case 5:
-			clearLCDLine(0);
-			clearLCDLine(1);
-			displayLCDString(0,0, sixthAutonString);
-			displayLCDString(1,0, "is running!");
-			robotInit();
-			setStripColor(120, 31, 255, 0, 0);
+			robotInit(sixthAutonString);
 			//Cone 1
-			mgmLeftForwards(50);
+			mgmForwards(46.5);
 			raiseMGM();
-			setStripColor(120, 31, 255, 255, 0);
-			wait1Msec(150);
+			wait1Msec(200);
 			outtake(300); //Cone 1/Preload
-			motor[ldt1] = motor[ldt2] = 50;
-			motor[rdt1] = motor[rdt2] = 50;
-			wait1Msec(150);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
-			setStripColor(120, 31, 0, 255, 0);
-			motor[claw]=-127;
-			moveBackwards(45);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(850);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
-			moveForwards(14);
-			setStripColor(120, 31, 0, 0, 255);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(450);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
-			//run4BUpFor(100, 90);
-			moveForwards(33);
+			//place mgm
+			moveBackwards(44);
+			wait1Msec(200);
+			leftAlign(800, C_motorPower);
+			wait1Msec(200);
+			moveForwards(11);
+			leftAlign(420, C_motorPower);
+			motor[claw] = 0;
+			wait1Msec(200);
+			//run4BUpFor(50, 90);
+			moveForwards(32);
 			moveBackwards(15);
-			setStripColor(120, 31, 255, 0, 0);
 			break;
 		case 6:
-			clearLCDLine(0);
-			clearLCDLine(1);
-			displayLCDString(0,0, seventhAutonString);
-			displayLCDString(1,0, "is running!");
-				clearLCDLine(0);
-			clearLCDLine(1);
-			displayLCDString(0,0, firstAutonString); //Left Mgm
-			displayLCDString(1,0, "is running!");
-			robotInit();
+			robotInit(seventhAutonString);
 			setStripColor(120, 31, 255, 0, 0);
 			//Cone 1
-			mgmLeftForwards(50);
+			mgmLeftForwards(47);
 			raiseMGM();
 			setStripColor(120, 31, 255, 255, 0);
 			wait1Msec(150);
 			outtake(300); //Cone 1/Preload
-			motor[ldt1] = motor[ldt2] = 50;
-			motor[rdt1] = motor[rdt2] = 50;
-			wait1Msec(150);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
+			rightAlign(175, 50);
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
 			moveForwards(1);
-			//runDR4BDownFor(200, 100);
 			motor[ldr4b]=-20;
 			motor[rdr4b]=20;
 			run4BDownFor(500, 127);
@@ -550,93 +494,19 @@ task auton(){//main task
 			setStripColor(120, 31, 0, 255, 255);
 			motor[claw]=-127;
 			moveBackwards(45);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(850);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
+			rightAlign(850, C_motorPower);
 			moveForwards(14);
 			setStripColor(120, 31, 0, 0, 255);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(450);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
-			//run4BUpFor(100, 90);
+			rightAlign(450, C_motorPower);
 			moveForwards(33);
 			moveBackwards(15);
 			setStripColor(120, 31, 255, 0, 0);
 			break;
 		case 7:
-			clearLCDLine(0);
-			clearLCDLine(1);
-			displayLCDString(0,0, eightAutonString);
-			displayLCDString(1,0, "is running!");
-			clearLCDLine(0);
-			clearLCDLine(1);
-			displayLCDString(0,0, firstAutonString); //Left Mgm
-			displayLCDString(1,0, "is running!");
-			robotInit();
-			setStripColor(120, 31, 255, 0, 0);
-			//Cone 1
-			mgmLeftForwards(50);
-			raiseMGM();
-			setStripColor(120, 31, 255, 255, 0);
-			wait1Msec(150);
-			outtake(300); //Cone 1/Preload
-			motor[ldt1] = motor[ldt2] = 50;
-			motor[rdt1] = motor[rdt2] = 50;
-			wait1Msec(150);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
-			setStripColor(120, 31, 0, 255, 0);
-			//Cone 2
-			motor[claw]=127; //intake
-			moveForwards(1);
-			//runDR4BDownFor(200, 100);
-			motor[ldr4b]=-20;
-			motor[rdr4b]=20;
-			run4BDownFor(500, 127);
-			wait1Msec(200);
-			run4BUpFor(700, 90);
-			wait1Msec(200);
-			outtake(300);
-			setStripColor(120, 31, 0, 255, 255);
-			//Cone 3
-			motor[claw]=127; //intake
-			run4BDownFor(150, 127);
-			moveForwards(4);
-			motor[ldr4b]=-30;
-			motor[rdr4b]=30;
-			run4BDownFor(500, 127);
-			wait1Msec(100);
-			run4BUpFor(100, 90);
-			runDR4BUpFor(100, 127);
-			run4BUpFor(500, 127);
-			wait1Msec(300);
-			outtake(300);
-			setStripColor(120, 31, 0, 0, 255);
-			//place mgm
-			motor[claw]=-127;
-			moveBackwards(54);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(850);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
-			moveForwards(14);
-			setStripColor(120, 31, 0, 0, 255);
-			motor[ldt1] = motor[ldt2] = C_motorPower;
-			motor[rdt1] = motor[rdt2] = C_motorPower;
-			wait1Msec(450);
-			motor[ldt1] = motor[ldt2] = 0;
-			motor[rdt1] = motor[rdt2] = 0;
-			//run4BUpFor(100, 90);
-			moveForwards(33);
-			moveBackwards(15);
+			robotInit(eightAutonString);
 			setStripColor(120, 31, 255, 0, 0);
 			break;
-			default:
+		default:
 			break;
 	}
 }

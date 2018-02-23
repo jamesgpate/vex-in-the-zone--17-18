@@ -30,7 +30,7 @@ int clawMode = 0;
 int autoStackCount = 0;
 
 int lcdPage = 0;
-bool lcdPartnerControl = false;
+bool lcdPartnerControl = true;
 int autoStack(int stackCount){
 	//start at parallel dr4b and parallel 4b
 	//pid vars
