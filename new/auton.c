@@ -610,7 +610,7 @@ task auton(){//main task
 			setStripColor(120, 31, 255, 255, 0);
 			wait1Msec(200);
 			outtake(300);
-			leftAlign(175, 50);
+			leftAlign(175, 40);
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
@@ -646,8 +646,7 @@ task auton(){//main task
 			setStripColor(120, 31, 0, 0, 255);
 			leftAlign(450, C_motorPower);
 			//run4BUpFor(100, 90);
-			moveForwards(8);
-			mgmForwards(20);
+			moveForwards(30);
 			setStripColor(120, 31, 255, 0, 0);
 			break;
 		case 10:
