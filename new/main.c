@@ -60,13 +60,13 @@ void pre_auton(){//Selects auton program
 		case 0:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, firstAutonString);
+			displayLCDString(0,0, zerothAutonString);
 			displayEnterString(1);
 			setStripColor(120,31,255,0,0);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
-				lcdCount = 7;
+				lcdCount = 17;
 			}
 			else if(nLCDButtons == rightButton){
 				waitForRelease();
@@ -78,7 +78,7 @@ void pre_auton(){//Selects auton program
 		case 1:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, secondAutonString);
+			displayLCDString(0,0, firstAutonString);
 			displayEnterString(1);
 			setStripColor(120,31,255,127,0);
 			waitForPress();
@@ -98,7 +98,7 @@ void pre_auton(){//Selects auton program
 		case 2:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, thirdAutonString);
+			displayLCDString(0,0, secondAutonString);
 			displayEnterString(1);
 			setStripColor(120,31,255,255,0);
 			waitForPress();
@@ -118,9 +118,9 @@ void pre_auton(){//Selects auton program
 		case 3:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, fourthAutonString);
+			displayLCDString(0,0, thirdAutonString);
 			displayEnterString(1);
-			setStripColor(120,31,0,255,0);
+			setStripColor(120,31,127,255,0);
 			waitForPress();
 			if(nLCDButtons == leftButton)
 			{
@@ -140,8 +140,9 @@ void pre_auton(){//Selects auton program
 		case 4:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, fifthAutonString);
+			displayLCDString(0,0, fourthAutonString);
 			displayEnterString(1);
+			setStripColor(120,31,0,255,0);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -159,9 +160,10 @@ void pre_auton(){//Selects auton program
 		case 5:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, sixthAutonString);
+			displayLCDString(0,0, fifthAutonString);
 			displayEnterString(1);
 			setStripColor(120,31,0,0,255);
+			setStripColor(120,31,0,255,127);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -179,9 +181,9 @@ void pre_auton(){//Selects auton program
 		case 6:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, seventhAutonString);
+			displayLCDString(0,0, sixthAutonString);
 			displayEnterString(1);
-			setStripColor(120,31,127,0,255);
+			setStripColor(120,31,0,255,255);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -199,9 +201,209 @@ void pre_auton(){//Selects auton program
 		case 7:
 			clearLCDLine(0);
 			clearLCDLine(1);
-			displayLCDString(0,0, eightAutonString);
+			displayLCDString(0,0, seventhAutonString);
 			displayEnterString(1);
-			setStripColor(120,31,255,0,255);
+			setStripColor(120,31,0,127,255);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 8:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, eighthAutonString);
+			displayEnterString(1);
+			setStripColor(120,31,0,0,255);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 9:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, ninthAutonString);
+			displayEnterString(1);
+			setStripColor(120,31,255,127,0);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 10:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, tenthAutonString);
+			displayEnterString(1);
+			setStripColor(120,31,255,255,0);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 11:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, eleventhAutonString);
+			displayEnterString(1);
+			setStripColor(120,31,127,255,0);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 12:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, twelfthAutonString);
+			displayEnterString(1);
+			setStripColor(120,31,0,255,0);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 13:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, thirteenthAutonString);
+			displayEnterString(1);
+			setStripColor(120,31,0,255,127);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 14:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, fourteenthAutonString);
+			displayEnterString(1);
+			setStripColor(120,31,0,255,255);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 15:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, fifteenthAutonString);
+			displayEnterString(1);
+			setStripColor(120,31,0,127,255);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 16:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, sixteenthAutonString);
+			displayEnterString(1);
+			setStripColor(120,31,0,0,255);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 17:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, seventeenthAutonString);
+			displayEnterString(1);
+			setStripColor(120,31,255,0,0);
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
@@ -217,7 +419,7 @@ void pre_auton(){//Selects auton program
 			SensorValue[rdtEnc]=0;
 			break;
 		default:
-			lcdCount = 2;
+			lcdCount = 0;
 			SensorValue[rdr4bEnc]=0;
 			SensorValue[ldr4bEnc]=0;
 			SensorValue[ldtEnc]=0;
