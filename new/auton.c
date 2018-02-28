@@ -27,7 +27,7 @@ const string fifteenthAutonString = "blueLeft 1 20";
 const string sixteenthAutonString = "blueLeft 3 10";
 
 const string seventeenthAutonString = "Nothing"; //8
-
+const string eighteenthAutonString = "Gyro Turn Test";
 int lcdCount = 0;
 
 const int C_rOfWheels = 2;
@@ -73,8 +73,8 @@ void gyroTurn(int degrees){
 		motor[rdt1] = motor[rdt2] = -C_motorPower;
 	}
 	if(GyroAngleAbsGet() < abs(degrees) && GyroValidGet()) wait1Msec(5);
-		motor[ldt1] = motor[ldt2] = 0;
-		motor[rdt1] = motor[rdt2] = 0;
+	motor[ldt1] = motor[ldt2] = 0;
+	motor[rdt1] = motor[rdt2] = 0;
 }
 void mgmForwards(int distance){//this moves the robot forwards *distance* inches while lowering the mgm
 	int encVal = getEncValForDistance(distance);
@@ -267,7 +267,7 @@ void robotInit(const string Auton){
 
 task auton(){//main task
 	getEncValForTurn(1);
-	//GyroInit(in2);
+	GyroInit(in2);
 	switch(lcdCount){
 		case 0:
 			clearLCDLine(0);
@@ -450,7 +450,7 @@ task auton(){//main task
 			raiseMGM();
 			break;
 		case 5:
-		robotInit(fifthAutonString);
+			robotInit(fifthAutonString);
 			setStripColor(120, 31, 255, 0, 0);
 			//Cone 1
 			mgmForwards(46);
@@ -920,6 +920,11 @@ task auton(){//main task
 			wait1Msec(2000);
 			motor[ldt1]=motor[ldt2]=0;
 			motor[rdt1]=motor[rdt2]=0;
+			break;
+		case 18:
+			robotInit(eighteenthAutonString);
+			gyroTurn(90);
+			gyroTurn(-90);
 			break;
 		default:
 			break;
