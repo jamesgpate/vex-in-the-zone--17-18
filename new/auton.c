@@ -6,25 +6,25 @@ const int enterString[] = {247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246
 
 const string zerothAutonString = "Stationary Goal"; //3
 
-const string firstAutonString = "blueLeft 3 20"; //1
-const string secondAutonString = "blueLeft 2 20"; //7
-const string thirdAutonString = "blueLeft 1 20"; //4
-const string fourthAutonString = "blueLeft 3 10"; //5
+const string firstAutonString = "redLeft 3 20"; //1
+const string secondAutonString = "redLeft 2 20"; //7
+const string thirdAutonString = "redLeft 1 20"; //4
+const string fourthAutonString = "redLeft 3 10"; //5
 
-const string fifthAutonString = "blueRight 3 20"; //2
-const string sixthAutonString = "blueRight 2 20";
-const string seventhAutonString = "blueRight 1 20"; //6
-const string eighthAutonString = "blueRight 3 10";
+const string fifthAutonString = "redRight 3 20"; //2
+const string sixthAutonString = "redRight 2 20";
+const string seventhAutonString = "redRight 1 20"; //6
+const string eighthAutonString = "redRight 3 10";
 
-const string ninthAutonString = "redRight 3 20";
-const string tenthAutonString = "redRight 2 20";
-const string eleventhAutonString = "redRight 1 20";
-const string twelfthAutonString = "redRight 3 10";
+const string ninthAutonString = "blueRight 3 20";
+const string tenthAutonString = "blueRight 2 20";
+const string eleventhAutonString = "blueRight 1 20";
+const string twelfthAutonString = "blueRight 3 10";
 
-const string thirteenthAutonString = "redLeft 3 20";
-const string fourteenthAutonString = "redLeft 2 20";
-const string fifteenthAutonString = "redLeft 1 20";
-const string sixteenthAutonString = "redLeft 3 10";
+const string thirteenthAutonString = "blueLeft 3 20";
+const string fourteenthAutonString = "blueLeft 2 20";
+const string fifteenthAutonString = "blueLeft 1 20";
+const string sixteenthAutonString = "blueLeft 3 10";
 
 const string seventeenthAutonString = "Nothing"; //8
 
@@ -291,7 +291,7 @@ task auton(){//main task
 			moveBackwards(2);
 			break;
 		case 1:
-		robotInit(firstAutonString);
+			robotInit(firstAutonString);
 			setStripColor(120, 31, 255, 0, 0);
 			//Cone 1
 			mgmLeftForwards(48.5);
@@ -303,7 +303,7 @@ task auton(){//main task
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
-			moveForwards(2);
+			moveForwards(1);
 			//runDR4BDownFor(200, 100);
 			motor[ldr4b]=-20;
 			motor[rdr4b]=20;
@@ -330,13 +330,13 @@ task auton(){//main task
 			//place mgm
 			motor[claw]=-127;
 			moveBackwards(54);
-			rightAlign(850, C_motorPower);
+			rightAlign(825, C_motorPower);
 			moveForwards(16);
 			setStripColor(120, 31, 0, 0, 255);
-			rightAlign(450, C_motorPower);
+			rightAlign(400, C_motorPower);
 			//run4BUpFor(100, 90);
 			moveForwards(8);
-			mgmForwards(20);
+			mgmForwards(22);
 			moveBackwards(15);
 			setStripColor(120, 31, 255, 0, 0);
 			break;
@@ -610,7 +610,7 @@ task auton(){//main task
 			setStripColor(120, 31, 255, 255, 0);
 			wait1Msec(200);
 			outtake(300);
-			leftAlign(175, 40);
+		//	leftAlign(175, 40);
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
@@ -642,9 +642,9 @@ task auton(){//main task
 			motor[claw]=-127;
 			moveBackwards(54);
 			leftAlign(850, C_motorPower);
-			moveForwards(16);
+			moveForwards(18);
 			setStripColor(120, 31, 0, 0, 255);
-			leftAlign(450, C_motorPower);
+			leftAlign(400, C_motorPower);
 			//run4BUpFor(100, 90);
 			moveForwards(30);
 			setStripColor(120, 31, 255, 0, 0);
@@ -658,7 +658,7 @@ task auton(){//main task
 			setStripColor(120, 31, 255, 255, 0);
 			wait1Msec(150);
 			outtake(300); //Cone 1/Preload
-			leftAlign(175, 50);
+			//leftAlign(175, 50);
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
@@ -674,9 +674,9 @@ task auton(){//main task
 			motor[claw]=-127;
 			moveBackwards(45);
 			leftAlign(850, C_motorPower);
-			moveForwards(14);
+			moveForwards(16);
 			setStripColor(120, 31, 0, 0, 255);
-			leftAlign(450, C_motorPower);
+			leftAlign(400, C_motorPower);
 			moveForwards(8);
 			mgmForwards(20);
 			moveBackwards(15);
@@ -688,12 +688,12 @@ task auton(){//main task
 			motor[ldt1] = motor[ldt2] = 30;//realign
 			motor[rdt1] = motor[rdt2] = 30;
 			wait1Msec(80);
-			mgmForwards(48.5);
+			mgmForwards(50);
 			raiseMGM();
 			wait1Msec(200);
 			outtake(300); //Cone 1/Preload
 			//place mgm
-			moveBackwards(44);
+			moveBackwards(47);
 			wait1Msec(200);
 			leftAlign(800, C_motorPower);
 			wait1Msec(200);
@@ -715,7 +715,7 @@ task auton(){//main task
 			setStripColor(120, 31, 255, 255, 0);
 			wait1Msec(200);
 			outtake(300); //Cone 1/Preload
-			leftAlign(170, 49);
+			//leftAlign(170, 49);
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
@@ -804,7 +804,7 @@ task auton(){//main task
 			rightAlign(450,C_motorPower);
 			//run4BUpFor(100, 90);
 			moveForwards(10);
-			mgmForwards(20);
+			mgmForwards(22);
 			moveBackwards(15);
 			setStripColor(120, 31, 255, 0, 0);
 			break;
@@ -924,4 +924,5 @@ task auton(){//main task
 		default:
 			break;
 	}
+	wait1Msec(5000);
 }

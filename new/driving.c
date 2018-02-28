@@ -85,18 +85,11 @@ void drivetrain(bool partnerControl){
 			motor[rdt1] = -c2Partner/2;
 			motor[rdt2] = -c2Partner/2;
 		}
-
 	}
 }
 void mobileGoal(bool partnerControl){
 	if(partnerControl){
 		if(vexRT[Btn6DXmtr2]){
-			while(dr4bEncAvg<10){
-				motor[ldr4b]=30;
-				motor[rdr4b]=-30;
-			}
-			motor[ldr4b]=0;
-			motor[rdr4b]=0;
 			motor[mgm] = 127;
 		}
 		else if(vexRT[Btn6UXmtr2])motor[mgm] = -127;
@@ -157,7 +150,7 @@ task drive(){
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarPot])>900 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<40){
+				if((SensorValue[fourbarPot])>900 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<60){
 					motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -258,14 +251,14 @@ task drive(){
 			if(lcdPage == 4) lcdPage = 0;
 			else lcdPage++;
 		}
-		if(nLCDButtons == centerButton && (nSysTime-partner)>1000) {
+		/*if(nLCDButtons == centerButton && (nSysTime-partner)>1000) {
 			wait1Msec(50);
 			lcdPartnerControl = !lcdPartnerControl;
 			partner = nSysTime;
-		}
-		//keep the loop timing consistently 20 ms
+		}*/
+		//keep the loop timing consistently 25 ms
 		int timeDiff = nSysTime - sysTime;
-		wait1Msec(20-timeDiff);
+		wait1Msec(25-timeDiff);
 		EndTimeSlice();
 	}
 }
