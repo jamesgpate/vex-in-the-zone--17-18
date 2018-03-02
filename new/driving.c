@@ -9,9 +9,9 @@ bool precise = false;
 
 int breaker =0;
 
-const int fourbarTop = 630;
-const int fourbarParallel = 1600;
-const int fourbarBottom = 2435;
+const int fourbarTop = 1950;
+const int fourbarParallel = 500;
+const int fourbarBottom = 0;
 
 int dr4bEncAvg = (SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2;
 
@@ -136,7 +136,7 @@ task drive(){
 		//claw
 		switch(clawMode){
 			case 0:
-				if((SensorValue[fourbarPot])>1300 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<20){
+				if((SensorValue[fourbarPot])<1000 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<20){
 					motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
@@ -150,7 +150,7 @@ task drive(){
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarPot])>900 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<60){
+				if((SensorValue[fourbarPot])<1300 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<60){
 					motor[claw]=127;
 					if(vexRT[Btn5D]==1){
 						motor[claw]=-127;
