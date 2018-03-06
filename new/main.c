@@ -33,6 +33,7 @@
 #include "auton.c"
 #include "lights.c"
 #include "gyroLib.c"
+
 void waitForRelease()
 {
 	while(nLCDButtons != 0)
@@ -66,7 +67,7 @@ void pre_auton(){//Selects auton program
 			waitForPress();
 			if(nLCDButtons == leftButton){
 				waitForRelease();
-				lcdCount = 17;
+				lcdCount = 18;
 			}
 			else if(nLCDButtons == rightButton){
 				waitForRelease();
@@ -402,6 +403,26 @@ void pre_auton(){//Selects auton program
 			clearLCDLine(0);
 			clearLCDLine(1);
 			displayLCDString(0,0, seventeenthAutonString);
+			displayEnterString(1);
+			setStripColor(120,31,255,0,0);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount++;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
+		case 18:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, eighteenthAutonString);
 			displayEnterString(1);
 			setStripColor(120,31,255,0,0);
 			waitForPress();

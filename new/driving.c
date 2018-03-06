@@ -163,10 +163,18 @@ task drive(){
 					}
 				}
 				break;
+			case 2:
+				motor[claw]=127;
+				if(vexRT[Btn5D]==1){
+					motor[claw]=-127;
+				}	
+				break;
 		}
 			//Changing clawModes
 		if(vexRT[Btn7R])clawMode=1;
-		while(vexRT[Btn7L])clawMode=0;
+		if(vexRT[Btn7L])clawMode=0;
+		if(vexRT[Btn7U])clawMode=2;
+
 		//Changing LEDs
 		if(vexRT[Btn8L] && !colors && (nSysTime-timed)>3000){
 			stopTask(purpleWave);
