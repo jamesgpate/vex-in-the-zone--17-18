@@ -64,17 +64,22 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	motor[ldt1]=motor[ldt2]=0;
 	motor[rdt1]=motor[rdt2]=0;
 }
-void gyroTurn(int degrees, int direction){
-	int gyroOriginalValue = GyroAngleDegGet();
-	int error = gyroOriginalValue - degrees;
-	while(GyroAngleDegGet()>(degrees-2)||GyroAngleDegGet()<(degrees+2)){
-		error = GyroAngleDegGet() - degrees;
-		if(direction==1){//if turn is clockwise
-			motor[ldt1] = motor[ldt2] = error;//motors positive
-			motor[rdt1] = motor[rdt2] = error;
-		}else if(direction==0){//if turn is counterclockwise
-			motor[ldt1] = motor[ldt2] = -error;//motors negative
-			motor[rdt1] = motor[rdt2] = -error;
+void gyroTurn(int degrees){
+	int error = GyroAngleDegGet() - degrees;
+	while(!GyroValidGet()) wait1Msec(5);
+	error = GyroAngleDegGet() - degrees;
+	if(GyroAngleDegGet)
+	if(direction==1){//if turn is clockwise
+		while(GyroAngleDegGet()>degrees||GyroAngleDegGet()<degrees){
+			error = GyroAngleDegGet() - degrees;
+			motor[ldt1] = motor[ldt2] = error + 10;//motors positive
+			motor[rdt1] = motor[rdt2] = error + 10;
+		}
+	}else if(direction==0){//if turn is counterclockwise
+		while(GyroAngleDegGet()>degrees||GyroAngleDegGet()<degrees){
+			error = GyroAngleDegGet() - degrees;
+			motor[ldt1] = motor[ldt2] = -error - 10;//motors negative
+			motor[rdt1] = motor[rdt2] = -error - 10;
 		}
 	}
 	motor[ldt1] = motor[ldt2] = 0;
@@ -271,7 +276,6 @@ void robotInit(const string Auton){
 
 task auton(){//main task
 	getEncValForTurn(1);
-	GyroInit(in2);
 	switch(lcdCount){
 		case 0:
 			clearLCDLine(0);
@@ -929,7 +933,7 @@ task auton(){//main task
 			//robotInit(eighteenthAutonString);
 			SensorValue[gyro1] = 0;
 			gyroTurn(90,1);
-			gyroTurn(90,0);
+			gyroTurn(0,0);
 			break;
 		default:
 			break;
