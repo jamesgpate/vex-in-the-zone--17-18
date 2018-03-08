@@ -64,23 +64,26 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	motor[ldt1]=motor[ldt2]=0;
 	motor[rdt1]=motor[rdt2]=0;
 }
+float gyroScale(float gyroScale){
+	return GyroAngleAbsGet()*gyroScale;
+}
 void gyroTurn(int degrees){
-	int error;
+	int error, direction;
+	float gyroScaleFloat = 1.4;
 	while(!GyroValidGet()) wait1Msec(5);
-	theGyro.value = 0.0;
-	if(degrees >= 180) direction = 1;
-	if(degrees < 180) direction = 0;
-	if(direction == 1){//if turn is clockwise / degrees larger than 180
-		while(GyroAngleDegGet()<degrees){
-			error = GyroAngleDegGet() - degrees;
-			motor[ldt1] = motor[ldt2] = error + 10;//motors positive
-			motor[rdt1] = motor[rdt2] = error + 10;
+	if(degrees < 0) direction = 1;
+	if(degrees > 0) direction = 0;
+	if(direction == 1){//if turn is clockwise
+		while(gyroScale(gyroScaleFloat)>degrees){//gyro negative
+			error = fabs(gyroScale(gyroScaleFloat)) - abs(degrees);
+			motor[ldt1] = motor[ldt2] = 30;//motors positive
+			motor[rdt1] = motor[rdt2] = 30;
 		}
-	}else if(direction == 0){//if turn is counterclockwise / degrees less than 180
-		while(GyroAngleDegGet()>degrees){
-			error = GyroAngleDegGet() - degrees;
-			motor[ldt1] = motor[ldt2] = -error - 10;//motors negative
-			motor[rdt1] = motor[rdt2] = -error - 10;
+	}else if(direction == 0){//if turn is counterclockwise
+		while(gyroScale(gyroScaleFloat)<degrees){//gyro positive
+			error = -degrees + gyroScale(gyroScaleFloat);
+			motor[ldt1] = motor[ldt2] = -30;//motors negative
+			motor[rdt1] = motor[rdt2] = -30;
 		}
 	}
 	motor[ldt1] = motor[ldt2] = 0;
@@ -932,12 +935,10 @@ task auton(){//main task
 			break;
 		case 18:
 			//robotInit(eighteenthAutonString);
-			SensorValue[gyro1] = 0;
-			gyroTurn(90,1);
-			gyroTurn(0,0);
+			gyroTurn(90);
+			gyroTurn(-90);
 			break;
 		default:
 			break;
 	}
-	wait1Msec(5000);
 }
