@@ -65,18 +65,19 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	motor[rdt1]=motor[rdt2]=0;
 }
 void gyroTurn(int degrees){
-	int error = GyroAngleDegGet() - degrees;
+	int error;
 	while(!GyroValidGet()) wait1Msec(5);
-	error = GyroAngleDegGet() - degrees;
-	if(GyroAngleDegGet)
-	if(direction==1){//if turn is clockwise
-		while(GyroAngleDegGet()>degrees||GyroAngleDegGet()<degrees){
+	theGyro.value = 0.0;
+	if(degrees >= 180) direction = 1;
+	if(degrees < 180) direction = 0;
+	if(direction == 1){//if turn is clockwise / degrees larger than 180
+		while(GyroAngleDegGet()<degrees){
 			error = GyroAngleDegGet() - degrees;
 			motor[ldt1] = motor[ldt2] = error + 10;//motors positive
 			motor[rdt1] = motor[rdt2] = error + 10;
 		}
-	}else if(direction==0){//if turn is counterclockwise
-		while(GyroAngleDegGet()>degrees||GyroAngleDegGet()<degrees){
+	}else if(direction == 0){//if turn is counterclockwise / degrees less than 180
+		while(GyroAngleDegGet()>degrees){
 			error = GyroAngleDegGet() - degrees;
 			motor[ldt1] = motor[ldt2] = -error - 10;//motors negative
 			motor[rdt1] = motor[rdt2] = -error - 10;
