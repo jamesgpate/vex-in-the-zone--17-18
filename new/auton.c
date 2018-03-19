@@ -69,21 +69,22 @@ float gyroScale(float gyroScale){
 }
 void gyroTurn(int degrees){
 	int error, direction;
-	float gyroScaleFloat = 1.4;
+	float gyroScaleFloat = 1.5;
+	wait1Msec(200);
 	while(!GyroValidGet()) wait1Msec(5);
 	if(degrees < 0) direction = 1;
 	if(degrees > 0) direction = 0;
 	if(direction == 1){//if turn is clockwise
 		while(gyroScale(gyroScaleFloat)>degrees){//gyro negative
 			error = fabs(gyroScale(gyroScaleFloat)) - abs(degrees);
-			motor[ldt1] = motor[ldt2] = 30;//motors positive
-			motor[rdt1] = motor[rdt2] = 30;
+			motor[ldt1] = motor[ldt2] = 50;//motors positive
+			motor[rdt1] = motor[rdt2] = 50;
 		}
 	}else if(direction == 0){//if turn is counterclockwise
 		while(gyroScale(gyroScaleFloat)<degrees){//gyro positive
 			error = -degrees + gyroScale(gyroScaleFloat);
-			motor[ldt1] = motor[ldt2] = -30;//motors negative
-			motor[rdt1] = motor[rdt2] = -30;
+			motor[ldt1] = motor[ldt2] = -50;//motors negative
+			motor[rdt1] = motor[rdt2] = -50;
 		}
 	}
 	motor[ldt1] = motor[ldt2] = 0;
