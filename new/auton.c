@@ -2,6 +2,7 @@
 #include "driving.c"
 #include "lights.c"
 #include "gyroLib.c"
+float gyroCorrectedAngle = 0.0;
 const int enterString[] = {247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246};//this is "�??     Enter    �?�"
 
 const string zerothAutonString = "Stationary Goal"; //3
@@ -35,7 +36,6 @@ const int C_rOfRobot = 13;
 const float C_PI = 3.1415926;
 const int C_motorPower = 120;
 const float C_dr4bconstant = 2.5;
-
 //for left encoder, forwards is pos, backwards is neg
 //for right encoder, forwards is neg, backwards is pos
 
@@ -65,11 +65,12 @@ void moveForwards(int distance){//this moves the robot forwards *distance* inche
 	motor[rdt1]=motor[rdt2]=0;
 }
 float gyroScale(float gyroScale){
-	return GyroAngleAbsGet()*gyroScale;
+	gyroCorrectedAngle = GyroAngleAbsGet()*gyroScale;
+	return gyroCorrectedAngle;
 }
 void gyroTurn(int degrees){
 	int error, direction;
-	float gyroScaleFloat = 1.5;
+	float gyroScaleFloat = 2.0;
 	wait1Msec(200);
 	while(!GyroValidGet()) wait1Msec(5);
 	if(degrees < 0) direction = 1;
@@ -80,12 +81,22 @@ void gyroTurn(int degrees){
 			motor[ldt1] = motor[ldt2] = 50;//motors positive
 			motor[rdt1] = motor[rdt2] = 50;
 		}
+		motor[ldt1] = motor[ldt2] = -5;
+		motor[rdt1] = motor[rdt2] = -5;
+		wait1Msec(25);
+		motor[ldt1] = motor[ldt2] = 0;
+		motor[rdt1] = motor[rdt2] = 0;
 	}else if(direction == 0){//if turn is counterclockwise
 		while(gyroScale(gyroScaleFloat)<degrees){//gyro positive
 			error = -degrees + gyroScale(gyroScaleFloat);
 			motor[ldt1] = motor[ldt2] = -50;//motors negative
 			motor[rdt1] = motor[rdt2] = -50;
 		}
+		motor[ldt1] = motor[ldt2] = 5;
+		motor[rdt1] = motor[rdt2] = 5;
+		wait1Msec(25);
+		motor[ldt1] = motor[ldt2] = 0;
+		motor[rdt1] = motor[rdt2] = 0;
 	}
 	motor[ldt1] = motor[ldt2] = 0;
 	motor[rdt1] = motor[rdt2] = 0;
@@ -938,6 +949,8 @@ task auton(){//main task
 			//robotInit(eighteenthAutonString);
 			gyroTurn(90);
 			gyroTurn(-90);
+			gyroTurn(25);
+			gyroTurn(-60);
 			break;
 		default:
 			break;
