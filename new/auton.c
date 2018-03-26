@@ -119,7 +119,7 @@ void mgmLeftForwards(int distance){//this moves the robot forwards *distance* in
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
 	while(!(SensorValue[rdtEnc]<(-encVal+10) && SensorValue[rdtEnc]>(-encVal-10))){
-		motor[ldt1]=motor[ldt2]=76;
+		motor[ldt1]=motor[ldt2]=70;
 		motor[rdt1]=motor[rdt2]=-120;
 		motor[mgm]=127;
 	}
@@ -134,7 +134,7 @@ void mgmRightForwards(int distance){//this moves the robot forwards *distance* i
 	SensorValue[rdtEnc] = 0;
 	while(!(SensorValue[rdtEnc]<(-encVal+10) && SensorValue[rdtEnc]>(-encVal-10))){
 		motor[ldt1]=motor[ldt2]=127;
-		motor[rdt1]=motor[rdt2]=-76;
+		motor[rdt1]=motor[rdt2]=-70;
 		motor[mgm]=127;
 	}
 	motor[ldt1]=motor[ldt2]=0;
@@ -321,9 +321,11 @@ task auton(){//main task
 			mgmLeftForwards(48.5);
 			raiseMGM();
 			setStripColor(120, 31, 255, 255, 0);
+			run4BDownFor(20,20);
 			wait1Msec(200);
 			outtake(300);
-			rightAlign(175, 50);
+			//rightAlign(175, 50);
+			gyroTurn(-1,20);
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
@@ -334,6 +336,7 @@ task auton(){//main task
 			run4BDownFor(500, 127);
 			wait1Msec(200);
 			run4BUpFor(700, 90);
+			run4BDownFor(20,20);
 			wait1Msec(250);
 			outtake(300);
 			setStripColor(120, 31, 0, 255, 255);
