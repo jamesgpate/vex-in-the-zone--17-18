@@ -70,7 +70,7 @@ float gyroScale(float gyroScale){
 }
 void gyroTurn(int degrees, int power){
 	int error, direction;
-	float gyroScaleFloat = 1.41;
+	float gyroScaleFloat = sqrt(2);
 	wait1Msec(200);
 	while(!GyroValidGet()) wait1Msec(5);
 	if(degrees < 0) direction = 1;
@@ -282,6 +282,8 @@ void robotInit(const string Auton){
 	displayLCDString(1,0, "is running!");
 
 	motor[claw]=50;
+	run4BUpFor(100, 127);
+	run4BDownFor(100, 127);
 	run4BUpFor(700, 127);
 	runDR4BUpFor(100, 20);
 	motor[ldt1] = motor[ldt2] = 50;
@@ -324,12 +326,11 @@ task auton(){//main task
 			run4BDownFor(20,20);
 			wait1Msec(200);
 			outtake(300);
-			//rightAlign(175, 50);
-			gyroTurn(-1,20);
+			rightAlign(125, 50);
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
-			moveForwards(1);
+			moveForwards(0.75);
 			//runDR4BDownFor(200, 100);
 			motor[ldr4b]=-20;
 			motor[rdr4b]=20;
@@ -357,12 +358,14 @@ task auton(){//main task
 			//place mgm
 			motor[claw]=-127;
 			moveBackwards(54);
-			rightAlign(825, C_motorPower);
-			moveForwards(16);
+			//rightAlign(725, C_motorPower);
+			gyroTurn(-135, 80);
+			moveForwards(12);
 			setStripColor(120, 31, 0, 0, 255);
-			rightAlign(400, C_motorPower);
+			//rightAlign(325, C_motorPower);
+			gyroTurn(-225, 80);
 			//run4BUpFor(100, 90);
-			moveForwards(8);
+			moveForwards(10);
 			mgmForwards(22);
 			moveBackwards(15);
 			setStripColor(120, 31, 255, 0, 0);
