@@ -5,16 +5,16 @@
 float gyroCorrectedAngle = 0.0;
 const int enterString[] = {247,32,32,32,32,32,69,110,116,101,114,32,32,32,32,246};//this is "�??     Enter    �?�"
 
-const string zerothAutonString = "Stationary Goal"; //3
+const string zerothAutonString = "Stationary Goal"; //Verified
 
-const string firstAutonString = "redLeft 3 20"; //1
-const string secondAutonString = "redLeft 2 20"; //7
-const string thirdAutonString = "redLeft 1 20"; //4
-const string fourthAutonString = "redLeft 3 10"; //5
+const string firstAutonString = "redLeft 3 20"; //Verified
+const string secondAutonString = "redLeft 2 20";
+const string thirdAutonString = "redLeft 1 20";
+const string fourthAutonString = "redLeft 3 10";
 
-const string fifthAutonString = "redRight 3 20"; //2
+const string fifthAutonString = "redRight 3 20";
 const string sixthAutonString = "redRight 2 20";
-const string seventhAutonString = "redRight 1 20"; //6
+const string seventhAutonString = "redRight 1 20";
 const string eighthAutonString = "redRight 3 10";
 
 const string ninthAutonString = "blueRight 3 20";
@@ -41,9 +41,7 @@ const float C_dr4bconstant = 2.5;
 
 void displayEnterString(int line){//this displays *enterString[]* to *line*
 	clearLCDLine(line);
-	for(int i = 0; i < 16; ++i){
-		displayLCDChar(line, i, enterString[i]);
-	}
+	displayLCDString(line, 0,"<     Enter    >");
 }
 
 int getEncValForDistance(int inches){//this returns the encoder value for drivetrain distance
@@ -68,7 +66,7 @@ float gyroScale(float gyroScale){
 	gyroCorrectedAngle = GyroAngleAbsGet()*gyroScale;
 	return gyroCorrectedAngle;
 }
-void gyroTurn(int degrees, int power){
+void gyroTurn(float degrees, int power){
 	int error, direction;
 	float gyroScaleFloat = sqrt(2);
 	wait1Msec(200);
@@ -483,16 +481,16 @@ task auton(){//main task
 			robotInit(fifthAutonString);
 			setStripColor(120, 31, 255, 0, 0);
 			//Cone 1
-			mgmForwards(46);
+			mgmForwards(42);
 			raiseMGM();
 			setStripColor(120, 31, 255, 255, 0);
+			run4BDownFor(20,20);
 			wait1Msec(200);
 			outtake(300); //Cone 1/Preload
 			setStripColor(120, 31, 0, 255, 0);
 			//rightAlign(175, 50);
 			//Cone 2
 			motor[claw]=127; //intake
-			moveForwards(1);
 			//runDR4BDownFor(200, 100);
 			motor[ldr4b]=-20;
 			motor[rdr4b]=20;
@@ -504,8 +502,8 @@ task auton(){//main task
 			setStripColor(120, 31, 0, 255, 255);
 			//Cone 3
 			motor[claw]=127; //intake
-			run4BDownFor(150, 127);
-			moveForwards(4);
+			run4BDownFor(200, 127);
+			moveForwards(3);
 			motor[ldr4b]=-30;
 			motor[rdr4b]=30;
 			run4BDownFor(500, 127);
@@ -518,11 +516,11 @@ task auton(){//main task
 			setStripColor(120, 31, 0, 0, 255);
 			//place mgm
 			motor[claw]=0;
-			moveBackwards(65);
-			leftAlign(800, C_motorPower);
+			moveBackwards(62);
+			gyroTurn(135, 80);
 			moveForwards(9.5);
 			setStripColor(120, 31, 0, 0, 255);
-			leftAlign(450,C_motorPower);
+			gyroTurn(225, 80);
 			//run4BUpFor(100, 90);
 			moveForwards(10);
 			mgmForwards(20);

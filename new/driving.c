@@ -167,7 +167,7 @@ task drive(){
 				motor[claw]=127;
 				if(vexRT[Btn5D]==1){
 					motor[claw]=-127;
-				}	
+				}
 				break;
 		}
 			//Changing clawModes
@@ -207,63 +207,15 @@ task drive(){
 		dr4b();
 		motor[fourbar]=c2;
 		//displays current battery and backup battery voltage
-		switch(lcdPage){
-			case 0:
-				clearLCDLine(0);
-				clearLCDLine(1);
-				displayLCDString(0,0,"Partner Control");
-				if(lcdPartnerControl)displayLCDString(1,0,"True");
-				else if(!lcdPartnerControl)displayLCDString(1,0,"False");
-				break;
-			case 1:
-				clearLCDLine(0);
-				clearLCDLine(1);
-				displayLCDString(0,0,"Battery: ");
-				displayLCDNumber(0,9, nAvgBatteryLevel);
-				displayLCDString(0,13, " mV");
-				displayLCDString(1,0,"Backup: ");
-				displayLCDNumber(1,9, BackupBatteryLevel);
-				displayLCDString(1,13, " mV");
-				break;
-			case 2:
-				clearLCDLine(0);
-				clearLCDLine(1);
-				displayLCDString(0,0,"Left DT: ");
-				displayLCDNumber(0,12, SensorValue[ldtEnc]);
-				displayLCDString(1,0,"Right DT: ");
-				displayLCDNumber(1,12, SensorValue[rdtEnc]);
-				break;
-			case 3:
-				clearLCDLine(0);
-				clearLCDLine(1);
-				displayLCDString(0,0,"Left DR4B: ");
-				displayLCDNumber(0,12, SensorValue[ldr4bEnc]);
-				displayLCDString(1,0,"Right DR4B: ");
-				displayLCDNumber(1,12, SensorValue[rdr4bEnc]);
-				break;
-			case 4:
-				clearLCDLine(0);
-				clearLCDLine(1);
-				displayLCDString(0,0,"Sonar: ");
-				displayLCDNumber(0,12, SensorValue[sound]);
-				displayLCDString(1,0,"4bar Pot: ");
-				displayLCDNumber(1,12, SensorValue[fourbarPot]);
-				break;
-		}
-		if(nLCDButtons == leftButton && (nSysTime-partner)>1000){
-			wait1Msec(50);
-			if(lcdPage == 0) lcdPage = 4;
-			else lcdPage--;
-		}else if(nLCDButtons == rightButton && (nSysTime-partner)>1000){
-			wait1Msec(50);
-			if(lcdPage == 4) lcdPage = 0;
-			else lcdPage++;
-		}
-		/*if(nLCDButtons == centerButton && (nSysTime-partner)>1000) {
-			wait1Msec(50);
-			lcdPartnerControl = !lcdPartnerControl;
-			partner = nSysTime;
-		}*/
+		clearLCDLine(0);
+		clearLCDLine(1);
+		displayLCDString(0,0,"Battery: ");
+		displayLCDNumber(0,9, nAvgBatteryLevel);
+		displayLCDString(0,13, " mV");
+		displayLCDString(1,0,"Backup: ");
+		displayLCDNumber(1,9, BackupBatteryLevel);
+		displayLCDString(1,13, " mV");
+
 		//keep the loop timing consistently 25 ms
 		int timeDiff = nSysTime - sysTime;
 		wait1Msec(25-timeDiff);
