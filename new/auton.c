@@ -302,16 +302,21 @@ task auton(){//main task
 			run4BUpFor(700, 127);
 			runDR4BUpFor(350, 100);
 			wait1Msec(300);
+			motor[ldt1] = motor[ldt2] = 50;
+			motor[rdt1] = motor[rdt2] = -50;
+			wait1Msec(100);
 			motor[ldr4b]=10;
 			motor[rdr4b]=-10;
-			moveForwards(6);
+			moveForwards(5);
 			wait1Msec(300);
-			run4BDownFor(150,60);
-			wait1Msec(400);
-			outtake(300);
+			run4BDownFor(150,50);
+			wait1Msec(300);
+			outtake(350);
 			motor[ldr4b]=0;
 			motor[rdr4b]=0;
+			wait1Msec(50);
 			run4BUpFor(150, 70);
+			motor[fourbar]=0;
 			moveBackwards(2);
 			break;
 		case 1:
@@ -481,7 +486,7 @@ task auton(){//main task
 			robotInit(fifthAutonString);
 			setStripColor(120, 31, 255, 0, 0);
 			//Cone 1
-			mgmForwards(42);
+			mgmForwards(43);
 			raiseMGM();
 			setStripColor(120, 31, 255, 255, 0);
 			run4BDownFor(20,20);
@@ -494,7 +499,7 @@ task auton(){//main task
 			//runDR4BDownFor(200, 100);
 			motor[ldr4b]=-20;
 			motor[rdr4b]=20;
-			run4BDownFor(500, 127);
+			run4BDownFor(550, 127);
 			wait1Msec(200);
 			run4BUpFor(700, 90);
 			wait1Msec(250);
@@ -506,7 +511,7 @@ task auton(){//main task
 			moveForwards(3);
 			motor[ldr4b]=-30;
 			motor[rdr4b]=30;
-			run4BDownFor(500, 127);
+			run4BDownFor(600, 127);
 			wait1Msec(100);
 			run4BUpFor(100, 90);
 			runDR4BUpFor(100, 127);
@@ -516,13 +521,14 @@ task auton(){//main task
 			setStripColor(120, 31, 0, 0, 255);
 			//place mgm
 			motor[claw]=0;
-			moveBackwards(62);
+			moveBackwards(58);
 			gyroTurn(135, 80);
 			moveForwards(9.5);
 			setStripColor(120, 31, 0, 0, 255);
 			gyroTurn(225, 80);
 			//run4BUpFor(100, 90);
-			moveForwards(10);
+			runDR4BUpFor(100,20);
+			moveForwards(12);
 			mgmForwards(20);
 			moveBackwards(15);
 			setStripColor(120, 31, 255, 0, 0);
