@@ -1,35 +1,20 @@
 #include "auton.c"
-#include "lights.c"
-
+//callable vars
 bool colors = false;
 int timed = 0;
-
-int partner = 0;
 bool precise = false;
-
-int breaker =0;
-
 const int fourbarTop = 1950;
 const int fourbarParallel = 500;
 const int fourbarBottom = 0;
-
 int dr4bEncAvg = (SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2;
-
 const int coneDistance = 230;
-
 const short leftButton = 1;
 const short centerButton = 2;
 const short rightButton = 4;
-
-//
+//internal vars
 int c4 = 0, c3 = 0, c2 = 0, c1 = 0;
 int c4Partner = 0, c3Partner = 0, c2Partner = 0, c1Partner = 0;
-
 int clawMode = 0;
-
-int autoStackCount = 0;
-
-int lcdPage = 0;
 bool lcdPartnerControl = true;
 int autoStack(int stackCount){
 	//start at parallel dr4b and parallel 4b
@@ -137,29 +122,29 @@ task drive(){
 		switch(clawMode){
 			case 0:
 				if((SensorValue[fourbarPot])<1000 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<20){
-					motor[claw]=127;
+					motor[claw]=50;
 					if(vexRT[Btn5D]==1){
-						motor[claw]=-127;
+						motor[claw]=-50;
 					}																				//If the claw is close enough to the ground, activate the claw
 				}
 				else{
-					motor[claw]=15;
+					motor[claw]=20;
 					if(vexRT[Btn5D]==1){
-						motor[claw]=-127;
+						motor[claw]=-50;
 					}
 				}
 				break;
 			case 1:
-				if((SensorValue[fourbarPot])<1300 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<60){
-					motor[claw]=127;
+				if((SensorValue[fourbarPot])<1400 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<60){
+					motor[claw]=50;
 					if(vexRT[Btn5D]==1){
-						motor[claw]=-127;
+						motor[claw]=-50;
 					}																			//Extends the range so that match loads can be easily grabbed
 				}
 				else{
 					motor[claw]=20;
 					if(vexRT[Btn5D]==1){
-						motor[claw]=-127;
+						motor[claw]=-50;
 					}
 				}
 				break;
@@ -220,5 +205,16 @@ task drive(){
 		int timeDiff = nSysTime - sysTime;
 		wait1Msec(25-timeDiff);
 		EndTimeSlice();
+	}
+}
+void callsUnusedVariablesDontCallThis(){
+	int discardVar;
+	if(false){
+		discardVar = fourbarTop;
+		discardVar = fourbarParallel;
+		discardVar = fourbarBottom;
+		discardVar = coneDistance;
+		autoStack(0);
+		callsUnusedVariablesDontCallThis();
 	}
 }

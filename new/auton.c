@@ -1,5 +1,3 @@
-#include "main.c"
-#include "driving.c"
 #include "lights.c"
 #include "gyroLib.c"
 float gyroCorrectedAngle = 0.0;
@@ -526,7 +524,7 @@ task auton(){//main task
 			gyroTurn(135, 80);
 			moveForwards(9.5);
 			setStripColor(120, 31, 0, 0, 255);
-			gyroTurn(225, 80);
+			gyroTurn(225, 70);
 			//run4BUpFor(100, 90);
 			runDR4BUpFor(100,20);
 			moveForwards(12);
@@ -558,10 +556,10 @@ task auton(){//main task
 			setStripColor(120, 31, 0, 255, 255);
 			motor[claw]=-127;
 			moveBackwards(55);
-			leftAlign(800, C_motorPower);
+			gyroTurn(135, 80);
 			moveForwards(14);
 			setStripColor(120, 31, 0, 0, 255);
-			leftAlign(450, C_motorPower);
+			gyroTurn(225, 70);
 			moveForwards(10);
 			mgmForwards(20);
 			moveBackwards(15);
@@ -577,10 +575,10 @@ task auton(){//main task
 			//place mgm
 			moveBackwards(44);
 			wait1Msec(200);
-			leftAlign(800, C_motorPower);
+			gyroTurn(135, 80);
 			wait1Msec(200);
 			moveForwards(11);
-			leftAlign(420, C_motorPower);
+			gyroTurn(225, 70);
 			motor[claw] = 0;
 			wait1Msec(200);
 			//run4BUpFor(50, 90);
@@ -627,10 +625,10 @@ task auton(){//main task
 			//place mgm
 			motor[claw]=0;
 			moveBackwards(65);
-			leftAlign(800, C_motorPower);
+			gyroTurn(135, 80);
 			moveForwards(9.5);
 			setStripColor(120, 31, 0, 0, 255);
-			leftAlign(450,C_motorPower);
+			gyroTurn(225, 70);
 			//run4BUpFor(100, 90);
 			mgmForwards(10);
 			moveBackwards(15);
@@ -676,10 +674,10 @@ task auton(){//main task
 			//place mgm
 			motor[claw]=-127;
 			moveBackwards(54);
-			leftAlign(850, C_motorPower);
+			gyroTurn(135, 80);
 			moveForwards(18);
 			setStripColor(120, 31, 0, 0, 255);
-			leftAlign(400, C_motorPower);
+			gyroTurn(225, 70);
 			//run4BUpFor(100, 90);
 			moveForwards(30);
 			setStripColor(120, 31, 255, 0, 0);
@@ -708,10 +706,10 @@ task auton(){//main task
 			setStripColor(120, 31, 0, 255, 255);
 			motor[claw]=-127;
 			moveBackwards(45);
-			leftAlign(850, C_motorPower);
+			gyroTurn(135, 80);
 			moveForwards(16);
 			setStripColor(120, 31, 0, 0, 255);
-			leftAlign(400, C_motorPower);
+			gyroTurn(225, 70);
 			moveForwards(8);
 			mgmForwards(20);
 			moveBackwards(15);
@@ -730,10 +728,10 @@ task auton(){//main task
 			//place mgm
 			moveBackwards(47);
 			wait1Msec(200);
-			leftAlign(800, C_motorPower);
+			gyroTurn(135, 80);
 			wait1Msec(200);
 			moveForwards(11);
-			leftAlign(420, C_motorPower);
+			gyroTurn(225, 70);
 			motor[claw] = 0;
 			wait1Msec(200);
 			//run4BUpFor(50, 90);
@@ -781,10 +779,10 @@ task auton(){//main task
 			motor[claw] = 0;
 			//place mgm in 10 pt zone
 			moveBackwards(54);
-			leftAlign(800, C_motorPower);
+			gyroTurn(135, 80);
 			moveForwards(10);
 			setStripColor(120, 31, 0, 0, 255);
-			leftAlign(400, C_motorPower);
+			gyroTurn(225, 70);
 			setStripColor(120, 31, 255, 0, 0);
 			run4BUpFor(100, 90);
 			mgmForwards(10);
@@ -833,10 +831,10 @@ task auton(){//main task
 			//place mgm
 			motor[claw]=0;
 			moveBackwards(65);
-			rightAlign(800, C_motorPower);
+			gyroTurn(-130, 80);
 			moveForwards(9.5);
 			setStripColor(120, 31, 0, 0, 255);
-			rightAlign(450,C_motorPower);
+			gyroTurn(-225, 70);
 			//run4BUpFor(100, 90);
 			moveForwards(10);
 			mgmForwards(22);
@@ -867,10 +865,10 @@ task auton(){//main task
 			setStripColor(120, 31, 0, 255, 255);
 			motor[claw]=-127;
 			moveBackwards(55);
-			rightAlign(800, C_motorPower);
+			gyroTurn(-130, 80);
 			moveForwards(14);
 			setStripColor(120, 31, 0, 0, 255);
-			rightAlign(450, C_motorPower);
+			gyroTurn(-225, 70);
 			moveForwards(10);
 			mgmForwards(20);
 			moveBackwards(15);
@@ -886,10 +884,10 @@ task auton(){//main task
 			//place mgm
 			moveBackwards(44);
 			wait1Msec(200);
-			rightAlign(800, C_motorPower);
+			gyroTurn(-130, 80);
 			wait1Msec(200);
 			moveForwards(11);
-			rightAlign(420, C_motorPower);
+			gyroTurn(-225, 70);
 			motor[claw] = 0;
 			wait1Msec(200);
 			//run4BUpFor(50, 90);
@@ -936,10 +934,10 @@ task auton(){//main task
 			//place mgm
 			motor[claw]=0;
 			moveBackwards(65);
-			rightAlign(800, C_motorPower);
+			gyroTurn(-130, 80);
 			moveForwards(9.5);
 			setStripColor(120, 31, 0, 0, 255);
-			rightAlign(450,C_motorPower);
+			gyroTurn(-225, 70);
 			//run4BUpFor(100, 90);
 			mgmForwards(10);
 			moveBackwards(15);
@@ -969,5 +967,19 @@ task auton(){//main task
 			break;
 		default:
 			break;
+	}
+}
+void callsAllFunctionsDontActuallyCallThis(){
+	if(false){
+		turnRight(1);
+		turnLeft(1);
+		lowerMGM();
+		rotateDr4bDownTo(1);
+		rotateDr4bUpTo(1);
+		runDR4BDownFor(1,1);
+		intake();
+		rotateFourbarTo(1);
+		rotateFourbarTo(1,1);
+		callsAllFunctionsDontActuallyCallThis();
 	}
 }

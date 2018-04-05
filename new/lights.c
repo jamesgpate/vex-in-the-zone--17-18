@@ -138,4 +138,5 @@ task sendRainbowDownStrip(){
 			startTask(sendRainbowDownStrip);
 		}
 	}*/
+	startTask(sendRainbowDownStrip);
 }

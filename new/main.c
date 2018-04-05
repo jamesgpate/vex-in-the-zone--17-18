@@ -31,9 +31,6 @@
 #pragma platform(VEX2)
 #include "Vex_Competition_Includes.c"
 #include "driving.c"
-#include "auton.c"
-#include "lights.c"
-#include "gyroLib.c"
 
 void waitForRelease()
 {
@@ -447,7 +444,6 @@ void pre_auton(){//Selects auton program
 			SensorValue[ldtEnc]=0;
 			SensorValue[rdtEnc]=0;
 			break;
-
 		}
 		SensorValue[ldtEnc]=0;
 		SensorValue[rdtEnc]=0;
