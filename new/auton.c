@@ -27,6 +27,8 @@ const string sixteenthAutonString = "blueLeft 3 10";
 
 const string seventeenthAutonString = "Nothing"; //8
 const string eighteenthAutonString = "Gyro Turn Test";
+
+const string nineteenthAutonString = "skills";
 int lcdCount = 0;
 
 const int C_rOfWheels = 2;
@@ -115,7 +117,7 @@ void mgmLeftForwards(int distance){//this moves the robot forwards *distance* in
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
 	while(!(SensorValue[rdtEnc]<(-encVal+10) && SensorValue[rdtEnc]>(-encVal-10))){
-		motor[ldt1]=motor[ldt2]=70;
+		motor[ldt1]=motor[ldt2]=85;
 		motor[rdt1]=motor[rdt2]=-120;
 		motor[mgm]=127;
 	}
@@ -129,8 +131,8 @@ void mgmRightForwards(int distance){//this moves the robot forwards *distance* i
 	SensorValue[ldtEnc] = 0;
 	SensorValue[rdtEnc] = 0;
 	while(!(SensorValue[rdtEnc]<(-encVal+10) && SensorValue[rdtEnc]>(-encVal-10))){
-		motor[ldt1]=motor[ldt2]=127;
-		motor[rdt1]=motor[rdt2]=-70;
+		motor[ldt1]=motor[ldt2]=120;
+		motor[rdt1]=motor[rdt2]=-80;
 		motor[mgm]=127;
 	}
 	motor[ldt1]=motor[ldt2]=0;
@@ -296,8 +298,8 @@ task auton(){//main task
 			clearLCDLine(1);
 			displayLCDString(0,0, zerothAutonString);//stationary
 			displayLCDString(1,0, "is running!");
-			motor[claw]=50;
-			run4BUpFor(700, 127);
+			motor[claw]=60;
+			run4BUpFor(800, 127);
 			runDR4BUpFor(350, 100);
 			wait1Msec(300);
 			motor[ldt1] = motor[ldt2] = 50;
@@ -305,9 +307,11 @@ task auton(){//main task
 			wait1Msec(100);
 			motor[ldr4b]=10;
 			motor[rdr4b]=-10;
-			moveForwards(5);
-			wait1Msec(300);
+			moveForwards(6);
+			wait1Msec(1000);
 			run4BDownFor(150,50);
+			wait1Msec(800);
+			motor[claw]=0;
 			wait1Msec(300);
 			outtake(350);
 			motor[ldr4b]=0;
@@ -325,13 +329,13 @@ task auton(){//main task
 			raiseMGM();
 			setStripColor(120, 31, 255, 255, 0);
 			run4BDownFor(20,20);
-			wait1Msec(200);
+			wait1Msec(300);
 			outtake(300);
 			rightAlign(125, 50);
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
-			moveForwards(0.75);
+			moveForwards(1);
 			//runDR4BDownFor(200, 100);
 			motor[ldr4b]=-20;
 			motor[rdr4b]=20;
@@ -348,7 +352,7 @@ task auton(){//main task
 			moveForwards(4);
 			motor[ldr4b]=-30;
 			motor[rdr4b]=30;
-			run4BDownFor(500, 127);
+			run4BDownFor(600, 127);
 			wait1Msec(100);
 			run4BUpFor(100, 90);
 			runDR4BUpFor(100, 127);
@@ -638,12 +642,13 @@ task auton(){//main task
 			robotInit(ninthAutonString);
 			setStripColor(120, 31, 255, 0, 0);
 			//Cone 1
-			mgmRightForwards(47);
+			mgmRightForwards(48.5);
 			raiseMGM();
 			setStripColor(120, 31, 255, 255, 0);
-			wait1Msec(200);
+			run4BDownFor(20,20);
+			wait1Msec(300);
 			outtake(300);
-		//	leftAlign(175, 40);
+			leftAlign(175, 40);
 			setStripColor(120, 31, 0, 255, 0);
 			//Cone 2
 			motor[claw]=127; //intake
@@ -675,7 +680,7 @@ task auton(){//main task
 			motor[claw]=-127;
 			moveBackwards(54);
 			gyroTurn(135, 80);
-			moveForwards(18);
+			moveForwards(12);
 			setStripColor(120, 31, 0, 0, 255);
 			gyroTurn(225, 70);
 			//run4BUpFor(100, 90);
@@ -795,13 +800,13 @@ task auton(){//main task
 			robotInit(thirteenthAutonString);
 			setStripColor(120, 31, 255, 0, 0);
 			//Cone 1
-			mgmForwards(46);
+			mgmForwards(48.5);
 			raiseMGM();
 			setStripColor(120, 31, 255, 255, 0);
-			wait1Msec(200);
+			wait1Msec(300);
 			outtake(300); //Cone 1/Preload
 			setStripColor(120, 31, 0, 255, 0);
-			//rightAlign(175, 50);
+			rightAlign(125, 50);
 			//Cone 2
 			motor[claw]=127; //intake
 			moveForwards(1);
@@ -820,7 +825,7 @@ task auton(){//main task
 			moveForwards(4);
 			motor[ldr4b]=-30;
 			motor[rdr4b]=30;
-			run4BDownFor(500, 127);
+			run4BDownFor(600, 127);
 			wait1Msec(100);
 			run4BUpFor(100, 90);
 			runDR4BUpFor(100, 127);
@@ -830,14 +835,15 @@ task auton(){//main task
 			setStripColor(120, 31, 0, 0, 255);
 			//place mgm
 			motor[claw]=0;
-			moveBackwards(65);
+			moveBackwards(54);
 			gyroTurn(-130, 80);
-			moveForwards(9.5);
+			moveForwards(12);
 			setStripColor(120, 31, 0, 0, 255);
 			gyroTurn(-225, 70);
 			//run4BUpFor(100, 90);
-			moveForwards(10);
-			mgmForwards(22);
+			moveForwards(2);
+			mgmForwards(25);
+			wait1Msec(400);
 			moveBackwards(15);
 			setStripColor(120, 31, 255, 0, 0);
 			break;
@@ -965,6 +971,238 @@ task auton(){//main task
 			moveForwards(5);
 			gyroTurn(360,50);
 			break;
+		case 19:
+
+			//redLeft 3 20
+
+			setStripColor(120, 31, 255, 0, 0);
+			//Cone 1
+			mgmLeftForwards(48.5);
+			raiseMGM();
+			setStripColor(120, 31, 255, 255, 0);
+			run4BDownFor(20,20);
+			wait1Msec(200);
+			outtake(300);
+			rightAlign(125, 50);
+			setStripColor(120, 31, 0, 255, 0);
+			//Cone 2
+			motor[claw]=127; //intake
+			moveForwards(0.75);
+			//runDR4BDownFor(200, 100);
+			motor[ldr4b]=-20;
+			motor[rdr4b]=20;
+			run4BDownFor(500, 127);
+			wait1Msec(200);
+			run4BUpFor(700, 90);
+			run4BDownFor(20,20);
+			wait1Msec(250);
+			outtake(300);
+			setStripColor(120, 31, 0, 255, 255);
+			//Cone 3
+			motor[claw]=127; //intake
+			run4BDownFor(150, 127);
+			moveForwards(4);
+			motor[ldr4b]=-30;
+			motor[rdr4b]=30;
+			run4BDownFor(500, 127);
+			wait1Msec(100);
+			run4BUpFor(100, 90);
+			runDR4BUpFor(100, 127);
+			run4BUpFor(500, 127);
+			wait1Msec(300);
+			outtake(300);
+			setStripColor(120, 31, 0, 0, 255);
+			//place mgm
+			motor[claw]=-127;
+			moveBackwards(54);
+			//rightAlign(725, C_motorPower);
+			gyroTurn(-130, 80);
+			moveForwards(12);
+			setStripColor(120, 31, 0, 0, 255);
+			//rightAlign(325, C_motorPower);
+			gyroTurn(-225, 70);
+			//run4BUpFor(100, 90);
+			moveForwards(2);
+			mgmForwards(25);
+			wait1Msec(400);
+			moveBackwards(15);
+			setStripColor(120, 31, 255, 0, 0);
+
+			//transition
+
+			moveForwards(2);
+			gyroTurn(-135, 70);
+			moveForwards(12);
+			gyroTurn(-90, 70);
+
+			//redRight 3 10
+
+			setStripColor(120, 31, 255, 0, 0);
+			//Cone 1
+			mgmForwards(46);
+			raiseMGM();
+			setStripColor(120, 31, 255, 255, 0);
+			wait1Msec(200);
+			outtake(300); //Cone 1/Preload
+			setStripColor(120, 31, 0, 255, 0);
+			//rightAlign(175, 50);
+			//Cone 2
+			motor[claw]=127; //intake
+			moveForwards(1);
+			//runDR4BDownFor(200, 100);
+			motor[ldr4b]=-20;
+			motor[rdr4b]=20;
+			run4BDownFor(500, 127);
+			wait1Msec(200);
+			run4BUpFor(700, 90);
+			wait1Msec(250);
+			outtake(300);
+			setStripColor(120, 31, 0, 255, 255);
+			//Cone 3
+			motor[claw]=127; //intake
+			run4BDownFor(150, 127);
+			moveForwards(4);
+			motor[ldr4b]=-30;
+			motor[rdr4b]=30;
+			run4BDownFor(500, 127);
+			wait1Msec(100);
+			run4BUpFor(100, 90);
+			runDR4BUpFor(100, 127);
+			run4BUpFor(500, 127);
+			wait1Msec(300);
+			outtake(300);
+			setStripColor(120, 31, 0, 0, 255);
+			//place mgm
+			motor[claw]=0;
+			moveBackwards(65);
+			gyroTurn(45, 80);
+			moveForwards(9.5);
+			setStripColor(120, 31, 0, 0, 255);
+			gyroTurn(135, 70);
+			//run4BUpFor(100, 90);
+			mgmForwards(10);
+			moveBackwards(15);
+			setStripColor(120, 31, 255, 0, 0);
+
+			//transition
+
+			moveForwards(2);
+			gyroTurn(-90, 70);
+			moveForwards(36);
+			gyroTurn(0, 70);
+			moveForwards(24);
+			gyroTurn(-90, 70);
+			moveForwards(10);
+			gyroTurn(-180, 70);
+
+			//blueLeft 3 20
+
+			setStripColor(120, 31, 255, 0, 0);
+			//Cone 1
+			mgmForwards(46);
+			raiseMGM();
+			setStripColor(120, 31, 255, 255, 0);
+			wait1Msec(200);
+			outtake(300); //Cone 1/Preload
+			setStripColor(120, 31, 0, 255, 0);
+			//rightAlign(175, 50);
+			//Cone 2
+			motor[claw]=127; //intake
+			moveForwards(1);
+			//runDR4BDownFor(200, 100);
+			motor[ldr4b]=-20;
+			motor[rdr4b]=20;
+			run4BDownFor(500, 127);
+			wait1Msec(200);
+			run4BUpFor(700, 90);
+			wait1Msec(250);
+			outtake(300);
+			setStripColor(120, 31, 0, 255, 255);
+			//Cone 3
+			motor[claw]=127; //intake
+			run4BDownFor(150, 127);
+			moveForwards(4);
+			motor[ldr4b]=-30;
+			motor[rdr4b]=30;
+			run4BDownFor(500, 127);
+			wait1Msec(100);
+			run4BUpFor(100, 90);
+			runDR4BUpFor(100, 127);
+			run4BUpFor(500, 127);
+			wait1Msec(300);
+			outtake(300);
+			setStripColor(120, 31, 0, 0, 255);
+			//place mgm
+			motor[claw]=0;
+			moveBackwards(65);
+			gyroTurn(-315, 80);
+			moveForwards(9.5);
+			setStripColor(120, 31, 0, 0, 255);
+			gyroTurn(-405, 70);
+			//run4BUpFor(100, 90);
+			moveForwards(10);
+			mgmForwards(22);
+			moveBackwards(15);
+			setStripColor(120, 31, 255, 0, 0);
+
+			//transition
+
+			moveForwards(2);
+			gyroTurn(-315, 70);
+			moveForwards(12);
+			gyroTurn(-270, 70);
+
+			//blueRight 3 10
+
+			setStripColor(120, 31, 255, 0, 0);
+			//Cone 1
+			mgmRightForwards(48.5);
+			raiseMGM();
+			setStripColor(120, 31, 255, 255, 0);
+			wait1Msec(200);
+			outtake(300); //Cone 1/Preload
+			//leftAlign(170, 49);
+			setStripColor(120, 31, 0, 255, 0);
+			//Cone 2
+			motor[claw]=127; //intake
+			moveForwards(1);
+			//runDR4BDownFor(200, 100);
+			motor[ldr4b]=-20;
+			motor[rdr4b]=20;
+			run4BDownFor(500, 127);
+			wait1Msec(200);
+			run4BUpFor(700, 90);
+			wait1Msec(250);
+			outtake(300);
+			setStripColor(120, 31, 0, 255, 255);
+			//Cone 3
+			motor[claw]=127; //intake
+			run4BDownFor(150, 127);
+			moveForwards(4);
+			motor[ldr4b]=-30;
+			motor[rdr4b]=30;
+			run4BDownFor(500, 127);
+			wait1Msec(200);
+			run4BUpFor(100, 90);
+			runDR4BUpFor(100, 127);
+			run4BUpFor(500, 127);
+			wait1Msec(300);
+			outtake(300);
+			setStripColor(120, 31, 0, 0, 255);
+			motor[claw] = 0;
+			//place mgm in 10 pt zone
+			moveBackwards(54);
+			gyroTurn(-135, 80);
+			moveForwards(10);
+			setStripColor(120, 31, 0, 0, 255);
+			gyroTurn(-225, 70);
+			setStripColor(120, 31, 255, 0, 0);
+			run4BUpFor(100, 90);
+			mgmForwards(10);
+			setStripColor(120, 15, 255, 0, 255);
+			moveBackwards(6);
+			setStripColor(120, 10, 255, 255, 255);
+			raiseMGM();
 		default:
 			break;
 	}

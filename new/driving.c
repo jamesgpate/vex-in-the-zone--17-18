@@ -121,30 +121,42 @@ task drive(){
 		//claw
 		switch(clawMode){
 			case 0:
-				if((SensorValue[fourbarPot])<1000 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<20){
-					motor[claw]=50;
-					if(vexRT[Btn5D]==1){
-						motor[claw]=-50;
+				if((SensorValue[fourbarPot])<1050 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<20){
+					motor[claw]=127;
+					if(vexRT[Btn5D]){
+						motor[claw]=-127;
 					}																				//If the claw is close enough to the ground, activate the claw
+					if(vexRT[Btn5U]){
+						motor[claw]=127;
+					}
 				}
 				else{
 					motor[claw]=20;
-					if(vexRT[Btn5D]==1){
-						motor[claw]=-50;
+					if(vexRT[Btn5D]){
+						motor[claw]=-127;
+					}
+					if(vexRT[Btn5U]){
+						motor[claw]=127;
 					}
 				}
 				break;
 			case 1:
 				if((SensorValue[fourbarPot])<1400 && ((SensorValue[ldr4bEnc]-SensorValue[rdr4bEnc])/2)<60){
-					motor[claw]=50;
-					if(vexRT[Btn5D]==1){
-						motor[claw]=-50;
+					motor[claw]=127;
+					if(vexRT[Btn5D]){
+						motor[claw]=-127;
 					}																			//Extends the range so that match loads can be easily grabbed
+					if(vexRT[Btn5U]){
+						motor[claw]=127;
+					}
 				}
 				else{
 					motor[claw]=20;
-					if(vexRT[Btn5D]==1){
-						motor[claw]=-50;
+					if(vexRT[Btn5D]){
+						motor[claw]=-127;
+					}
+					if(vexRT[Btn5U]){
+						motor[claw]=127;
 					}
 				}
 				break;

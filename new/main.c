@@ -437,6 +437,26 @@ void pre_auton(){//Selects auton program
 			SensorValue[ldtEnc]=0;
 			SensorValue[rdtEnc]=0;
 			break;
+		case 19:
+			clearLCDLine(0);
+			clearLCDLine(1);
+			displayLCDString(0,0, nineteenthAutonString);
+			displayEnterString(1);
+			setStripColor(120,31,255,0,0);
+			waitForPress();
+			if(nLCDButtons == leftButton){
+				waitForRelease();
+				lcdCount--;
+			}
+			else if(nLCDButtons == rightButton){
+				waitForRelease();
+				lcdCount=0;
+			}
+			SensorValue[rdr4bEnc]=0;
+			SensorValue[ldr4bEnc]=0;
+			SensorValue[ldtEnc]=0;
+			SensorValue[rdtEnc]=0;
+			break;
 		default:
 			lcdCount = 0;
 			SensorValue[rdr4bEnc]=0;
