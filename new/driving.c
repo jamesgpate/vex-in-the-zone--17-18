@@ -55,7 +55,7 @@ void drivetrain(bool partnerControl){
 		motor[ldt1] = c3+c4;
 		motor[ldt2] = c3+c4;
 		motor[rdt1] = -c3+c4;
-		motor[rdt2] = -c3+c4;
+		motor[rdt2] = -c3+c4;		
 	}
 	if(partnerControl){
 		if(!precise){
@@ -91,11 +91,11 @@ void dr4b(){
 	if(vexRT[Btn6U]){
  		lPower=80;
  		rPower=-80;
-		//motor[fourbar]=-20;
+
  	}else if(vexRT[Btn6D]){
  		lPower=-80;
  		rPower=80;
-		//motor[fourbar]=20;
+
  	}else if(dr4bEncAvg < 5){
  		lPower = -15;
  		rPower = 15;
